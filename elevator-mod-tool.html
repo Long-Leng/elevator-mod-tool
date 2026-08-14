@@ -1605,7 +1605,13 @@ function LiftEditor(_ref12) {
     setFeats = _ref12.setFeats,
     setLocal = _ref12.setLocal,
     step = _ref12.step,
-    setStep = _ref12.setStep;
+    setStep = _ref12.setStep,
+    autoFilled = _ref12.autoFilled,
+    autoFilledFields = _ref12.autoFilledFields,
+    uploading = _ref12.uploading,
+    handleJobSiteUpload = _ref12.handleJobSiteUpload,
+    fileUploadRef = _ref12.fileUploadRef,
+    onClearAutoFill = _ref12.onClearAutoFill;
   var se = function se(k) {
     return function (v) {
       return setExisting(function (s) {
@@ -4589,7 +4595,16 @@ function App() {
     setFeats: setEditFeats,
     setLocal: setEditLocal,
     step: wizStep,
-    setStep: setWizStep
+    setStep: setWizStep,
+    autoFilled: autoFilled,
+    autoFilledFields: autoFilledFields,
+    uploading: uploading,
+    handleJobSiteUpload: handleJobSiteUpload,
+    fileUploadRef: fileUploadRef,
+    onClearAutoFill: function onClearAutoFill() {
+      setAutoFilled(false);
+      setAutoFilledFields([]);
+    }
   }), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
