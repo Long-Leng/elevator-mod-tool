@@ -1,0 +1,5263 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Elevator MOD Pre-Sale Tool</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,sans-serif;background:#f1f5f9;min-height:100vh;font-size:15px}:root{--color-background-primary:#fff;--color-background-secondary:#f8fafc;--color-border-secondary:#cbd5e1;--color-border-tertiary:#e2e8f0;--color-border-strong:#94a3b8;--color-text-primary:#1e293b;--color-text-secondary:#64748b;--color-text-muted:#94a3b8;--color-text-danger:#dc2626;--color-background-danger:#fef2f2;--color-border-danger:#fca5a5}select,input,textarea{font-family:inherit;font-size:inherit}</style>
+</head><body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+<script>
+const {
+  useState,
+  useRef,
+  useEffect
+} = React;
+
+// ── CATALOG (shared from New Sales) ──────────────────────────────────
+const SOURCE_PRODUCTS = {
+  AMEC: ["NEXIEZ-MR", "NEXIEZ-MR BED", "NEXIEZ-MRL II", "NEXIEZ-FIT", "NEXIEZ-S", "NEXWAY-S-AP II", "NEXWAY Package R"],
+  MESE: ["NEXIEZ-MRL", "NEXWAY-S", "NEXWAY"],
+  SMEC_LIFT: ["LEHY-G", "LEHY-L-G"],
+  SMEC_ESC: ["Escalator K2S3"],
+  Other: []
+};
+const CAT = {
+  "NEXIEZ-MR": {
+    codes: {
+      "P6": {
+        p: 6,
+        kg: 450,
+        sp: ["1.0", "1.5", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["800"]
+        }
+      },
+      "P8": {
+        p: 8,
+        kg: 550,
+        sp: ["1.0", "1.5", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["800"]
+        }
+      },
+      "P9": {
+        p: 9,
+        kg: 600,
+        sp: ["1.0", "1.5", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["800"]
+        }
+      },
+      "P10": {
+        p: 10,
+        kg: 700,
+        sp: ["1.0", "1.5", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["800"]
+        }
+      },
+      "P11": {
+        p: 11,
+        kg: 750,
+        sp: ["1.0", "1.5", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["800"]
+        }
+      },
+      "P13": {
+        p: 13,
+        kg: 900,
+        sp: ["1.0", "1.5", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["900"]
+        }
+      },
+      "P15": {
+        p: 15,
+        kg: 1000,
+        sp: ["1.0", "1.5", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["900", "1000"],
+          "2S": ["900"]
+        }
+      },
+      "P17": {
+        p: 17,
+        kg: 1150,
+        sp: ["1.0", "1.5", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["1000", "1100"],
+          "2S": ["1000", "1100"]
+        }
+      },
+      "P20": {
+        p: 20,
+        kg: 1350,
+        sp: ["1.0", "1.5", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["1000", "1100"]
+        }
+      },
+      "P24": {
+        p: 24,
+        kg: 1600,
+        sp: ["1.0", "1.5", "1.75", "2.0", "2.5"],
+        dr: {
+          "2S": ["1200"]
+        }
+      }
+    }
+  },
+  "NEXIEZ-MR BED": {
+    codes: {
+      "B750": {
+        p: 11,
+        kg: 750,
+        sp: ["1.0", "1.5", "1.75"],
+        dr: {
+          "2S": ["—"]
+        },
+        cw: "Side"
+      },
+      "B1000": {
+        p: 15,
+        kg: 1000,
+        sp: ["1.0", "1.5", "1.75"],
+        dr: {
+          "2S": ["—"]
+        },
+        cw: "Side"
+      }
+    }
+  },
+  "NEXIEZ-MRL II": {
+    codes: {
+      "P6": {
+        p: 6,
+        kg: 450,
+        sp: ["1.0", "1.6", "1.75"],
+        dr: {
+          "2S": ["800"]
+        }
+      },
+      "P8": {
+        p: 8,
+        kg: 630,
+        sp: ["1.0", "1.6", "1.75"],
+        dr: {
+          CO: ["900", "800"],
+          "2S": ["900", "800"]
+        }
+      },
+      "P11": {
+        p: 11,
+        kg: 825,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["900", "800"],
+          "2S": ["900", "1100"]
+        }
+      },
+      "P13": {
+        p: 13,
+        kg: 1000,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["1100", "900", "800"],
+          "2S": ["1100", "900", "800"]
+        }
+      },
+      "P17": {
+        p: 17,
+        kg: 1275,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["1100", "1000"],
+          "2S": ["1100"]
+        }
+      },
+      "P18": {
+        p: 18,
+        kg: 1350,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["1100"]
+        }
+      },
+      "P21": {
+        p: 21,
+        kg: 1600,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["1100"],
+          "2S": ["1200", "1300"]
+        }
+      },
+      "P24": {
+        p: 24,
+        kg: 1800,
+        sp: ["1.0", "1.6", "1.75"],
+        dr: {
+          CO: ["1200"]
+        }
+      }
+    }
+  },
+  "NEXIEZ-FIT": {
+    codes: {
+      "P6": {
+        p: 6,
+        kg: 450,
+        sp: ["1.0", "1.6", "1.75"],
+        dr: {
+          "2S": ["800"]
+        }
+      },
+      "P8": {
+        p: 8,
+        kg: 630,
+        sp: ["1.0", "1.6", "1.75"],
+        dr: {
+          CO: ["900", "800"],
+          "2S": ["900", "800"]
+        }
+      },
+      "P11": {
+        p: 11,
+        kg: 825,
+        sp: ["1.0", "1.6", "1.75"],
+        dr: {
+          CO: ["900", "800"],
+          "2S": ["900"]
+        }
+      },
+      "P13W": {
+        p: 13,
+        kg: 1000,
+        sp: ["1.0", "1.6", "1.75"],
+        dr: {
+          CO: ["900", "1100"]
+        }
+      },
+      "P13D": {
+        p: 13,
+        kg: 1000,
+        sp: ["1.0", "1.6", "1.75"],
+        dr: {
+          CO: ["900", "800"],
+          "2S": ["900"]
+        }
+      }
+    }
+  },
+  "NEXIEZ-S": {
+    codes: {
+      "P4": {
+        p: 4,
+        kg: 320,
+        sp: ["1.0"],
+        dr: {
+          "2S": ["700"]
+        }
+      },
+      "P6": {
+        p: 6,
+        kg: 450,
+        sp: ["1.0"],
+        dr: {
+          "2S": ["800"]
+        }
+      }
+    }
+  },
+  "NEXWAY-S-AP II": {
+    codes: {
+      "P11": {
+        p: 11,
+        kg: 825,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5", "3.0"],
+        dr: {
+          CO: ["900"]
+        },
+        cw: "auto"
+      },
+      "P14": {
+        p: 14,
+        kg: 1050,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5", "3.0"],
+        dr: {
+          CO: ["900"],
+          "2S": ["900"]
+        },
+        cw: "auto"
+      },
+      "P17": {
+        p: 17,
+        kg: 1275,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5", "3.0"],
+        dr: {
+          CO: ["1100"],
+          "2S": ["1100"]
+        },
+        cw: "auto"
+      },
+      "P18": {
+        p: 18,
+        kg: 1350,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5", "3.0"],
+        dr: {
+          CO: ["1100"]
+        },
+        cw: "auto"
+      }
+    },
+    sdl: {
+      "3.0": ["CO"]
+    }
+  },
+  "NEXWAY Package R": {
+    codes: {
+      "P13": {
+        p: 13,
+        kg: 1000,
+        sp: ["3.5", "4.0"],
+        dr: {
+          CO: ["900"]
+        },
+        cw: "auto",
+        mt: 180
+      },
+      "P14": {
+        p: 14,
+        kg: 1050,
+        sp: ["3.5", "4.0"],
+        dr: {
+          CO: ["1000", "900"],
+          "2S": ["900"]
+        },
+        cw: "auto",
+        mt: 180
+      },
+      "P16": {
+        p: 16,
+        kg: 1200,
+        sp: ["3.5", "4.0"],
+        dr: {
+          CO: ["1000", "1100"]
+        },
+        cw: "auto",
+        mt: 180
+      },
+      "P17": {
+        p: 17,
+        kg: 1275,
+        sp: ["3.5", "4.0"],
+        dr: {
+          CO: ["1100"],
+          "2S": ["1100"]
+        },
+        cw: "auto",
+        mt: 150
+      },
+      "P18": {
+        p: 18,
+        kg: 1350,
+        sp: ["3.5", "4.0"],
+        dr: {
+          CO: ["1100"]
+        },
+        cw: "auto",
+        mt: 150
+      }
+    }
+  },
+  "LEHY-G": {
+    codes: {
+      "2000": {
+        kg: 2000,
+        sp: ["0.5", "1.0"],
+        dr: {}
+      },
+      "3000": {
+        kg: 3000,
+        sp: ["0.5", "1.0"],
+        dr: {}
+      },
+      "5000": {
+        kg: 5000,
+        sp: ["0.5", "1.0"],
+        dr: {}
+      },
+      "10000": {
+        kg: 10000,
+        sp: ["0.5", "1.0"],
+        dr: {}
+      }
+    }
+  },
+  "LEHY-L-G": {
+    codes: {
+      "2000": {
+        kg: 2000,
+        sp: ["0.5", "1.0"],
+        dr: {}
+      },
+      "3000": {
+        kg: 3000,
+        sp: ["0.5", "1.0"],
+        dr: {}
+      },
+      "5000": {
+        kg: 5000,
+        sp: ["0.5", "1.0"],
+        dr: {}
+      }
+    }
+  },
+  "NEXIEZ-MRL": {
+    codes: {
+      "P6W": {
+        p: 6,
+        kg: 450,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["800"],
+          "2S": ["800"]
+        }
+      },
+      "P6D": {
+        p: 6,
+        kg: 450,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          "2S": ["800"]
+        }
+      },
+      "P7": {
+        p: 7,
+        kg: 550,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["800", "900"],
+          "2S": ["800", "900"]
+        }
+      },
+      "P8": {
+        p: 8,
+        kg: 630,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["800", "900"]
+        }
+      },
+      "P11": {
+        p: 11,
+        kg: 825,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["800", "900"]
+        }
+      },
+      "P13": {
+        p: 13,
+        kg: 1000,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["900", "1100"]
+        }
+      },
+      "P14D": {
+        p: 14,
+        kg: 1050,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["800", "900"],
+          "2S": ["800", "900"]
+        }
+      },
+      "P16W": {
+        p: 16,
+        kg: 1200,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["1100"]
+        }
+      },
+      "P18W": {
+        p: 18,
+        kg: 1350,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["1100"]
+        }
+      },
+      "P21W": {
+        p: 21,
+        kg: 1600,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["1100"]
+        }
+      },
+      "P21D": {
+        p: 21,
+        kg: 1600,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["1100"],
+          "2S": ["1200"]
+        }
+      },
+      "P24W": {
+        p: 24,
+        kg: 1800,
+        sp: ["1.0", "1.6", "1.75"],
+        dr: {
+          CO: ["1100"]
+        }
+      },
+      "P24D": {
+        p: 24,
+        kg: 1800,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5"],
+        dr: {
+          CO: ["1100"],
+          "2S": ["1200"]
+        }
+      }
+    }
+  },
+  "NEXWAY-S": {
+    codes: {
+      "P11": {
+        p: 11,
+        kg: 825,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5", "3.0"],
+        dr: {
+          CO: ["900"]
+        }
+      },
+      "P12": {
+        p: 12,
+        kg: 900,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5", "3.0"],
+        dr: {
+          CO: ["900"]
+        }
+      },
+      "P13": {
+        p: 13,
+        kg: 1000,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5", "3.0"],
+        dr: {
+          CO: ["900"]
+        }
+      },
+      "P14": {
+        p: 14,
+        kg: 1050,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5", "3.0"],
+        dr: {
+          CO: ["900", "1000"],
+          "2S": ["900"]
+        }
+      },
+      "P16": {
+        p: 16,
+        kg: 1200,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5", "3.0"],
+        dr: {
+          CO: ["1000", "1100"]
+        }
+      },
+      "P18": {
+        p: 18,
+        kg: 1350,
+        sp: ["1.0", "1.6", "1.75", "2.0", "2.5", "3.0"],
+        dr: {
+          CO: ["1100"]
+        }
+      }
+    }
+  },
+  "NEXWAY": {
+    codes: {
+      "P14": {
+        p: 14,
+        kg: 1050,
+        sp: ["2.0", "2.5", "3.0", "3.5", "4.0"],
+        dr: {
+          CO: ["900"]
+        }
+      },
+      "P16": {
+        p: 16,
+        kg: 1200,
+        sp: ["2.0", "2.5", "3.0", "3.5", "4.0", "5.0", "5.5", "6.0", "7.0", "7.5", "8.0"],
+        dr: {
+          CO: ["1000"]
+        }
+      },
+      "P18": {
+        p: 18,
+        kg: 1350,
+        sp: ["2.0", "2.5", "3.0", "3.5", "4.0", "5.0", "5.5", "6.0", "7.0", "7.5", "8.0"],
+        dr: {
+          CO: ["1100"]
+        }
+      },
+      "P21": {
+        p: 21,
+        kg: 1600,
+        sp: ["2.0", "2.5", "3.0", "3.5", "4.0", "5.0", "5.5", "6.0", "7.0", "7.5", "8.0"],
+        dr: {
+          CO: ["1100"]
+        }
+      },
+      "P24": {
+        p: 24,
+        kg: 1800,
+        sp: ["2.0", "2.5", "3.0", "3.5", "4.0", "5.0", "5.5", "6.0", "7.0", "7.5", "8.0"],
+        dr: {
+          CO: ["1100"]
+        }
+      },
+      "P26": {
+        p: 26,
+        kg: 2000,
+        sp: ["2.0", "2.5", "3.0", "3.5", "4.0", "5.0", "5.5", "6.0", "7.0", "7.5", "8.0"],
+        dr: {
+          CO: ["1100"]
+        }
+      }
+    }
+  }
+};
+const MESE_CTL = ["S200", "S300", "CD0", "CDM1", "CDM2", "CDM3", "CDM4", "CDM5", "CDM6", "CD4L", "N300"];
+const MR_CTL = ["S00", "S200", "S300", "L200", "L200S", "L210", "L210S", "N300", "N300S", "L310", "L400", "L410"];
+const CEILING = {
+  "NEXIEZ-MR": MR_CTL,
+  "NEXIEZ-MR BED": ["S00", "L220", "N300"],
+  "NEXIEZ-MRL II": ["CL1", "CL2", "DL5", "DL6", "DL7"],
+  "NEXIEZ-FIT": ["CL2", "DL5"],
+  "NEXIEZ-S": ["N700", "L700"],
+  "NEXWAY-S-AP II": MR_CTL,
+  "NEXWAY Package R": MR_CTL,
+  "NEXIEZ-MRL": MESE_CTL,
+  "NEXWAY-S": MESE_CTL,
+  "NEXWAY": MESE_CTL
+};
+const MR_MAIN = ["CBV-C710", "CBV-C720", "CBV-C730", "CBV-N710", "CBV-N720", "CBV-N730", "CBV-C760", "CBV-D710", "CBV-D720", "CBV-D730", "CBU-C710", "CBU-N710", "CBU-C720", "CBU-N720", "CBVF-C258", "CBVF-N228"];
+const MR_AUX = ["CBV-C716", "CBV-C726", "CBV-C736", "CBV-N716", "CBV-N726", "CBV-N736", "CBV-C766", "CBV-D716", "CBV-D726", "CBV-D736", "CBU-C716", "CBU-N716", "CBU-C726", "CBU-N726"];
+const MRL_MAIN = ["CBV-C1010", "CBV-C1030", "CBV-C1040", "CBV-C1050", "CBV-D1010", "CBV-D1030", "CBV-D1040", "CBV-D1050", "CBV-N1010", "CBV-N1030", "CBV-N1040", "CBV-N1050", "CBV-M1010", "CBV-M1030", "CBV-M1040", "CBV-M1050", "CBV-P1010", "CBV-P1030", "CBV-P1040", "CBV-P1050"];
+const MRL_AUX = ["CBV-C1016", "CBV-C1036", "CBV-C1046", "CBV-C1056", "CBV-D1016", "CBV-D1036", "CBV-D1046", "CBV-D1056", "CBV-N1016", "CBV-N1036", "CBV-N1046", "CBV-N1056", "CBV-M1016", "CBV-M1036", "CBV-M1046", "CBV-M1056", "CBV-P1016", "CBV-P1036", "CBV-P1046", "CBV-P1056"];
+const MESE_MAIN = ["CBV-C910", "CBV-C913", "CBV-C914", "CBV-C930", "CBV-C933", "CBV-C934", "CBV-C940", "CBV-C943", "CBV-C944", "CBV-C970", "CBV-C973", "CBV-C974", "CBVG-C258", "CBV-D910", "CBV-D930E", "CBV-D940E", "CBV-D950E", "CBV-D960E", "CBV-D970", "CBH2-D739", "CBV-N910", "CBV-N930", "CBV-N940", "CBV-N970"];
+const COP_CFG = {
+  "NEXIEZ-MR": {
+    main: MR_MAIN,
+    aux: MR_AUX,
+    hcCOP: "CBV-F670"
+  },
+  "NEXIEZ-MR BED": {
+    main: MR_MAIN,
+    aux: MR_AUX,
+    hcCOP: "CBV-F670"
+  },
+  "NEXIEZ-MRL II": {
+    main: MRL_MAIN,
+    aux: MRL_AUX,
+    hcCOP: "CBV-F670"
+  },
+  "NEXIEZ-FIT": {
+    main: ["CBV-M1030", "CBV-M1040", "CBV-N1030", "CBV-N1040"],
+    aux: null,
+    hcCOP: "CBV-F670"
+  },
+  "NEXIEZ-S": {
+    main: ["CBV-M760"],
+    aux: null,
+    hcCOP: "CBV-F670"
+  },
+  "NEXWAY-S-AP II": {
+    main: MR_MAIN,
+    aux: MR_AUX,
+    hcCOP: "CBV-F670"
+  },
+  "NEXWAY Package R": {
+    main: MR_MAIN,
+    aux: MR_AUX,
+    hcCOP: "CBV-F670"
+  },
+  "NEXIEZ-MRL": {
+    main: MESE_MAIN,
+    aux: "text",
+    hcCOP: "CBV-F910"
+  },
+  "NEXWAY-S": {
+    main: MESE_MAIN,
+    aux: "text",
+    hcCOP: "CBV-F910"
+  },
+  "NEXWAY": {
+    main: MESE_MAIN,
+    aux: "text",
+    hcCOP: "CBV-F910"
+  }
+};
+const MIRROR_CFG = {
+  "NEXIEZ-MR": ["No", "YZ-52A", "YZ-53A", "YZ-55SN", "By local"],
+  "NEXIEZ-MR BED": ["No", "YZ-52A", "YZ-53A", "YZ-55SN", "By local"],
+  "NEXIEZ-MRL II": ["No", "YZ-52A", "YZ-53A", "YZ-55SN", "By local"],
+  "NEXIEZ-FIT": ["No", "YZ-52A", "YZ-53A", "By local"],
+  "NEXIEZ-S": ["No", "YZ-52AN", "By local"],
+  "NEXWAY-S-AP II": ["No", "YZ-52A", "YZ-53A", "YZ-55SN", "By local"],
+  "NEXWAY Package R": ["No", "YZ-52A", "YZ-53A", "YZ-55SN", "By local"],
+  "NEXIEZ-MRL": ["No", "YH-100SL", "YH-100SV", "YH-100SB", "YH-100GL", "YH-100GV", "YH-100GB", "YH-56S", "YH-57S", "Flat type", "Pipe type", "remark"],
+  "NEXWAY-S": ["No", "YH-100SL", "YH-100SV", "YH-100SB", "YH-100GL", "YH-100GV", "YH-100GB", "YH-56S", "YH-57S", "Flat type", "Pipe type", "remark"],
+  "NEXWAY": ["No", "YH-100SL", "YH-100SV", "YH-100SB", "YH-100GL", "YH-100GV", "YH-100GB", "YH-56S", "YH-57S", "Flat type", "Pipe type", "remark"]
+};
+const HANDRAIL_CFG = {
+  "NEXIEZ-MR": ["No", "YH-59S", "YH-59M", "YH-59G", "YH-57S", "Flat type", "Pipe type", "remark"],
+  "NEXIEZ-MR BED": ["No", "YH-59S", "YH-59M", "YH-59G", "YH-57S", "Flat type", "Pipe type", "remark"],
+  "NEXIEZ-MRL II": ["No", "YH-100SL", "YH-100GL", "YH-100SM", "YH-57S", "Flat type", "Pipe type", "remark"],
+  "NEXIEZ-FIT": ["No", "YH-100SL", "Flat type", "Pipe type", "remark"],
+  "NEXIEZ-S": ["No", "YH-59S", "Flat type", "Pipe type", "remark"],
+  "NEXWAY-S-AP II": ["No", "YH-59S", "YH-59M", "YH-59G", "YH-57S", "Flat type", "Pipe type", "remark"],
+  "NEXWAY Package R": ["No", "YH-59S", "YH-59M", "YH-59G", "YH-57S", "Flat type", "Pipe type", "remark"],
+  "NEXIEZ-MRL": ["No", "YH-100SL", "YH-100SV", "YH-100SB", "YH-100GL", "YH-100GV", "YH-100GB", "YH-56S", "YH-57S", "Flat type", "Pipe type", "remark"],
+  "NEXWAY-S": ["No", "YH-100SL", "YH-100SV", "YH-100SB", "YH-100GL", "YH-100GV", "YH-100GB", "YH-56S", "YH-57S", "Flat type", "Pipe type", "remark"],
+  "NEXWAY": ["No", "YH-100SL", "YH-100SV", "YH-100SB", "YH-100GL", "YH-100GV", "YH-100GB", "YH-56S", "YH-57S", "Flat type", "Pipe type", "remark"]
+};
+const MESE_LAN = ["HLV-SH60", "HLF-SH20", "HLF-SH10", "HLV-SH50", "HLV-SH70", "HLH-SH10", "HLF-A10"];
+const MESE_BTN = ["HBV-A610", "HBV-C610"];
+const MESE_PIV = ["PIV-A634", "PIV-A644", "PIV-A684", "PIV-A694", "PIV-A664", "PIV-A674", "PID-D410", "PIH-D410", "PIH-C130", "PIH-C213", "PIH-C223"];
+const MR_LAN = ["HLV-A21S", "HLV-A31S", "HLV-E65", "HLV-E66", "HLV-E71", "HLH-A31S", "HLV-A16S", "HLH-A16S"];
+const MR_BTN = ["HBV-A1010N", "HBV-A1010B", "HBV-C710N"];
+const MR_PIV = ["PIV-A1010", "PIV-A1020", "PIV-A1030", "PIV-A1040", "PIV-C710", "PIV-C720", "PIV-C730", "PIV-C740", "PIV-C766", "PIV-C776"];
+const ENTRANCE_CFG = {
+  "NEXIEZ-MR": {
+    lan: MR_LAN,
+    btn: MR_BTN,
+    piv: MR_PIV,
+    hcBtn: "HBV-F710"
+  },
+  "NEXIEZ-MR BED": {
+    lan: MR_LAN,
+    btn: MR_BTN,
+    piv: MR_PIV,
+    hcBtn: "HBV-F710"
+  },
+  "NEXIEZ-MRL II": {
+    lan: ["HLV1-A80S", "HLV3-A80S", "HLV1-A90S", "HLV3-A90S", "HLV1-E62", "HLV3-E62", "HLV-A16S", "HLV-A31S", "HLH1-A80S", "HLH3-A80S", "HLH-A16S", "HLH-A31S", "HLH1-A90S", "HLH3-A90S"],
+    btn: ["HBV-A1010", "HBV-A1210", "HBV-C716"],
+    piv: ["PIV-A1010", "PIV-A1020", "PIV-A1030", "PIV-A1040", "PIV-A1080", "PIV-A1090", "PIV-A1210", "PIV-A1220", "PIV-A1230", "PIV-A1240", "PIV-A1280", "PIV-A1290", "PIV-C710", "PIV-C720", "PIV-C730", "PIV-C740", "PIV-C780", "PIV-C790", "PIV-C766", "PIV-C776"],
+    hcBtn: "HBV-F716"
+  },
+  "NEXIEZ-FIT": {
+    lan: ["HLV-A16S", "HLH-A16S"],
+    btn: ["HBV1-A910"],
+    piv: ["PIV1-A1040", "PIV3-C780", "PIV-A1030", "PIV-C730", "PIV-A1040", "PIV-C740", "PIV-A1080", "PIV-C780", "PIV-A1090", "PIV-C790"],
+    hcBtn: "HBV-F716"
+  },
+  "NEXIEZ-S": {
+    lan: null,
+    btn: ["HBV1-A910N", "HBV1-A910B"],
+    piv: ["PIV1-A910N", "PIV1-A910B"],
+    hcBtn: null
+  },
+  "NEXWAY-S-AP II": {
+    lan: MR_LAN,
+    btn: MR_BTN,
+    piv: MR_PIV,
+    hcBtn: "HBV-F710"
+  },
+  "NEXWAY Package R": {
+    lan: MR_LAN,
+    btn: MR_BTN,
+    piv: MR_PIV,
+    hcBtn: "HBV-F710"
+  },
+  "NEXIEZ-MRL": {
+    lan: MESE_LAN,
+    btn: MESE_BTN,
+    piv: MESE_PIV,
+    hcBtn: "HBV-F610"
+  },
+  "NEXWAY-S": {
+    lan: MESE_LAN,
+    btn: MESE_BTN,
+    piv: MESE_PIV,
+    hcBtn: "HBV-F610"
+  },
+  "NEXWAY": {
+    lan: MESE_LAN,
+    btn: MESE_BTN,
+    piv: MESE_PIV,
+    hcBtn: "HBV-F610"
+  }
+};
+const OBS = ["No", "NY-40A", "NY-40B", "NY-40C", "NY-40D", "NY-40E"];
+const DW = ["700", "800", "900", "1000", "1100", "1200", "1300", "remark"];
+const DH = ["2000", "2100", "2200", "2300", "2400", "remark"];
+const CH = ["2200", "2300", "2400", "2500", "2600", "2700", "2800", "remark"];
+const FINISH = ["SUS-HL", "SUS-M", "SUS-E", "Painted local", "Painted factory", "PPS", "remark"];
+const FRONT = ["SUS-HL", "SUS-M", "Painted local", "Painted factory", "PPS", "remark"];
+const TRANSOM_ENT = ["No", "SUS-HL", "SUS-M", "Painted local", "Painted factory", "PPS", "remark"];
+const KICK = ["SUS-HL304", "SUS-HL", "Aluminum", "remark"];
+const GLASS = ["No", "200x800 1 side", "200x800 2 side", "200x1300", "300x1300"];
+const RECESS = ["No", "20 mm", "25 mm", "30 mm", "remark"];
+const FLOORING = ["Vinyl tile", "By local", "remark"];
+const HR_SIDES = ["1 side (rear)", "2 side", "3 side", "3 side 2 level"];
+const JAMB = ["Painted by local", "Painted by factory", "SUS-HL", "SUS-M", "remark"];
+const GROUP_OP = ["1C-2BC", "2C-2BC", "2C-ΣAI22", "3C-ΣAI22", "4C-ΣAI22", "3C-ΣAI2200C", "4C-ΣAI2200C", "5C-ΣAI2200C", "6C-ΣAI2200C", "7C-ΣAI2200C", "8C-ΣAI2200C", "remark"];
+
+// ── CONSTANTS ────────────────────────────────────────────────────────
+const NAV = "#1e3a5f",
+  AMBER = "#d97706",
+  AMBERD = "#92400e",
+  BLUE = "#378ADD";
+const SCOPE_OPTS = ["No", "By MET", "By owner", "remark"];
+const CWT_OPTS = ["Rear", "Left", "Right", "Side"];
+const HOISTWAY_OPTS = ["RCC", "Brick", "Steel", "remark"];
+const USAGE_OPTS = ["Passenger", "Service", "Bed", "Fireman", "Car park"];
+const JAMB_TYPE_OPTS = ["E102", "E202", "E302"];
+const bInp = {
+  width: "100%",
+  padding: "7px 10px",
+  borderRadius: 7,
+  border: "0.5px solid var(--color-border-secondary)",
+  background: "var(--color-background-primary)",
+  color: "var(--color-text-primary)",
+  fontSize: 14,
+  fontFamily: "inherit",
+  outline: "none",
+  boxSizing: "border-box"
+};
+
+// ── INIT STATE ────────────────────────────────────────────────────────
+const INIT_PROJ = {
+  jobSiteNo: "",
+  projectBKKNo: "",
+  name: "",
+  customer: "",
+  building: "",
+  location: "",
+  date: "",
+  rev: "Rev.0",
+  engineer: "",
+  sales: ""
+};
+const INIT_EXISTING = {
+  elevNo: "",
+  usage: "Passenger",
+  brand: "",
+  yearInstalled: "",
+  capacity: "",
+  speed: "",
+  operation: "",
+  travel: "",
+  noOfStop: "",
+  floorName: "",
+  doorType: "CO",
+  doorWidth: "",
+  carType: "Standard",
+  machineRoom: "MR",
+  mrSize: "",
+  carW: "",
+  carD: "",
+  ceilingHL: "",
+  entranceJJ: "",
+  entranceHH: "",
+  cwtLocation: "Rear",
+  shaftAH: "",
+  shaftBH: "",
+  leWall: "",
+  reWall: "",
+  pitDepth: "",
+  overhead: "",
+  hoistway: "Concrete",
+  cop: "",
+  ceiling: "",
+  carWall: "SUS-HL",
+  carDoor: "SUS-HL",
+  kickPlate: "SUS-HL304",
+  flooring: "Vinyl tile",
+  recessFloor: "",
+  noOfFan: "1",
+  landingDoorMain: "SUS-HL",
+  landingDoorTypical: "SUS-HL",
+  jambMain: "Painted by local",
+  jambTypical: "Painted by local",
+  jambTypeMain: "E102",
+  jambTypeMainRemark: "",
+  jambTypeTypical: "E102",
+  jambTypeTypicalRemark: "",
+  hallBtnMain: "",
+  hallBtnMainRemark: "",
+  hallBtnTypical: "",
+  hallBtnTypicalRemark: "",
+  hallLanternMain: "",
+  hallLanternMainRemark: "",
+  hallLanternTypical: "",
+  hallLanternTypicalRemark: "",
+  hallPIVMain: "",
+  hallPIVMainRemark: "",
+  hallPIVTypical: "",
+  hallPIVTypicalRemark: "",
+  remarkGeneral: "",
+  remarkShaft: "",
+  remarkCar: "",
+  remarkEntrance: ""
+};
+const INIT_PROPOSED = {
+  source: "AMEC",
+  product: "",
+  code: "",
+  speed: "",
+  kg: "",
+  persons: "",
+  doorType: "CO",
+  carType: "Standard",
+  machineRoom: "MRL",
+  operation: "1C-2BC",
+  travel: "",
+  noOfStop: "",
+  floorName: "",
+  carWidth: "",
+  carDepth: "",
+  carDoorWidth: "",
+  carDoorHeight: "",
+  ceilingHeight: "",
+  cwtLocation: "Rear",
+  shaftAH: "",
+  shaftBH: "",
+  leWall: "",
+  reWall: "",
+  pitDepth: "",
+  overhead: "",
+  ceilingType: "",
+  carWallFinish: "SUS-HL",
+  carDoorFinish: "SUS-HL",
+  flooring: "Vinyl tile",
+  kickPlate: "SUS-HL304",
+  recessFloor: "No",
+  noOfFan: "1",
+  mainCOP: "",
+  mainCOPRemark: "",
+  ceilingTypeRemark: "",
+  landingDoorMain: "SUS-HL",
+  landingDoorTypical: "SUS-HL",
+  jambMain: "Painted by local",
+  jambTypical: "Painted by local",
+  jambTypeMain: "E102",
+  jambTypeMainRemark: "",
+  jambTypeTypical: "E102",
+  jambTypeTypicalRemark: "",
+  hallBtnMain: "",
+  hallBtnMainRemark: "",
+  hallBtnTypical: "",
+  hallBtnTypicalRemark: "",
+  hallLanternMain: "",
+  hallLanternMainRemark: "",
+  hallLanternTypical: "",
+  hallLanternTypicalRemark: "",
+  hallPIVMain: "",
+  hallPIVMainRemark: "",
+  hallPIVTypical: "",
+  hallPIVTypicalRemark: "",
+  remarkGeneral: "",
+  remarkShaft: "",
+  remarkCar: "",
+  remarkEntrance: ""
+};
+const INIT_FEATS = {
+  ECL: true,
+  MELD: true,
+  RSRL: true,
+  EMB: true,
+  BMS_GW: false,
+  EER: false,
+  EER_type: "EER-P",
+  FER: false,
+  FE: false,
+  FE_FELC: "No",
+  WP_W: false,
+  OEPS_SA: false,
+  WP_S: false,
+  Niagara: false,
+  DKO_TB: true,
+  SDE: false,
+  SDE_side: "one side",
+  SR: false,
+  SR_beam: "1 beam",
+  MBS: false,
+  FCC_P: true,
+  OLHL: true,
+  HE_B: false,
+  AS: false,
+  ABP: false,
+  ELSC: false,
+  ELSC_type: "ELSCA",
+  FCC_A: false,
+  LO: false,
+  NS: false,
+  NS_CB: false,
+  cardreader: false,
+  HOS: true,
+  RCS: false,
+  RET: false,
+  PCNV: false,
+  SCS_B: false,
+  BSO: false,
+  ELCS_RB: false,
+  ELCS_SP: false,
+  MFP: true,
+  VIP_S: false,
+  CCTV: true,
+  AAN: false,
+  AAN_type: "AAN-B",
+  AECC: true,
+  AECC_type: "AECC",
+  AIL: false,
+  ITP: false,
+  ITP_volt: "6V",
+  ACB: true,
+  AHC: false
+};
+const INIT_LOCAL = {
+  newJamb: "No",
+  newJambRemark: "",
+  motorRelocation: "No",
+  motorRelocationRemark: "",
+  demolishBeamMotor: "No",
+  demolishBeamMotorRemark: "",
+  demolishBuffer: "No",
+  demolishBufferRemark: "",
+  expandEntrance: "No",
+  expandEntranceRemark: "",
+  closeEntrance: "No",
+  closeEntranceRemark: "",
+  utilities: "No",
+  overhaul: "No",
+  rental: "",
+  wiringITP: "",
+  floorToFloor: "",
+  eerEquipment: "No",
+  lcd: "No",
+  lcdInch: "",
+  items: [],
+  remark: ""
+};
+const uid = () => Math.random().toString(36).slice(2, 8);
+const STEPS = ["Project Info", "Lift Comparison", "Features", "Local Scope"];
+
+// ── UI COMPONENTS ─────────────────────────────────────────────────────
+const Inp = ({
+  v,
+  on,
+  ph,
+  type = "text"
+}) => /*#__PURE__*/React.createElement("input", {
+  type: type,
+  value: v || "",
+  onChange: e => on(e.target.value),
+  placeholder: ph || "",
+  style: bInp
+});
+const Sel = ({
+  v,
+  on,
+  opts
+}) => /*#__PURE__*/React.createElement("select", {
+  value: v || opts[0] || "",
+  onChange: e => on(e.target.value),
+  style: {
+    ...bInp,
+    cursor: "pointer"
+  }
+}, opts.map(o => /*#__PURE__*/React.createElement("option", {
+  key: o
+}, o)));
+const F = ({
+  label,
+  children,
+  half
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    gridColumn: half ? "span 1" : "span 2",
+    display: "flex",
+    flexDirection: "column",
+    gap: 4
+  }
+}, /*#__PURE__*/React.createElement("label", {
+  style: {
+    fontSize: 11.5,
+    color: "var(--color-text-secondary)",
+    fontWeight: 500
+  }
+}, label), children);
+const Sec = ({
+  title,
+  icon,
+  children
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    background: "var(--color-background-primary)",
+    border: "0.5px solid var(--color-border-tertiary)",
+    borderRadius: 10,
+    overflow: "hidden",
+    marginBottom: 10
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    padding: "8px 12px",
+    background: AMBER,
+    color: "#fff",
+    fontSize: 13,
+    fontWeight: 500
+  }
+}, icon, " ", title), /*#__PURE__*/React.createElement("div", {
+  style: {
+    padding: 14,
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: 10
+  }
+}, children));
+const WizBar = ({
+  step,
+  onStep
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: 16
+  }
+}, STEPS.map((l, i) => /*#__PURE__*/React.createElement("div", {
+  key: i,
+  style: {
+    display: "flex",
+    alignItems: "center",
+    flex: i < STEPS.length - 1 ? 1 : "auto"
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 3,
+    cursor: "pointer"
+  },
+  onClick: () => onStep(i + 1)
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    background: i + 1 <= step ? AMBER : "var(--color-border-secondary)",
+    color: i + 1 <= step ? "#fff" : "var(--color-text-muted)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: 12,
+    fontWeight: 500,
+    boxShadow: i + 1 === step ? "0 0 0 3px rgba(217,119,6,0.2)" : "none"
+  }
+}, i + 1), /*#__PURE__*/React.createElement("span", {
+  style: {
+    fontSize: 9.5,
+    color: i + 1 === step ? AMBER : "var(--color-text-muted)",
+    fontWeight: i + 1 === step ? 500 : 400,
+    whiteSpace: "nowrap"
+  }
+}, l)), i < STEPS.length - 1 && /*#__PURE__*/React.createElement("div", {
+  style: {
+    flex: 1,
+    height: 2,
+    background: i + 1 < step ? AMBER : "var(--color-border-secondary)",
+    margin: "0 4px",
+    marginBottom: 14
+  }
+}))));
+
+// Comparison table components
+const TblHdr = ({
+  title,
+  icon
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    padding: "8px 12px",
+    background: "#d97706",
+    color: "#fff",
+    fontSize: 13,
+    fontWeight: 500
+  }
+}, icon, " ", title);
+const ColHdr = () => /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: "grid",
+    gridTemplateColumns: "140px 1fr 1fr",
+    background: "var(--color-background-secondary)",
+    borderBottom: "0.5px solid var(--color-border-tertiary)"
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    padding: "5px 8px",
+    fontSize: 11,
+    color: "var(--color-text-muted)",
+    borderRight: "0.5px solid var(--color-border-tertiary)"
+  }
+}, "Field"), /*#__PURE__*/React.createElement("div", {
+  style: {
+    padding: "5px 8px",
+    fontSize: 11,
+    fontWeight: 500,
+    color: "#475569",
+    textAlign: "center",
+    borderRight: "0.5px solid var(--color-border-tertiary)"
+  }
+}, "Existing lift"), /*#__PURE__*/React.createElement("div", {
+  style: {
+    padding: "5px 8px",
+    fontSize: 11,
+    fontWeight: 500,
+    color: NAV,
+    textAlign: "center"
+  }
+}, "🏢 Modernization Full Replacement"));
+const GrpHdr = ({
+  title
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    gridColumn: "span 3",
+    padding: "4px 8px",
+    fontSize: 11,
+    color: NAV,
+    fontWeight: 600,
+    background: "#eef2f7",
+    borderBottom: "0.5px solid var(--color-border-tertiary)",
+    borderTop: "0.5px solid var(--color-border-tertiary)"
+  }
+}, title);
+const Row = ({
+  label,
+  ex,
+  pr,
+  badge
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: "grid",
+    gridTemplateColumns: "140px 1fr 1fr",
+    borderBottom: "0.5px solid var(--color-border-tertiary)",
+    minHeight: 34,
+    alignItems: "center"
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    padding: "4px 8px",
+    fontSize: 11,
+    color: "var(--color-text-secondary)",
+    borderRight: "0.5px solid var(--color-border-tertiary)",
+    background: "var(--color-background-secondary)",
+    fontWeight: 500,
+    lineHeight: 1.3
+  }
+}, label), /*#__PURE__*/React.createElement("div", {
+  style: {
+    padding: "4px 6px",
+    borderRight: "0.5px solid var(--color-border-tertiary)"
+  }
+}, ex), /*#__PURE__*/React.createElement("div", {
+  style: {
+    padding: "4px 6px",
+    background: "#fff7ed",
+    display: "flex",
+    alignItems: "center",
+    gap: 4
+  }
+}, pr, badge && /*#__PURE__*/React.createElement("span", {
+  style: {
+    padding: "1px 5px",
+    borderRadius: 3,
+    fontSize: 9.5,
+    fontWeight: 500,
+    ...badge.style
+  }
+}, badge.text)));
+const RemarkRow = ({
+  exVal,
+  prVal,
+  onEx,
+  onPr
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: "grid",
+    gridTemplateColumns: "140px 1fr 1fr",
+    borderBottom: "0.5px solid var(--color-border-tertiary)"
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    padding: "5px 8px",
+    fontSize: 11,
+    color: "var(--color-text-muted)",
+    borderRight: "0.5px solid var(--color-border-tertiary)",
+    background: "var(--color-background-secondary)",
+    fontStyle: "italic"
+  }
+}, "Remark"), /*#__PURE__*/React.createElement("div", {
+  style: {
+    padding: "4px 6px",
+    borderRight: "0.5px solid var(--color-border-tertiary)"
+  }
+}, /*#__PURE__*/React.createElement("textarea", {
+  value: exVal || "",
+  onChange: e => onEx(e.target.value),
+  rows: 2,
+  placeholder: "Non-standard existing...",
+  style: {
+    ...bInp,
+    resize: "none",
+    fontSize: 12
+  }
+})), /*#__PURE__*/React.createElement("div", {
+  style: {
+    padding: "4px 6px",
+    background: "#fff7ed"
+  }
+}, /*#__PURE__*/React.createElement("textarea", {
+  value: prVal || "",
+  onChange: e => onPr(e.target.value),
+  rows: 2,
+  placeholder: "Non-standard proposed...",
+  style: {
+    ...bInp,
+    resize: "none",
+    fontSize: 12,
+    border: "0.5px solid #b5d4f4",
+    color: NAV
+  }
+})));
+const feasBadge = (ex, pr) => {
+  const e = Number(ex),
+    p = Number(pr);
+  if (!ex || !pr) return null;
+  if (p <= e) return {
+    text: "OK",
+    style: {
+      background: "#dcf5e8",
+      color: "#166534"
+    }
+  };
+  return {
+    text: `+${p - e}mm`,
+    style: {
+      background: "#fef2f2",
+      color: "#dc2626",
+      fontWeight: 600
+    }
+  };
+};
+const FeatItem = ({
+  code,
+  label,
+  locked,
+  checked,
+  onChange,
+  children
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    padding: "7px 0",
+    borderBottom: "0.5px solid var(--color-border-tertiary)"
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: "flex",
+    alignItems: "center",
+    gap: 8
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  onClick: () => !locked && onChange(!checked),
+  style: {
+    width: 22,
+    height: 22,
+    borderRadius: 4,
+    border: `2px solid ${checked ? locked ? "#94A3B8" : AMBER : "#94A3B8"}`,
+    background: checked ? locked ? "#94A3B8" : AMBER : "#fff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: locked ? "not-allowed" : "pointer",
+    flexShrink: 0
+  }
+}, checked && /*#__PURE__*/React.createElement("span", {
+  style: {
+    color: "#fff",
+    fontSize: 12,
+    fontWeight: 700
+  }
+}, "✓")), /*#__PURE__*/React.createElement("span", {
+  style: {
+    fontSize: 13,
+    color: "var(--color-text-primary)"
+  }
+}, /*#__PURE__*/React.createElement("strong", {
+  style: {
+    fontWeight: 500
+  }
+}, code), " — ", label), locked && /*#__PURE__*/React.createElement("span", {
+  style: {
+    fontSize: 10,
+    background: "#f1f5f9",
+    color: "#64748b",
+    padding: "1px 6px",
+    borderRadius: 3
+  }
+}, "standard")), checked && children && /*#__PURE__*/React.createElement("div", {
+  style: {
+    marginTop: 6,
+    marginLeft: 30
+  }
+}, children));
+const FeatGroup = ({
+  icon,
+  title,
+  children,
+  defaultOpen = true
+}) => {
+  const [open, setOpen] = useState(defaultOpen);
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 8,
+      border: "0.5px solid var(--color-border-tertiary)",
+      borderRadius: 8,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    onClick: () => setOpen(!open),
+    style: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: "9px 12px",
+      background: "var(--color-background-secondary)",
+      cursor: "pointer",
+      userSelect: "none"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 13,
+      fontWeight: 500
+    }
+  }, icon, " ", title), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 14,
+      color: "var(--color-text-secondary)"
+    }
+  }, open ? "▼" : "▶")), open && /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "4px 12px"
+    }
+  }, children));
+};
+const ScopeRow = ({
+  label,
+  val,
+  remark,
+  onVal,
+  onRemark
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    gridColumn: "span 2",
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: 8,
+    padding: "6px 0",
+    borderBottom: "0.5px solid var(--color-border-tertiary)"
+  }
+}, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 11.5,
+    color: "var(--color-text-secondary)",
+    fontWeight: 500,
+    marginBottom: 4
+  }
+}, label), /*#__PURE__*/React.createElement(Sel, {
+  v: val,
+  on: onVal,
+  opts: SCOPE_OPTS
+})), val === "remark" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 11.5,
+    color: "var(--color-text-secondary)",
+    fontWeight: 500,
+    marginBottom: 4
+  }
+}, "Remark"), /*#__PURE__*/React.createElement(Inp, {
+  v: remark,
+  on: onRemark,
+  ph: "Specify..."
+})));
+const Tog = ({
+  v,
+  on,
+  label
+}) => /*#__PURE__*/React.createElement("div", {
+  onClick: () => on(!v),
+  style: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 8,
+    cursor: "pointer",
+    userSelect: "none"
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    width: 38,
+    height: 20,
+    borderRadius: 10,
+    background: v ? AMBER : "var(--color-border-secondary)",
+    position: "relative",
+    flexShrink: 0
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    position: "absolute",
+    top: 2,
+    left: v ? 20 : 2,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    background: "#fff",
+    transition: "left 0.2s"
+  }
+})), /*#__PURE__*/React.createElement("span", {
+  style: {
+    fontSize: 13
+  }
+}, label));
+
+// ── LIFT EDITOR (steps 2-5) ───────────────────────────────────────────
+function LiftEditor({
+  existing,
+  proposed,
+  feats,
+  local,
+  setExisting,
+  setProposed,
+  setFeats,
+  setLocal,
+  step,
+  setStep
+}) {
+  const se = k => v => setExisting(s => ({
+    ...s,
+    [k]: v
+  }));
+  const spr = k => v => setProposed(s => ({
+    ...s,
+    [k]: v
+  }));
+  const sf = k => v => setFeats(f => ({
+    ...f,
+    [k]: v
+  }));
+  const sl = k => v => setLocal(l => ({
+    ...l,
+    [k]: v
+  }));
+  const catEntry = proposed.product && CAT[proposed.product] ? CAT[proposed.product] : null;
+  const codes = catEntry ? Object.keys(catEntry.codes) : [];
+  const codeData = catEntry && proposed.code ? catEntry.codes[proposed.code] : null;
+  const speeds = codeData ? codeData.sp : [];
+  const copCfg = COP_CFG[proposed.product] || {};
+  const entCfg = ENTRANCE_CFG[proposed.product] || {};
+  const prodList = SOURCE_PRODUCTS[proposed.source] || [];
+  const onSource = v => {
+    setProposed(s => ({
+      ...s,
+      source: v,
+      product: "",
+      code: "",
+      speed: "",
+      kg: "",
+      persons: ""
+    }));
+  };
+  const onProduct = v => {
+    setProposed(s => ({
+      ...s,
+      product: v,
+      code: "",
+      speed: "",
+      kg: "",
+      persons: ""
+    }));
+  };
+  const onCode = v => {
+    const d = catEntry?.codes[v] || {};
+    setProposed(s => ({
+      ...s,
+      code: v,
+      kg: String(d.kg || ""),
+      persons: String(d.p || ""),
+      speed: (d.sp || [])[0] || ""
+    }));
+  };
+  const inpE = k => /*#__PURE__*/React.createElement("input", {
+    value: existing[k] || "",
+    onChange: e => se(k)(e.target.value),
+    style: {
+      ...bInp,
+      fontSize: 12,
+      padding: "4px 6px"
+    }
+  });
+  const selE = (k, opts) => /*#__PURE__*/React.createElement("select", {
+    value: existing[k] || opts[0],
+    onChange: e => se(k)(e.target.value),
+    style: {
+      ...bInp,
+      fontSize: 12,
+      padding: "4px 6px",
+      cursor: "pointer"
+    }
+  }, opts.map(o => /*#__PURE__*/React.createElement("option", {
+    key: o
+  }, o)));
+  const inpP = k => /*#__PURE__*/React.createElement("input", {
+    value: proposed[k] || "",
+    onChange: e => spr(k)(e.target.value),
+    style: {
+      ...bInp,
+      fontSize: 12,
+      padding: "4px 6px",
+      border: "0.5px solid #f97316",
+      color: NAV,
+      background: "#fff7ed"
+    }
+  });
+  const selP = (k, opts) => /*#__PURE__*/React.createElement("select", {
+    value: proposed[k] || opts[0],
+    onChange: e => spr(k)(e.target.value),
+    style: {
+      ...bInp,
+      fontSize: 12,
+      padding: "4px 6px",
+      cursor: "pointer",
+      border: "0.5px solid #f97316",
+      color: NAV,
+      background: "#fff7ed"
+    }
+  }, opts.map(o => /*#__PURE__*/React.createElement("option", {
+    key: o
+  }, o)));
+  const catSel = (k, opts, val) => /*#__PURE__*/React.createElement("select", {
+    value: val || opts[0] || "",
+    onChange: e => spr(k)(e.target.value),
+    style: {
+      ...bInp,
+      fontSize: 12,
+      padding: "4px 6px",
+      cursor: "pointer",
+      border: "0.5px solid #f97316",
+      color: NAV,
+      background: "#fff7ed"
+    }
+  }, opts.map(o => /*#__PURE__*/React.createElement("option", {
+    key: o
+  }, o)));
+  if (step === 2) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--color-background-primary)",
+      border: "0.5px solid var(--color-border-tertiary)",
+      borderRadius: 10,
+      overflow: "hidden",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement(TblHdr, {
+    icon: "🏗️",
+    title: "General Info"
+  }), /*#__PURE__*/React.createElement(ColHdr, null), /*#__PURE__*/React.createElement(Row, {
+    label: "Elevator No.",
+    ex: inpE('elevNo'),
+    pr: inpP('elevNo')
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Usage",
+    ex: selE('usage', USAGE_OPTS),
+    pr: selP('usage', USAGE_OPTS)
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Brand (existing)",
+    ex: inpE('brand'),
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "4px 6px",
+        fontSize: 12,
+        color: "#64748b"
+      }
+    }, "—")
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Year installed",
+    ex: inpE('yearInstalled'),
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "4px 6px",
+        fontSize: 12,
+        color: "#64748b"
+      }
+    }, "N/A")
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Source/Factory",
+    ex: /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "4px 6px",
+        fontSize: 12,
+        color: "#64748b"
+      }
+    }, "—"),
+    pr: /*#__PURE__*/React.createElement("select", {
+      value: proposed.source || "AMEC",
+      onChange: e => onSource(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        cursor: "pointer",
+        border: "0.5px solid #f97316",
+        color: NAV,
+        background: "#fff7ed"
+      }
+    }, ["AMEC", "MESE", "Other"].map(o => /*#__PURE__*/React.createElement("option", {
+      key: o
+    }, o)))
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Product",
+    ex: /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "4px 6px",
+        fontSize: 12,
+        color: "#64748b"
+      }
+    }, "—"),
+    pr: /*#__PURE__*/React.createElement("select", {
+      value: proposed.product || "",
+      onChange: e => onProduct(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        cursor: "pointer",
+        border: "0.5px solid #f97316",
+        color: NAV,
+        background: "#fff7ed"
+      }
+    }, /*#__PURE__*/React.createElement("option", {
+      value: ""
+    }, "— select product —"), prodList.map(p => /*#__PURE__*/React.createElement("option", {
+      key: p
+    }, p)))
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Code / Capacity",
+    ex: inpE('capacity'),
+    pr: codes.length > 0 ? /*#__PURE__*/React.createElement("select", {
+      value: proposed.code || "",
+      onChange: e => onCode(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        cursor: "pointer",
+        border: "0.5px solid #f97316",
+        color: NAV,
+        background: "#fff7ed"
+      }
+    }, /*#__PURE__*/React.createElement("option", {
+      value: ""
+    }, "— select code —"), codes.map(c => {
+      const d = catEntry.codes[c];
+      return /*#__PURE__*/React.createElement("option", {
+        key: c,
+        value: c
+      }, c, " — ", d.kg, " kg (", d.p, "P)");
+    })) : inpP('code')
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Capacity (auto)",
+    ex: /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "4px 6px",
+        fontSize: 12,
+        color: "#64748b"
+      }
+    }, existing.capacity || "—", " kg"),
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "4px 6px",
+        fontSize: 12,
+        color: NAV,
+        fontWeight: 500
+      }
+    }, proposed.kg ? `${proposed.kg} kg (${proposed.persons}P)` : "—")
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Door Type",
+    ex: selE('doorType', ["CO", "2S", "Other"]),
+    pr: selP('doorType', ["CO", "2S"])
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Speed (m/s)",
+    ex: inpE('speed'),
+    pr: speeds.length > 0 ? /*#__PURE__*/React.createElement("select", {
+      value: proposed.speed || "",
+      onChange: e => spr('speed')(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        cursor: "pointer",
+        border: "0.5px solid #f97316",
+        color: NAV,
+        background: "#fff7ed"
+      }
+    }, speeds.map(s => /*#__PURE__*/React.createElement("option", {
+      key: s
+    }, s))) : inpP('speed')
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Operation",
+    ex: inpE('operation'),
+    pr: selP('operation', GROUP_OP)
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Travel (m)",
+    ex: inpE('travel'),
+    pr: inpP('travel')
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "No. of Stop",
+    ex: inpE('noOfStop'),
+    pr: inpP('noOfStop')
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Floor Name",
+    ex: inpE('floorName'),
+    pr: inpP('floorName')
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Machine Room",
+    ex: selE('machineRoom', ["MR", "MRL"]),
+    pr: selP('machineRoom', ["MRL", "MR"])
+  }), /*#__PURE__*/React.createElement(RemarkRow, {
+    exVal: existing.remarkGeneral,
+    prVal: proposed.remarkGeneral,
+    onEx: se('remarkGeneral'),
+    onPr: spr('remarkGeneral')
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--color-background-primary)",
+      border: "0.5px solid var(--color-border-tertiary)",
+      borderRadius: 10,
+      overflow: "hidden",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement(TblHdr, {
+    icon: "📐",
+    title: "Shaft, Car & Civil Dimensions"
+  }), /*#__PURE__*/React.createElement(ColHdr, null), /*#__PURE__*/React.createElement(Row, {
+    label: "Car Type",
+    ex: selE('carType', ["Standard", "Non-standard"]),
+    pr: selP('carType', ["Standard", "Non-standard"])
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Car AA×BB (mm)",
+    ex: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 3
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      value: existing.carW || "",
+      onChange: e => se('carW')(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        width: 55
+      },
+      placeholder: "W"
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        alignSelf: "center",
+        color: "#94a3b8",
+        fontSize: 12
+      }
+    }, "×"), /*#__PURE__*/React.createElement("input", {
+      value: existing.carD || "",
+      onChange: e => se('carD')(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        width: 55
+      },
+      placeholder: "D"
+    })),
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 3
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      value: proposed.carWidth || "",
+      onChange: e => spr('carWidth')(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        width: 55,
+        border: "0.5px solid #b5d4f4",
+        color: NAV
+      },
+      placeholder: "W"
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        alignSelf: "center",
+        color: "#b5d4f4",
+        fontSize: 12
+      }
+    }, "×"), /*#__PURE__*/React.createElement("input", {
+      value: proposed.carDepth || "",
+      onChange: e => spr('carDepth')(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        width: 55,
+        border: "0.5px solid #b5d4f4",
+        color: NAV
+      },
+      placeholder: "D"
+    }))
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Ceiling HL (mm)",
+    ex: inpE('ceilingHL'),
+    pr: inpP('ceilingHeight')
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Entrance JJ×HH (mm)",
+    ex: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 3
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      value: existing.entranceJJ || "",
+      onChange: e => se('entranceJJ')(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        width: 55
+      },
+      placeholder: "JJ"
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        alignSelf: "center",
+        color: "#94a3b8",
+        fontSize: 12
+      }
+    }, "×"), /*#__PURE__*/React.createElement("input", {
+      value: existing.entranceHH || "",
+      onChange: e => se('entranceHH')(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        width: 55
+      },
+      placeholder: "HH"
+    })),
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 3
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      value: proposed.carDoorWidth || "",
+      onChange: e => spr('carDoorWidth')(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        width: 55,
+        border: "0.5px solid #b5d4f4",
+        color: NAV
+      },
+      placeholder: "JJ"
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        alignSelf: "center",
+        color: "#b5d4f4",
+        fontSize: 12
+      }
+    }, "×"), /*#__PURE__*/React.createElement("input", {
+      value: proposed.carDoorHeight || "",
+      onChange: e => spr('carDoorHeight')(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        width: 55,
+        border: "0.5px solid #b5d4f4",
+        color: NAV
+      },
+      placeholder: "HH"
+    }))
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "CWT Location",
+    ex: selE('cwtLocation', CWT_OPTS),
+    pr: selP('cwtLocation', CWT_OPTS)
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Shaft AH×BH (mm)",
+    ex: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 3
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      value: existing.shaftAH || "",
+      onChange: e => se('shaftAH')(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        width: 55
+      },
+      placeholder: "AH"
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        alignSelf: "center",
+        color: "#94a3b8",
+        fontSize: 12
+      }
+    }, "×"), /*#__PURE__*/React.createElement("input", {
+      value: existing.shaftBH || "",
+      onChange: e => se('shaftBH')(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        width: 55
+      },
+      placeholder: "BH"
+    })),
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 3
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      value: proposed.shaftAH || "",
+      onChange: e => spr('shaftAH')(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        width: 55,
+        border: "0.5px solid #b5d4f4",
+        color: NAV
+      },
+      placeholder: "AH"
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        alignSelf: "center",
+        color: "#b5d4f4",
+        fontSize: 12
+      }
+    }, "×"), /*#__PURE__*/React.createElement("input", {
+      value: proposed.shaftBH || "",
+      onChange: e => spr('shaftBH')(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 12,
+        padding: "4px 6px",
+        width: 55,
+        border: "0.5px solid #b5d4f4",
+        color: NAV
+      },
+      placeholder: "BH"
+    }))
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "LE Wall (mm)",
+    ex: inpE('leWall'),
+    pr: inpP('leWall')
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "RE Wall (mm)",
+    ex: inpE('reWall'),
+    pr: inpP('reWall')
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "MR Size AM×BM×HM",
+    ex: existing.machineRoom === 'MR' ? inpE('mrSize') : /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "4px 6px",
+        fontSize: 11.5,
+        color: "#94a3b8"
+      }
+    }, "N/A (MRL)"),
+    pr: proposed.machineRoom === 'MR' ? inpP('mrSize') : /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "4px 6px",
+        fontSize: 11.5,
+        color: "#94a3b8"
+      }
+    }, "N/A (MRL)")
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Overhead OH (mm)",
+    ex: inpE('overhead'),
+    pr: inpP('overhead'),
+    badge: feasBadge(existing.overhead, proposed.overhead)
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Pit Depth PD (mm)",
+    ex: inpE('pitDepth'),
+    pr: inpP('pitDepth'),
+    badge: feasBadge(existing.pitDepth, proposed.pitDepth)
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Hoistway Structure",
+    ex: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, selE('hoistway', HOISTWAY_OPTS), existing.hoistway === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: existing.hoistwayremark || '',
+      onChange: e => se('hoistwayremark')(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 11,
+        padding: '4px 6px'
+      },
+      placeholder: "Specify..."
+    })),
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, selP('hoistway', HOISTWAY_OPTS), proposed.hoistway === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.hoistwayremark || '',
+      onChange: e => spr('hoistwayremark')(e.target.value),
+      style: {
+        ...bInp,
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      },
+      placeholder: "Specify..."
+    }))
+  }), /*#__PURE__*/React.createElement(RemarkRow, {
+    exVal: existing.remarkShaft,
+    prVal: proposed.remarkShaft,
+    onEx: se('remarkShaft'),
+    onPr: spr('remarkShaft')
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--color-background-primary)",
+      border: "0.5px solid var(--color-border-tertiary)",
+      borderRadius: 10,
+      overflow: "hidden",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement(TblHdr, {
+    icon: "🎨",
+    title: "Car Design"
+  }), /*#__PURE__*/React.createElement(ColHdr, null), /*#__PURE__*/React.createElement(Row, {
+    label: "COP Main",
+    ex: inpE('cop'),
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, copCfg.main ? catSel('mainCOP', [...(copCfg.main || []), 'remark'], proposed.mainCOP) : inpP('mainCOP'), proposed.mainCOP === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.mainCOPRemark || '',
+      onChange: e => spr('mainCOPRemark')(e.target.value),
+      placeholder: "Specify...",
+      style: {
+        ...bInp,
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      }
+    }))
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Ceiling",
+    ex: inpE('ceiling'),
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, (CEILING[proposed.product] || []).length > 0 ? catSel('ceilingType', [...(CEILING[proposed.product] || []), 'remark'], proposed.ceilingType) : inpP('ceilingType'), proposed.ceilingType === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.ceilingTypeRemark || '',
+      onChange: e => spr('ceilingTypeRemark')(e.target.value),
+      placeholder: "Specify...",
+      style: {
+        ...bInp,
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      }
+    }))
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Car Wall",
+    ex: selE('carWall', FINISH),
+    pr: selP('carWallFinish', FINISH)
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Car Door",
+    ex: selE('carDoor', FINISH),
+    pr: selP('carDoorFinish', FINISH)
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Kick Plate",
+    ex: selE('kickPlate', KICK),
+    pr: selP('kickPlate', KICK)
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Flooring",
+    ex: selE('flooring', FLOORING),
+    pr: selP('flooring', FLOORING)
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Recess Floor (mm)",
+    ex: inpE('recessFloor'),
+    pr: selP('recessFloor', RECESS)
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "No. of Fan",
+    ex: inpE('noOfFan'),
+    pr: selP('noOfFan', ["1", "2", "3"])
+  }), /*#__PURE__*/React.createElement(RemarkRow, {
+    exVal: existing.remarkCar,
+    prVal: proposed.remarkCar,
+    onEx: se('remarkCar'),
+    onPr: spr('remarkCar')
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--color-background-primary)",
+      border: "0.5px solid var(--color-border-tertiary)",
+      borderRadius: 10,
+      overflow: "hidden",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement(TblHdr, {
+    icon: "🚪",
+    title: "Entrance Design"
+  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(ColHdr, null), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "140px 1fr 1fr"
+    }
+  }, /*#__PURE__*/React.createElement(GrpHdr, {
+    title: "Landing Door"
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Main floor",
+    ex: selE('landingDoorMain', FINISH),
+    pr: selP('landingDoorMain', [...FINISH.filter(x => x !== 'remark'), 'No', 'By local', 'remark'])
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Typical floor",
+    ex: selE('landingDoorTypical', FINISH),
+    pr: selP('landingDoorTypical', [...FINISH.filter(x => x !== 'remark'), 'No', 'By local', 'remark'])
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "140px 1fr 1fr"
+    }
+  }, /*#__PURE__*/React.createElement(GrpHdr, {
+    title: "Door Jamb"
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Jamb — Main",
+    ex: selE('jambMain', JAMB),
+    pr: selP('jambMain', [...JAMB.filter(x => x !== 'remark'), 'No', 'By local', 'remark'])
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Jamb — Typical",
+    ex: selE('jambTypical', JAMB),
+    pr: selP('jambTypical', [...JAMB.filter(x => x !== 'remark'), 'No', 'By local', 'remark'])
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Jamb type — Main",
+    ex: selE('jambTypeMain', JAMB_TYPE_OPTS),
+    pr: selP('jambTypeMain', JAMB_TYPE_OPTS)
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Jamb type — Typical",
+    ex: selE('jambTypeTypical', JAMB_TYPE_OPTS),
+    pr: selP('jambTypeTypical', JAMB_TYPE_OPTS)
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "140px 1fr 1fr"
+    }
+  }, /*#__PURE__*/React.createElement(GrpHdr, {
+    title: "Hall Button"
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Main floor",
+    ex: inpE('hallBtnMain'),
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, catSel('hallBtnMain', [...(entCfg.btn || []), 'No', 'By local', 'remark'], proposed.hallBtnMain), proposed.hallBtnMain === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.hallBtnMainRemark || '',
+      onChange: e => spr('hallBtnMainRemark')(e.target.value),
+      placeholder: "Specify...",
+      style: {
+        ...bInp,
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      }
+    }))
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Typical floor",
+    ex: inpE('hallBtnTypical'),
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, catSel('hallBtnTypical', [...(entCfg.btn || []), 'No', 'By local', 'remark'], proposed.hallBtnTypical), proposed.hallBtnTypical === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.hallBtnTypicalRemark || '',
+      onChange: e => spr('hallBtnTypicalRemark')(e.target.value),
+      placeholder: "Specify...",
+      style: {
+        ...bInp,
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      }
+    }))
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "140px 1fr 1fr"
+    }
+  }, /*#__PURE__*/React.createElement(GrpHdr, {
+    title: "Hall Lantern"
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Main floor",
+    ex: inpE('hallLanternMain'),
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, catSel('hallLanternMain', [...(entCfg.lan || []), 'No', 'By local', 'remark'], proposed.hallLanternMain), proposed.hallLanternMain === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.hallLanternMainRemark || '',
+      onChange: e => spr('hallLanternMainRemark')(e.target.value),
+      placeholder: "Specify...",
+      style: {
+        ...bInp,
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      }
+    }))
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Typical floor",
+    ex: inpE('hallLanternTypical'),
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, catSel('hallLanternTypical', [...(entCfg.lan || []), 'No', 'By local', 'remark'], proposed.hallLanternTypical), proposed.hallLanternTypical === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.hallLanternTypicalRemark || '',
+      onChange: e => spr('hallLanternTypicalRemark')(e.target.value),
+      placeholder: "Specify...",
+      style: {
+        ...bInp,
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      }
+    }))
+  }), entCfg.piv && entCfg.piv.length > 0 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "140px 1fr 1fr"
+    }
+  }, /*#__PURE__*/React.createElement(GrpHdr, {
+    title: "Hall Position Indicator"
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Main floor",
+    ex: inpE('hallPIVMain'),
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, catSel('hallPIVMain', [...(entCfg.piv || []), 'No', 'By local', 'remark'], proposed.hallPIVMain), proposed.hallPIVMain === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.hallPIVMainRemark || '',
+      onChange: e => spr('hallPIVMainRemark')(e.target.value),
+      placeholder: "Specify...",
+      style: {
+        ...bInp,
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      }
+    }))
+  }), /*#__PURE__*/React.createElement(Row, {
+    label: "Typical floor",
+    ex: inpE('hallPIVTypical'),
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, catSel('hallPIVTypical', [...(entCfg.piv || []), 'No', 'By local', 'remark'], proposed.hallPIVTypical), proposed.hallPIVTypical === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.hallPIVTypicalRemark || '',
+      onChange: e => spr('hallPIVTypicalRemark')(e.target.value),
+      placeholder: "Specify...",
+      style: {
+        ...bInp,
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      }
+    }))
+  })), /*#__PURE__*/React.createElement(RemarkRow, {
+    exVal: existing.remarkEntrance,
+    prVal: proposed.remarkEntrance,
+    onEx: se('remarkEntrance'),
+    onPr: spr('remarkEntrance')
+  }))));
+  if (step === 3) return /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--color-background-primary)",
+      border: "0.5px solid var(--color-border-tertiary)",
+      borderRadius: 10,
+      overflow: "hidden",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "9px 14px",
+      background: "#d97706",
+      color: "#fff",
+      fontSize: 12,
+      fontWeight: 500
+    }
+  }, "⭐ Features & Options"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 12
+    }
+  }, /*#__PURE__*/React.createElement(FeatGroup, {
+    icon: "🚨",
+    title: "Emergency Operations"
+  }, /*#__PURE__*/React.createElement(FeatItem, {
+    code: "ECL",
+    label: "Emergency Car Lighting",
+    locked: true,
+    checked: feats.ECL,
+    onChange: () => {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "RSRL",
+    label: "RSRL",
+    locked: true,
+    checked: feats.RSRL,
+    onChange: () => {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "EMB",
+    label: "Emergency Bell",
+    locked: true,
+    checked: feats.EMB,
+    onChange: () => {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "MELD",
+    label: "Machine Room-less Emergency Lowering Device",
+    locked: true,
+    checked: feats.MELD,
+    onChange: () => {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "BMS-GW",
+    label: "Building Management System GateWay",
+    checked: feats.BMS_GW,
+    onChange: sf('BMS_GW')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "EER",
+    label: "Earthquake Emergency Return",
+    checked: feats.EER,
+    onChange: sf('EER')
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 12
+    }
+  }, ["EER-P", "EER-S"].map(o => /*#__PURE__*/React.createElement("label", {
+    key: o,
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 5,
+      cursor: "pointer"
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "radio",
+    checked: feats.EER_type === o,
+    onChange: () => sf('EER_type')(o)
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12
+    }
+  }, o))))), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "FER",
+    label: "Fire Emergency Return",
+    checked: feats.FER,
+    onChange: sf('FER')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "FE",
+    label: "Firefighters' Emergency Operation",
+    checked: feats.FE,
+    onChange: sf('FE')
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      marginTop: 4
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      color: "var(--color-text-secondary)"
+    }
+  }, "FELC:"), ["Yes", "No"].map(o => /*#__PURE__*/React.createElement("label", {
+    key: o,
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 4,
+      cursor: "pointer"
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "radio",
+    checked: feats.FE_FELC === o,
+    onChange: () => sf('FE_FELC')(o)
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12
+    }
+  }, o))))), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "WP-W",
+    label: "MelEye Monitoring and Control",
+    checked: feats.WP_W,
+    onChange: sf('WP_W')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "OEPS-SA",
+    label: "Operation by Emergency Power Source",
+    checked: feats.OEPS_SA,
+    onChange: sf('OEPS_SA')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "WP-S",
+    label: "Supervisory Panel Serial",
+    checked: feats.WP_S,
+    onChange: sf('WP_S')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "Niagara",
+    label: "Niagara IoT Platform",
+    checked: feats.Niagara,
+    onChange: sf('Niagara')
+  })), /*#__PURE__*/React.createElement(FeatGroup, {
+    icon: "🚪",
+    title: "Door Operation"
+  }, /*#__PURE__*/React.createElement(FeatItem, {
+    code: "DKO-TB",
+    label: "Door Hold",
+    locked: true,
+    checked: feats.DKO_TB,
+    onChange: () => {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "SDE",
+    label: "Safety Door Edge",
+    checked: feats.SDE,
+    onChange: sf('SDE')
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 12
+    }
+  }, ["one side", "both side"].map(o => /*#__PURE__*/React.createElement("label", {
+    key: o,
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 5,
+      cursor: "pointer"
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "radio",
+    checked: feats.SDE_side === o,
+    onChange: () => sf('SDE_side')(o)
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12
+    }
+  }, o))))), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "SR",
+    label: "Safety Ray",
+    checked: feats.SR,
+    onChange: sf('SR')
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 12
+    }
+  }, ["1 beam", "2 beam"].map(o => /*#__PURE__*/React.createElement("label", {
+    key: o,
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 5,
+      cursor: "pointer"
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "radio",
+    checked: feats.SR_beam === o,
+    onChange: () => sf('SR_beam')(o)
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12
+    }
+  }, o))))), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "MBS",
+    label: "Multi Beam Sensor",
+    checked: feats.MBS,
+    onChange: sf('MBS')
+  })), /*#__PURE__*/React.createElement(FeatGroup, {
+    icon: "⚙️",
+    title: "Operation & Service"
+  }, /*#__PURE__*/React.createElement(FeatItem, {
+    code: "FCC-P",
+    label: "Overload",
+    locked: true,
+    checked: feats.FCC_P,
+    onChange: () => {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "OLHL",
+    label: "Overload",
+    locked: true,
+    checked: feats.OLHL,
+    onChange: () => {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "HE-B",
+    label: "Reserved Operation for Emergency",
+    checked: feats.HE_B,
+    onChange: sf('HE_B')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "AS",
+    label: "Attendant Service",
+    checked: feats.AS,
+    onChange: sf('AS')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "ABP",
+    label: "Auto By-pass",
+    checked: feats.ABP,
+    onChange: sf('ABP')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "ELSC",
+    label: "Elevator and Security System Interface",
+    checked: feats.ELSC,
+    onChange: sf('ELSC')
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 12
+    }
+  }, ["ELSCA", "ELSC"].map(o => /*#__PURE__*/React.createElement("label", {
+    key: o,
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 5,
+      cursor: "pointer"
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "radio",
+    checked: feats.ELSC_type === o,
+    onChange: () => sf('ELSC_type')(o)
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12
+    }
+  }, o))))), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "FCC-A",
+    label: "False Call Canceling Automatic",
+    checked: feats.FCC_A,
+    onChange: sf('FCC_A')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "LO",
+    label: "Landing Open",
+    checked: feats.LO,
+    onChange: sf('LO')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "NS",
+    label: "Non Service Floor",
+    checked: feats.NS,
+    onChange: sf('NS')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "NS-CB",
+    label: "Non Service Floor Car Button Type",
+    checked: feats.NS_CB,
+    onChange: sf('NS_CB')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "Cardreader",
+    label: "Interface Card Reader",
+    checked: feats.cardreader,
+    onChange: sf('cardreader')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "HOS",
+    label: "Out of Service by Hall Key Switch",
+    checked: feats.HOS,
+    onChange: sf('HOS')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "RCS",
+    label: "Remote Control System",
+    checked: feats.RCS,
+    onChange: sf('RCS')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "RET",
+    label: "Return Operation",
+    checked: feats.RET,
+    onChange: sf('RET')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "PCNV",
+    label: "Regenerative Converter",
+    checked: feats.PCNV,
+    onChange: sf('PCNV')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "SCS-B",
+    label: "Secret Call Service",
+    checked: feats.SCS_B,
+    onChange: sf('SCS_B')
+  })), /*#__PURE__*/React.createElement(FeatGroup, {
+    icon: "🏢",
+    title: "Group Control",
+    defaultOpen: false
+  }, /*#__PURE__*/React.createElement(FeatItem, {
+    code: "BSO",
+    label: "Bank Separation Operation",
+    checked: feats.BSO,
+    onChange: sf('BSO')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "ELCS-RB",
+    label: "Elevator Call System by Robot",
+    checked: feats.ELCS_RB,
+    onChange: sf('ELCS_RB')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "ELCS-SP",
+    label: "Elevator Call System by Smartphone",
+    checked: feats.ELCS_SP,
+    onChange: sf('ELCS_SP')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "MFP",
+    label: "Main Floor Parking",
+    checked: feats.MFP,
+    onChange: sf('MFP')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "VIP-S",
+    label: "VIP Service",
+    checked: feats.VIP_S,
+    onChange: sf('VIP_S')
+  })), /*#__PURE__*/React.createElement(FeatGroup, {
+    icon: "📡",
+    title: "Signal & Display",
+    defaultOpen: false
+  }, /*#__PURE__*/React.createElement(FeatItem, {
+    code: "CCTV",
+    label: "CCTV",
+    locked: true,
+    checked: feats.CCTV,
+    onChange: () => {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "AAN",
+    label: "Voice Announcement",
+    checked: feats.AAN,
+    onChange: sf('AAN')
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 12
+    }
+  }, ["AAN-B", "AAN-G"].map(o => /*#__PURE__*/React.createElement("label", {
+    key: o,
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 5,
+      cursor: "pointer"
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "radio",
+    checked: feats.AAN_type === o,
+    onChange: () => sf('AAN_type')(o)
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12
+    }
+  }, o))))), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "AECC/AECH",
+    label: "Car Arrival Chime",
+    checked: feats.AECC,
+    onChange: sf('AECC')
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 12
+    }
+  }, ["AECC", "AECH"].map(o => /*#__PURE__*/React.createElement("label", {
+    key: o,
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 5,
+      cursor: "pointer"
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "radio",
+    checked: feats.AECC_type === o,
+    onChange: () => sf('AECC_type')(o)
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12
+    }
+  }, o))))), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "AIL",
+    label: "Immediate Prediction Indicator",
+    checked: feats.AIL,
+    onChange: sf('AIL')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "ITP",
+    label: "Intercom",
+    checked: feats.ITP,
+    onChange: sf('ITP')
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 12
+    }
+  }, ["6V", "24V"].map(o => /*#__PURE__*/React.createElement("label", {
+    key: o,
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 5,
+      cursor: "pointer"
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "radio",
+    checked: feats.ITP_volt === o,
+    onChange: () => sf('ITP_volt')(o)
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12
+    }
+  }, o))))), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "ACB",
+    label: "Sonic Car Button Click",
+    checked: feats.ACB,
+    onChange: sf('ACB')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "AHC",
+    label: "Sonic Hall Button Click",
+    checked: feats.AHC,
+    onChange: sf('AHC')
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 4px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "var(--color-text-secondary)",
+      fontWeight: 500,
+      marginBottom: 4
+    }
+  }, "Additional Feature Remark"), /*#__PURE__*/React.createElement("textarea", {
+    value: feats.featureRemark || "",
+    onChange: e => sf('featureRemark')(e.target.value),
+    placeholder: "Additional features or remarks...",
+    rows: 3,
+    style: {
+      ...bInp,
+      resize: "vertical"
+    }
+  }))));
+  if (step === 4) return /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--color-background-primary)",
+      border: "0.5px solid #86c9a0",
+      borderRadius: 10,
+      overflow: "hidden",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "9px 14px",
+      background: "#d97706",
+      color: "#fff",
+      fontSize: 13,
+      fontWeight: 500
+    }
+  }, "🔧 Local Scope (MOD)"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 14,
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      gridColumn: "span 2",
+      fontSize: 12,
+      color: "var(--color-text-secondary)",
+      fontWeight: 600,
+      marginBottom: 8,
+      paddingBottom: 4,
+      borderBottom: "0.5px solid var(--color-border-tertiary)"
+    }
+  }, "MOD Civil & Installation Works"), /*#__PURE__*/React.createElement(ScopeRow, {
+    label: "ติดตั้งวงกบใหม่",
+    val: local.newJamb,
+    remark: local.newJambRemark,
+    onVal: sl('newJamb'),
+    onRemark: sl('newJambRemark')
+  }), /*#__PURE__*/React.createElement(ScopeRow, {
+    label: "การขนย้าย Motor",
+    val: local.motorRelocation,
+    remark: local.motorRelocationRemark,
+    onVal: sl('motorRelocation'),
+    onRemark: sl('motorRelocationRemark')
+  }), /*#__PURE__*/React.createElement(ScopeRow, {
+    label: "งานทุบปูน Beam Motor เก่า",
+    val: local.demolishBeamMotor,
+    remark: local.demolishBeamMotorRemark,
+    onVal: sl('demolishBeamMotor'),
+    onRemark: sl('demolishBeamMotorRemark')
+  }), /*#__PURE__*/React.createElement(ScopeRow, {
+    label: "งานทุบปูน Buffer เก่า",
+    val: local.demolishBuffer,
+    remark: local.demolishBufferRemark,
+    onVal: sl('demolishBuffer'),
+    onRemark: sl('demolishBufferRemark')
+  }), /*#__PURE__*/React.createElement(ScopeRow, {
+    label: "งานขยายช่องหน้าชั้น",
+    val: local.expandEntrance,
+    remark: local.expandEntranceRemark,
+    onVal: sl('expandEntrance'),
+    onRemark: sl('expandEntranceRemark')
+  }), /*#__PURE__*/React.createElement(ScopeRow, {
+    label: "งานปิดช่องหน้าชั้น",
+    val: local.closeEntrance,
+    remark: local.closeEntranceRemark,
+    onVal: sl('closeEntrance'),
+    onRemark: sl('closeEntranceRemark')
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      gridColumn: "span 2",
+      marginTop: 8,
+      paddingTop: 8,
+      borderTop: "0.5px solid var(--color-border-tertiary)",
+      fontSize: 12,
+      color: "var(--color-text-secondary)",
+      fontWeight: 600,
+      marginBottom: 8
+    }
+  }, "General Local Scope"), [["utilities", "Utilities (น้ำ-ไฟ)"], ["overhaul", "Overhaul"], ["eerEquipment", "EER Equipment"]].map(([k, l]) => /*#__PURE__*/React.createElement(F, {
+    key: k,
+    label: l,
+    half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "4px 0"
+    }
+  }, /*#__PURE__*/React.createElement(Tog, {
+    v: local[k] === 'Yes',
+    on: v => sl(k)(v ? 'Yes' : 'No'),
+    label: local[k] === 'Yes' ? 'Yes' : 'No'
+  })))), /*#__PURE__*/React.createElement(F, {
+    label: "Rental (months)",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    type: "number",
+    v: local.rental,
+    on: sl('rental'),
+    ph: "months"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Wiring ITP (m)",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    type: "number",
+    v: local.wiringITP,
+    on: sl('wiringITP'),
+    ph: "meters"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Floor to floor >5m",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    type: "number",
+    v: local.floorToFloor,
+    on: sl('floorToFloor'),
+    ph: "floors"
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      gridColumn: "span 2",
+      marginTop: 4
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: "var(--color-text-secondary)",
+      fontWeight: 500,
+      marginBottom: 6
+    }
+  }, "Additional Items"), (local.items || []).map((it, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      display: "flex",
+      gap: 6,
+      marginBottom: 6,
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    value: it,
+    onChange: e => {
+      const arr = [...(local.items || [])];
+      arr[i] = e.target.value;
+      setLocal(s => ({
+        ...s,
+        items: arr
+      }));
+    },
+    style: {
+      ...bInp,
+      flex: 1
+    },
+    placeholder: "e.g. Green/Red light..."
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setLocal(s => ({
+      ...s,
+      items: s.items.filter((_, j) => j !== i)
+    })),
+    style: {
+      width: 26,
+      height: 26,
+      borderRadius: 5,
+      border: "0.5px solid var(--color-border-danger)",
+      background: "var(--color-background-danger)",
+      color: "var(--color-text-danger)",
+      cursor: "pointer",
+      fontSize: 14,
+      flexShrink: 0,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, "×"))), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setLocal(s => ({
+      ...s,
+      items: [...(s.items || []), '']
+    })),
+    style: {
+      padding: "6px 12px",
+      borderRadius: 6,
+      border: "1.5px dashed #166634",
+      background: "#f0fdf4",
+      color: "#166534",
+      fontSize: 12,
+      cursor: "pointer",
+      fontFamily: "inherit",
+      fontWeight: 500
+    }
+  }, "+ Add item")), /*#__PURE__*/React.createElement(F, {
+    label: "General Remark"
+  }, /*#__PURE__*/React.createElement("textarea", {
+    value: local.remark || "",
+    onChange: e => sl('remark')(e.target.value),
+    rows: 3,
+    placeholder: "General local scope remarks...",
+    style: {
+      ...bInp,
+      resize: "vertical"
+    }
+  }))));
+  return null;
+}
+
+// ── MAIN APP ──────────────────────────────────────────────────────────
+function App() {
+  const [proj, setProj] = useState({
+    ...INIT_PROJ
+  });
+  const [groups, setGroups] = useState([]);
+  const [view, setView] = useState('list');
+  const [expanded, setExpanded] = useState({});
+  const [previewGroup, setPreviewGroup] = useState(null);
+
+  // ── AUTO-SAVE to localStorage ──────────────────────────────────────
+  useEffect(() => {
+    try {
+      localStorage.setItem('mod_proj', JSON.stringify(proj));
+    } catch (e) {}
+  }, [proj]);
+  useEffect(() => {
+    try {
+      localStorage.setItem('mod_groups', JSON.stringify(groups));
+    } catch (e) {}
+  }, [groups]);
+  useEffect(() => {
+    try {
+      const p = localStorage.getItem('mod_proj');
+      if (p) setProj(prev => ({
+        ...prev,
+        ...JSON.parse(p)
+      }));
+      const g = localStorage.getItem('mod_groups');
+      if (g) {
+        const parsed = JSON.parse(g);
+        const fixed = parsed.map(gr => ({
+          ...gr,
+          existing: {
+            ...INIT_EXISTING,
+            ...(gr.existing || {})
+          },
+          proposed: {
+            ...INIT_PROPOSED,
+            ...(gr.proposed || {})
+          },
+          feats: {
+            ...INIT_FEATS,
+            ...(gr.feats || {})
+          },
+          local: {
+            ...INIT_LOCAL,
+            ...(gr.local || {})
+          }
+        }));
+        setGroups(fixed);
+      }
+    } catch (e) {}
+  }, []); // list | edit
+  const [editIdx, setEditIdx] = useState(null);
+  const [editExisting, setEditExisting] = useState({
+    ...INIT_EXISTING
+  });
+  const [editProposed, setEditProposed] = useState({
+    ...INIT_PROPOSED
+  });
+  const [editFeats, setEditFeats] = useState({
+    ...INIT_FEATS
+  });
+  const [editLocal, setEditLocal] = useState({
+    ...INIT_LOCAL
+  });
+  const [wizStep, setWizStep] = useState(1);
+  const [saveMsg, setSaveMsg] = useState('');
+  const importRef = useRef(null);
+  const sp = v => setProj(p => ({
+    ...p,
+    ...v
+  }));
+  const exportJSON = () => {
+    const data = {
+      version: 1,
+      type: "MOD",
+      proj,
+      groups
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: 'application/json'
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (proj.name || 'MOD') + '_' + proj.rev + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  const importJSON = file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const d = JSON.parse(e.target.result);
+        if (d.proj) setProj(d.proj);
+        if (d.groups) setGroups(d.groups);
+      } catch {
+        alert('Invalid JSON');
+      }
+    };
+    reader.readAsText(file);
+  };
+  const openNew = () => {
+    setEditIdx(null);
+    setEditExisting({
+      ...INIT_EXISTING
+    });
+    setEditProposed({
+      ...INIT_PROPOSED
+    });
+    setEditFeats({
+      ...INIT_FEATS
+    });
+    setEditLocal({
+      ...INIT_LOCAL
+    });
+    setWizStep(1);
+    setView('edit');
+  };
+  const openEdit = idx => {
+    const g = groups[idx];
+    setEditIdx(idx);
+    setEditExisting({
+      ...g.existing
+    });
+    setEditProposed({
+      ...g.proposed
+    });
+    setEditFeats({
+      ...g.feats
+    });
+    setEditLocal({
+      ...g.local
+    });
+    setWizStep(1);
+    setView('edit');
+  };
+  const copyGroup = idx => {
+    const g = groups[idx];
+    const ng = {
+      id: uid(),
+      existing: {
+        ...g.existing,
+        elevNo: (g.existing.elevNo || 'Lift') + ' (copy)'
+      },
+      proposed: {
+        ...g.proposed
+      },
+      feats: {
+        ...g.feats
+      },
+      local: {
+        ...g.local
+      }
+    };
+    setGroups(prev => [...prev, ng]);
+  };
+  const deleteGroup = idx => {
+    if (!window.confirm('Delete this lift?')) return;
+    setGroups(prev => prev.filter((_, i) => i !== idx));
+  };
+  const generateXls = async () => {
+    const ExcelJS = window.ExcelJS;
+    if (!ExcelJS) {
+      alert('ExcelJS not loaded');
+      return;
+    }
+    const wb = new ExcelJS.Workbook();
+    wb.creator = 'Elevator MOD Pre-Sale Tool';
+    const NAV_C = 'FF1E3A5F',
+      WHT = 'FFFFFFFF',
+      AMBR = 'FFD97706',
+      BLU = 'FF075985',
+      SECL = 'FFEEF2F7',
+      ALT = 'FFFAFAFA',
+      GRN = 'FF166534',
+      AMBL = 'FFFFF3E0';
+    const fs = (cell, argb) => {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: {
+          argb
+        }
+      };
+    };
+    const bd = cell => {
+      cell.border = {
+        bottom: {
+          style: 'thin',
+          color: {
+            argb: 'FFE2E8F0'
+          }
+        },
+        right: {
+          style: 'thin',
+          color: {
+            argb: 'FFE2E8F0'
+          }
+        }
+      };
+    };
+    const al = (cell, h = 'left') => {
+      cell.alignment = {
+        vertical: 'middle',
+        horizontal: h,
+        wrapText: false
+      };
+    };
+
+    // ── SUMMARY SHEET ────────────────────────────────────────────────
+    const ws0 = wb.addWorksheet('Summary');
+    [10, 22, 22, 22, 10, 10, 8, 12, 12, 12].forEach((w, i) => {
+      ws0.getColumn(i + 1).width = w;
+    });
+    const addMerged = (ws, txt, bg, font, cols, h) => {
+      const r = ws.addRow([txt, ...Array(cols - 1).fill('')]);
+      ws.mergeCells(`A${r.number}:${String.fromCharCode(64 + cols)}${r.number}`);
+      r.height = h || 20;
+      const c = r.getCell('A');
+      fs(c, bg);
+      c.font = font;
+      al(c);
+      bd(c);
+      return r;
+    };
+    addMerged(ws0, `${proj.name || 'Project'} — MOD Pre-Sale Inquiry | ${proj.rev}`, AMBR, {
+      color: {
+        argb: WHT
+      },
+      bold: true,
+      size: 12
+    }, 10, 26);
+    addMerged(ws0, `Customer: ${proj.customer || '—'} | Building: ${proj.building || '—'} | Location: ${proj.location || '—'} | Date: ${proj.date || '—'} | Sales: ${proj.sales || '—'} | Engineer: ${proj.engineer || '—'}`, 'FFFFF7ED', {
+      color: {
+        argb: 'FF7C2D12'
+      },
+      size: 10
+    }, 10, 18);
+    ws0.addRow([]);
+    const sh = ws0.addRow(['No.', 'Elev No.', 'Existing Brand', 'Proposed Product', 'Code', 'kg', 'Speed', 'Stops', 'OH diff', 'Pit diff']);
+    sh.height = 20;
+    ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'].forEach(c => {
+      const cell = sh.getCell(c);
+      fs(cell, AMBR);
+      cell.font = {
+        color: {
+          argb: WHT
+        },
+        bold: true,
+        size: 10
+      };
+      al(cell, 'center');
+      bd(cell);
+    });
+    groups.forEach((g, gi) => {
+      const e = g.existing || {},
+        p = g.proposed || {};
+      const ohDiff = e.overhead && p.overhead ? Number(p.overhead) - Number(e.overhead) : null;
+      const pitDiff = e.pitDepth && p.pitDepth ? Number(p.pitDepth) - Number(e.pitDepth) : null;
+      const r = ws0.addRow([gi + 1, e.elevNo || '—', e.brand || '—', [p.source, p.product].filter(Boolean).join(' '), p.code || '—', p.kg || '—', p.speed ? p.speed + ' m/s' : '—', e.noOfStop || '—', ohDiff != null ? ohDiff > 0 ? '+' + ohDiff + 'mm' : 'OK' : '—', pitDiff != null ? pitDiff > 0 ? '+' + pitDiff + 'mm' : 'OK' : '—']);
+      r.height = 18;
+      ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'].forEach((c, ci) => {
+        const cell = r.getCell(c);
+        const bg = gi % 2 === 0 ? 'FFFFFFFF' : ALT;
+        fs(cell, bg);
+        al(cell, ci === 0 ? 'center' : 'left');
+        bd(cell);
+        if (ci >= 8 && r.getCell(c).value && r.getCell(c).value.includes('+')) {
+          cell.font = {
+            color: {
+              argb: 'FFDC2626'
+            },
+            bold: true
+          };
+        }
+        if (ci >= 8 && r.getCell(c).value === 'OK') {
+          cell.font = {
+            color: {
+              argb: 'FF166534'
+            },
+            bold: true
+          };
+        }
+      });
+    });
+
+    // ── PER-LIFT SHEETS ─────────────────────────────────────────────
+    groups.forEach((g, gi) => {
+      const e = g.existing || {},
+        p = g.proposed || {},
+        f = g.feats || {},
+        l = g.local || {};
+      const shName = ('G' + (gi + 1) + (e.elevNo ? ' - ' + e.elevNo : '')).slice(0, 31).replace(/[\/\\?*\[\]:]/g, '');
+      const ws = wb.addWorksheet(shName);
+      [6, 36, 36, 36].forEach((w, i) => {
+        ws.getColumn(i + 1).width = w;
+      });
+      addMerged(ws, `${proj.name || 'Project'} | ${proj.rev}`, AMBR, {
+        color: {
+          argb: WHT
+        },
+        bold: true,
+        size: 12
+      }, 4, 24);
+      addMerged(ws, `${e.elevNo || 'Lift ' + (gi + 1)} — Modernization Full Replacement`, AMBR, {
+        color: {
+          argb: WHT
+        },
+        bold: true,
+        size: 11
+      }, 4, 20);
+      const hr = ws.addRow(['', 'Field', 'Existing Lift', 'Modernization Full Replacement']);
+      hr.height = 22;
+      ['A', 'B', 'C', 'D'].forEach((c, ci) => {
+        const cell = hr.getCell(c);
+        fs(cell, AMBR);
+        cell.font = {
+          color: {
+            argb: WHT
+          },
+          bold: true,
+          size: 11
+        };
+        al(cell, ci === 0 ? 'center' : ci === 1 ? 'left' : 'center');
+        bd(cell);
+      });
+      let n = 1;
+      const secHdr = title => {
+        const r = ws.addRow(['', title, '', '']);
+        ws.mergeCells(`B${r.number}:D${r.number}`);
+        r.height = 18;
+        const c = r.getCell('B');
+        fs(c, AMBR);
+        c.font = {
+          color: {
+            argb: WHT
+          },
+          bold: true,
+          size: 11
+        };
+        al(c);
+        bd(c);
+        n = 1;
+      };
+      const row = (label, ex, pr, redIfMore) => {
+        const r = ws.addRow([n++, label, ex || '—', pr || '—']);
+        r.height = 17;
+        const bg = n % 2 === 0 ? 'FFFFFFFF' : ALT;
+        const nc = r.getCell('A');
+        fs(nc, bg);
+        al(nc, 'center');
+        bd(nc);
+        const lc = r.getCell('B');
+        fs(lc, SECL);
+        al(lc);
+        lc.font = {
+          bold: true,
+          size: 10
+        };
+        bd(lc);
+        const ec = r.getCell('C');
+        fs(ec, bg);
+        al(ec);
+        bd(ec);
+        const pc = r.getCell('D');
+        fs(pc, 'FFFFF7ED');
+        al(pc);
+        pc.font = {
+          color: {
+            argb: NAV_C
+          },
+          bold: true
+        };
+        if (redIfMore) {
+          const ev = Number(ex),
+            pv = Number(pr);
+          if (!isNaN(ev) && !isNaN(pv) && pv > ev) {
+            pc.font = {
+              color: {
+                argb: 'FFDC2626'
+              },
+              bold: true
+            };
+            pc.value = (pr || '—') + ' (+' + (pv - ev) + 'mm)';
+          }
+        }
+        bd(pc);
+      };
+      const locRow = (label, val) => {
+        const r = ws.addRow([n++, label, val || '—', '']);
+        ws.mergeCells(`C${r.number}:D${r.number}`);
+        r.height = 17;
+        const bg = n % 2 === 0 ? 'FFFFFFFF' : ALT;
+        ['A', 'B', 'C'].forEach(c => {
+          fs(r.getCell(c), c === 'B' ? SECL : bg);
+          al(r.getCell(c));
+          bd(r.getCell(c));
+        });
+        r.getCell('B').font = {
+          bold: true,
+          size: 10
+        };
+        const vc = r.getCell('C');
+        if (val === 'By MET') {
+          vc.font = {
+            color: {
+              argb: 'FF166534'
+            },
+            bold: true
+          };
+        } else if (val === 'By owner') {
+          vc.font = {
+            color: {
+              argb: 'FF92400E'
+            },
+            bold: true
+          };
+        }
+      };
+      secHdr('General Info');
+      row('Brand / Product', e.brand, [p.source, p.product, p.code].filter(Boolean).join(' / '));
+      row('Car Type', e.carType, p.carType);
+      row('Capacity', e.capacity ? e.capacity + ' kg' : '—', p.kg ? p.kg + ' kg (' + p.persons + 'P)' : '—');
+      row('Door Type', e.doorType, p.doorType);
+      row('Speed', e.speed ? e.speed + ' m/s' : '—', p.speed ? p.speed + ' m/s' : '—');
+      row('Operation', e.operation, p.operation);
+      row('No. of Stop', e.noOfStop, p.noOfStop || e.noOfStop);
+      row('Travel', e.travel ? e.travel + ' m' : '—', p.travel ? p.travel + ' m' : '—');
+      row('Machine Room', e.machineRoom, p.machineRoom);
+      secHdr('Shaft & Civil Dimensions');
+      row('Car AA×BB (mm)', e.carW && e.carD ? e.carW + '×' + e.carD : '—', p.carWidth && p.carDepth ? p.carWidth + '×' + p.carDepth : '—');
+      row('Shaft AH×BH (mm)', e.shaftAH && e.shaftBH ? e.shaftAH + '×' + e.shaftBH : '—', p.shaftAH && p.shaftBH ? p.shaftAH + '×' + p.shaftBH : '—');
+      row('Overhead OH (mm)', e.overhead, p.overhead, true);
+      row('Pit Depth PD (mm)', e.pitDepth, p.pitDepth, true);
+      if (e.hoistway) row('Hoistway', e.hoistway, p.hoistway);
+      secHdr('Car Design');
+      row('COP Main', e.cop, p.mainCOP + (p.mainCOPRemark ? ' (' + p.mainCOPRemark + ')' : ''));
+      row('Ceiling', e.ceiling, p.ceilingType + (p.ceilingTypeRemark ? ' (' + p.ceilingTypeRemark + ')' : ''));
+      row('Car Wall', e.carWall, p.carWallFinish);
+      row('Car Door', e.carDoor, p.carDoorFinish);
+      row('Flooring', e.flooring, p.flooring);
+      if (e.recessFloor || p.recessFloor) row('Recess Floor', e.recessFloor, p.recessFloor);
+      secHdr('Entrance Design');
+      row('Landing door (main)', e.landingDoorMain, p.landingDoorMain);
+      row('Landing door (typical)', e.landingDoorTypical, p.landingDoorTypical);
+      row('Jamb (main)', e.jambMain, p.jambMain);
+      row('Jamb type (main)', e.jambTypeMain, p.jambTypeMain + (p.jambTypeMainRemark ? ' (' + p.jambTypeMainRemark + ')' : ''));
+      if (e.hallBtnMain || p.hallBtnMain) row('Hall button (main)', e.hallBtnMain, p.hallBtnMain + (p.hallBtnMainRemark ? ' (' + p.hallBtnMainRemark + ')' : ''));
+      if (e.hallLanternMain || p.hallLanternMain) row('Hall lantern (main)', e.hallLanternMain, p.hallLanternMain + (p.hallLanternMainRemark ? ' (' + p.hallLanternMainRemark + ')' : ''));
+      if (e.hallPIVMain || p.hallPIVMain) row('Hall pos. ind. (main)', e.hallPIVMain, p.hallPIVMain + (p.hallPIVMainRemark ? ' (' + p.hallPIVMainRemark + ')' : ''));
+      const stdFeats = 'ECL · MELD · DKO-TB · FCC-P · OLHL · CCTV';
+      const optList = Object.entries({
+        BMS_GW: 'BMS-GW',
+        EER: 'EER',
+        FER: 'FER',
+        FE: 'FE',
+        WP_W: 'WP-W',
+        OEPS_SA: 'OEPS-SA',
+        WP_S: 'WP-S',
+        Niagara: 'Niagara',
+        AS: 'AS',
+        cardreader: 'Cardreader',
+        PCNV: 'PCNV',
+        AAN: 'AAN',
+        AECC: 'AECC',
+        AIL: 'AIL',
+        ITP: 'ITP'
+      });
+      const optFeats = optList.filter(([k]) => f[k]).map(([k, v]) => v).join(' · ');
+      secHdr('Features (Proposed)');
+      const xlStd = ['ITP', 'DKO-TB', 'OLHL', 'ECL', 'MELD', 'SDE', 'ACB', 'FCC-P', 'CCTV', 'RSRL', 'EMB', `AECC (${f.AECC_type})`, 'MFP', 'HOS'];
+      const xlOpt = [f.EER && `EER (${f.EER_type})`, f.ABP && 'ABP', f.FE && (f.FE_FELC === 'Yes' ? 'FE + FELC' : 'FE'), f.AAN && `AAN (${f.AAN_type})`, f.AS && 'AS', f.FCC_A && 'FCC-A', f.cardreader && 'Cardreader', f.OEPS_SA && 'OEPS-SA', f.ITP && `ITP (${f.ITP_volt})`].filter(Boolean);
+      [...xlStd.map(v => ({
+        v,
+        std: true
+      })), ...xlOpt.map(v => ({
+        v,
+        std: false
+      }))].forEach(({
+        v,
+        std
+      }, fi) => {
+        const r2 = ws.addRow([fi + 1, v, std ? 'Standard' : 'Optional', '']);
+        ws.mergeCells(`C${r2.number}:D${r2.number}`);
+        r2.height = 16;
+        const nb = r2.getCell('A');
+        fs(nb, fi % 2 === 0 ? 'FFFFFFFF' : ALT);
+        al(nb, 'center');
+        bd(nb);
+        const lb = r2.getCell('B');
+        fs(lb, fi % 2 === 0 ? 'FFFFFFFF' : ALT);
+        al(lb);
+        bd(lb);
+        const vb = r2.getCell('C');
+        fs(vb, 'FFFFF7ED');
+        al(vb, 'center');
+        vb.font = {
+          color: {
+            argb: std ? NAV_C : 'FFC2410C'
+          },
+          bold: true,
+          size: 10
+        };
+        bd(vb);
+      });
+      const localItems = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(([, v]) => v && v !== 'No');
+      if (localItems.length > 0) {
+        secHdr('Local Scope (MOD)');
+        localItems.forEach(([label, val]) => locRow(label, val));
+      }
+    });
+    const buf = await wb.xlsx.writeBuffer();
+    const blob = new Blob([buf], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (proj.name || 'MOD') + '_' + proj.rev + '.xlsx';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  const saveGroup = () => {
+    const g = {
+      id: editIdx !== null ? groups[editIdx].id : uid(),
+      existing: editExisting,
+      proposed: editProposed,
+      feats: editFeats,
+      local: editLocal
+    };
+    if (editIdx !== null) {
+      setGroups(prev => prev.map((x, i) => i === editIdx ? g : x));
+    } else {
+      setGroups(prev => [...prev, g]);
+    }
+    setSaveMsg('Saved!');
+    setTimeout(() => setSaveMsg(''), 2000);
+    setView('list');
+    window.scrollTo(0, 0);
+  };
+  const totalUnits = groups.length;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "system-ui,sans-serif",
+      fontSize: 15,
+      background: "var(--color-background-secondary)",
+      minHeight: "100vh"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: NAV,
+      padding: "0 16px",
+      position: "sticky",
+      top: 0,
+      zIndex: 50
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 740,
+      margin: "0 auto",
+      display: "flex",
+      alignItems: "center",
+      gap: 6,
+      height: 48
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 30,
+      height: 30,
+      borderRadius: 7,
+      background: AMBER,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 13,
+      fontWeight: 700,
+      color: NAV,
+      flexShrink: 0
+    }
+  }, "M"), view !== 'edit' && /*#__PURE__*/React.createElement("button", {
+    onClick: () => setView('list'),
+    style: {
+      padding: "5px 13px",
+      borderRadius: 5,
+      border: "none",
+      background: view === 'list' ? "#fff" : "transparent",
+      color: view === 'list' ? NAV : "rgba(255,255,255,0.65)",
+      fontWeight: view === 'list' ? 500 : 400,
+      fontSize: 12,
+      cursor: "pointer",
+      fontFamily: "inherit"
+    }
+  }, "Group List"), view !== 'edit' && /*#__PURE__*/React.createElement("button", {
+    onClick: () => setView('preview'),
+    style: {
+      padding: "5px 13px",
+      borderRadius: 5,
+      border: "none",
+      background: view === 'preview' ? "#fff" : "transparent",
+      color: view === 'preview' ? NAV : "rgba(255,255,255,0.65)",
+      fontWeight: view === 'preview' ? 500 : 400,
+      fontSize: 12,
+      cursor: "pointer",
+      fontFamily: "inherit"
+    }
+  }, "Preview Form"), view === 'edit' && /*#__PURE__*/React.createElement("button", {
+    onClick: () => setView('list'),
+    style: {
+      padding: "5px 12px",
+      borderRadius: 5,
+      border: "0.5px solid rgba(255,255,255,0.3)",
+      background: "transparent",
+      color: "#fff",
+      fontSize: 12,
+      cursor: "pointer",
+      fontFamily: "inherit"
+    }
+  }, "← Back to List"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }), saveMsg && /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "#86efac"
+    }
+  }, saveMsg), /*#__PURE__*/React.createElement("button", {
+    onClick: exportJSON,
+    style: {
+      padding: "5px 10px",
+      borderRadius: 5,
+      border: "0.5px solid rgba(255,255,255,0.3)",
+      background: "transparent",
+      color: "#fff",
+      fontSize: 11.5,
+      cursor: "pointer",
+      fontFamily: "inherit"
+    }
+  }, "💾 Save"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => importRef.current?.click(),
+    style: {
+      padding: "5px 10px",
+      borderRadius: 5,
+      border: "0.5px solid rgba(255,255,255,0.3)",
+      background: "transparent",
+      color: "#fff",
+      fontSize: 11.5,
+      cursor: "pointer",
+      fontFamily: "inherit"
+    }
+  }, "📂 Load"), /*#__PURE__*/React.createElement("input", {
+    ref: importRef,
+    type: "file",
+    accept: ".json",
+    style: {
+      display: "none"
+    },
+    onChange: e => {
+      if (e.target.files?.[0]) importJSON(e.target.files[0]);
+      e.target.value = '';
+    }
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 740,
+      margin: "0 auto",
+      padding: "14px 12px"
+    }
+  }, view === 'list' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--color-background-primary)",
+      border: "0.5px solid var(--color-border-tertiary)",
+      borderRadius: 10,
+      padding: 14,
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 500,
+      color: NAV,
+      marginBottom: 12
+    }
+  }, "📋 Project Information"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement(F, {
+    label: "Job Site Check No.",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.jobSiteNo,
+    on: v => sp({
+      jobSiteNo: v
+    }),
+    ph: "e.g. JS-2026-001"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Project BKK No.",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.projectBKKNo,
+    on: v => sp({
+      projectBKKNo: v
+    }),
+    ph: "e.g. BKK-2026-001"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Project Name"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.name,
+    on: v => sp({
+      name: v
+    }),
+    ph: "e.g. ABC Building MOD"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Customer"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.customer,
+    on: v => sp({
+      customer: v
+    }),
+    ph: "Customer name"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Building Type"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: proj.building || "Office",
+    on: v => sp({
+      building: v
+    }),
+    opts: ["Office", "Residential", "Hotel", "Hospital", "Bank", "Department store", "ETC"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Location"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.location,
+    on: v => sp({
+      location: v
+    }),
+    ph: "City"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Date",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.date,
+    on: v => sp({
+      date: v
+    }),
+    ph: "YYYY-MM-DD"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Revision",
+    half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    value: proj.rev,
+    onChange: e => sp({
+      rev: e.target.value
+    }),
+    style: {
+      ...bInp,
+      flex: 1
+    }
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: () => {
+      const m = proj.rev.match(/Rev\.(\d+)/);
+      const n = m ? parseInt(m[1]) + 1 : 1;
+      sp({
+        rev: `Rev.${n}`
+      });
+    },
+    style: {
+      padding: "7px 10px",
+      borderRadius: 7,
+      border: `0.5px solid ${AMBER}`,
+      background: "transparent",
+      color: AMBER,
+      cursor: "pointer",
+      fontFamily: "inherit",
+      fontSize: 12,
+      whiteSpace: "nowrap"
+    }
+  }, "+Rev"))), /*#__PURE__*/React.createElement(F, {
+    label: "Sales Name",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.sales,
+    on: v => sp({
+      sales: v
+    }),
+    ph: "Sales name"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Engineer Name",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.engineer,
+    on: v => sp({
+      engineer: v
+    }),
+    ph: "Engineer name"
+  })))), /*#__PURE__*/React.createElement("button", {
+    onClick: openNew,
+    style: {
+      width: "100%",
+      padding: "10px",
+      borderRadius: 8,
+      border: `1.5px dashed ${NAV}`,
+      background: "transparent",
+      color: NAV,
+      fontSize: 13,
+      fontWeight: 500,
+      cursor: "pointer",
+      fontFamily: "inherit",
+      marginBottom: 10
+    }
+  }, "+ Add Lift (MOD)"), groups.length === 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      padding: "40px 20px",
+      color: "var(--color-text-muted)",
+      fontSize: 13
+    }
+  }, "No lifts added yet — click \"+ Add Lift (MOD)\" to get started"), groups.map((g, i) => {
+    const e = g.existing || {},
+      p = g.proposed || {};
+    return /*#__PURE__*/React.createElement("div", {
+      key: g.id,
+      style: {
+        border: `0.5px solid ${AMBER}`,
+        borderRadius: 12,
+        marginBottom: 10,
+        overflow: "hidden",
+        background: "var(--color-background-primary)"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        padding: "10px 14px",
+        background: "#fefce8",
+        borderBottom: "0.5px solid var(--color-border-tertiary)"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 28,
+        height: 28,
+        borderRadius: 7,
+        background: AMBER,
+        color: NAV,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: 11,
+        fontWeight: 500,
+        flexShrink: 0
+      }
+    }, "G", i + 1), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 14,
+        fontWeight: 500,
+        color: AMBERD
+      }
+    }, e.elevNo || `Lift ${i + 1}`), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 12,
+        color: "var(--color-text-muted)"
+      }
+    }, e.brand || "—", " → ", p.source || "—", " ", p.product || "—", " ", p.code || "")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 6
+      }
+    }, ["Edit", "Copy", "Preview", "Delete"].map(a => /*#__PURE__*/React.createElement("button", {
+      key: a,
+      onClick: () => a === 'Edit' ? openEdit(i) : a === 'Copy' ? copyGroup(i) : a === 'Preview' ? setPreviewGroup(g) : deleteGroup(i),
+      style: {
+        padding: "5px 10px",
+        borderRadius: 6,
+        border: "0.5px solid var(--color-border-secondary)",
+        background: "var(--color-background-primary)",
+        color: a === 'Delete' ? "var(--color-text-danger)" : a === 'Preview' ? AMBER : "var(--color-text-primary)",
+        fontWeight: a === 'Preview' ? 500 : 400,
+        fontSize: 11.5,
+        cursor: "pointer",
+        fontFamily: "inherit"
+      }
+    }, a)))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "10px 14px",
+        display: "grid",
+        gridTemplateColumns: "repeat(3,1fr)",
+        gap: 8
+      }
+    }, [["Existing speed", e.speed ? e.speed + " m/s" : "—"], ["Proposed speed", p.speed ? p.speed + " m/s" : "—"], ["Capacity", p.kg ? p.kg + " kg" : "—"], ["No. of Stop", e.noOfStop || "—"], ["Travel", e.travel ? e.travel + " m" : "—"], ["Machine Room", p.machineRoom || "—"]].map(([l, v]) => /*#__PURE__*/React.createElement("div", {
+      key: l,
+      style: {
+        background: "var(--color-background-secondary)",
+        borderRadius: 8,
+        padding: "8px 10px"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 10,
+        color: "var(--color-text-muted)",
+        marginBottom: 2
+      }
+    }, l), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 13,
+        fontWeight: 500
+      }
+    }, v)))));
+  }), groups.length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      marginTop: 8,
+      paddingBottom: 40,
+      color: "var(--color-text-muted)",
+      fontSize: 12
+    }
+  }, totalUnits, " lift(s) total")), view === 'edit' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => setView('list'),
+    style: {
+      padding: "7px 12px",
+      borderRadius: 7,
+      border: "0.5px solid var(--color-border-secondary)",
+      background: "var(--color-background-primary)",
+      cursor: "pointer",
+      fontSize: 13,
+      fontFamily: "inherit"
+    }
+  }, "← Back"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      fontWeight: 500
+    }
+  }, editIdx !== null ? "Edit Lift" : "Modernization Full Replacement")), /*#__PURE__*/React.createElement(WizBar, {
+    step: wizStep,
+    onStep: setWizStep
+  }), wizStep === 1 && /*#__PURE__*/React.createElement(Sec, {
+    icon: "🏗️",
+    title: "Basic Info"
+  }, /*#__PURE__*/React.createElement(F, {
+    label: "Elevator No."
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: editExisting.elevNo,
+    on: v => setEditExisting(s => ({
+      ...s,
+      elevNo: v
+    })),
+    ph: "e.g. D-PL-01"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Quantity",
+    half: true
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    min: "1",
+    value: editProposed.quantity || 1,
+    onChange: e => setEditProposed(s => ({
+      ...s,
+      quantity: e.target.value
+    })),
+    style: {
+      ...bInp
+    }
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Usage",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: editExisting.usage || "Passenger",
+    on: v => setEditExisting(s => ({
+      ...s,
+      usage: v
+    })),
+    opts: ["Passenger", "Service", "Bed", "Fireman", "Car park"]
+  }))), wizStep >= 2 && wizStep <= 4 && /*#__PURE__*/React.createElement(LiftEditor, {
+    existing: editExisting,
+    proposed: editProposed,
+    feats: editFeats,
+    local: editLocal,
+    setExisting: setEditExisting,
+    setProposed: setEditProposed,
+    setFeats: setEditFeats,
+    setLocal: setEditLocal,
+    step: wizStep,
+    setStep: setWizStep
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 10,
+      paddingBottom: 20
+    }
+  }, wizStep > 1 && /*#__PURE__*/React.createElement("button", {
+    onClick: () => setWizStep(s => s - 1),
+    style: {
+      flex: 1,
+      padding: "10px",
+      borderRadius: 8,
+      border: "0.5px solid var(--color-border-strong)",
+      background: "var(--color-background-primary)",
+      cursor: "pointer",
+      fontSize: 14,
+      fontFamily: "inherit"
+    }
+  }, "← Back"), wizStep < 4 ? /*#__PURE__*/React.createElement("button", {
+    onClick: () => setWizStep(s => s + 1),
+    style: {
+      flex: 2,
+      padding: "10px",
+      borderRadius: 8,
+      border: "none",
+      background: AMBER,
+      color: NAV,
+      cursor: "pointer",
+      fontSize: 14,
+      fontWeight: 500,
+      fontFamily: "inherit"
+    }
+  }, "Next →") : /*#__PURE__*/React.createElement("button", {
+    onClick: saveGroup,
+    style: {
+      flex: 2,
+      padding: "10px",
+      borderRadius: 8,
+      border: "none",
+      background: AMBER,
+      color: NAV,
+      cursor: "pointer",
+      fontSize: 14,
+      fontWeight: 500,
+      fontFamily: "inherit"
+    }
+  }, "💾 Save Lift"))), view === 'preview' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "right",
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: generateXls,
+    style: {
+      padding: "8px 18px",
+      borderRadius: 7,
+      border: "none",
+      background: AMBER,
+      color: NAV,
+      fontSize: 12.5,
+      fontWeight: 500,
+      cursor: "pointer",
+      fontFamily: "inherit"
+    }
+  }, "📊 Export Excel")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: AMBER,
+      borderRadius: 10,
+      padding: 16,
+      marginBottom: 12,
+      borderLeft: "5px solid #fff3e0"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 9.5,
+      color: "rgba(255,255,255,0.8)",
+      letterSpacing: ".1em",
+      textTransform: "uppercase",
+      marginBottom: 3
+    }
+  }, "MOD Pre-Sale Inquiry Form — For Sales Planning Team"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: "#fff",
+      fontSize: 17,
+      fontWeight: 500,
+      marginBottom: 3
+    }
+  }, proj.name || "Unnamed Project"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      marginBottom: 10,
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
+  }, proj.customer && /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "rgba(255,255,255,0.9)",
+      fontWeight: 500
+    }
+  }, "Customer: ", proj.customer), proj.building && /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "rgba(255,255,255,0.8)"
+    }
+  }, "Building: ", proj.building), proj.location && /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "rgba(255,255,255,0.8)"
+    }
+  }, "Location: ", proj.location), proj.date && /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "rgba(255,255,255,0.8)"
+    }
+  }, "Date: ", proj.date), proj.sales && /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "rgba(255,255,255,0.8)"
+    }
+  }, "Sales: ", proj.sales), proj.engineer && /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "rgba(255,255,255,0.8)"
+    }
+  }, "Engineer: ", proj.engineer)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 20
+    }
+  }, [["Lifts", groups.length], ["Date", proj.date || "—"], ["Revision", proj.rev]].map(([l, v]) => /*#__PURE__*/React.createElement("div", {
+    key: l
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 9.5,
+      color: "rgba(255,255,255,0.4)"
+    }
+  }, l), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: "#fff",
+      fontWeight: 500
+    }
+  }, v))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fff",
+      borderRadius: 10,
+      overflow: "hidden",
+      border: "0.5px solid #e2e8f0",
+      marginBottom: 80
+    }
+  }, groups.map((g, gi) => {
+    const e = g.existing || {},
+      p = g.proposed || {},
+      f = g.feats || {},
+      l = g.local || {};
+    const isOpen = expanded[g.id] !== false;
+    const diffBadge = (ex, pr) => {
+      const ev = Number(ex),
+        pv = Number(pr);
+      if (!ex || !pr) return null;
+      if (pv <= ev) return /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 10,
+          background: "#dcf5e8",
+          color: "#166534",
+          padding: "1px 5px",
+          borderRadius: 3,
+          marginLeft: 4,
+          fontWeight: 500
+        }
+      }, "OK");
+      return /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 10,
+          background: "#fef2f2",
+          color: "#dc2626",
+          padding: "1px 5px",
+          borderRadius: 3,
+          marginLeft: 4,
+          fontWeight: 600
+        }
+      }, "+", pv - ev, "mm");
+    };
+    const stdFeatList = [{
+      code: 'ITP',
+      label: 'Intercom',
+      val: f.ITP ? `ITP (${f.ITP_volt})` : null,
+      std: false
+    }, {
+      code: 'DKO-TB',
+      label: 'Door Hold',
+      val: 'DKO-TB',
+      std: true
+    }, {
+      code: 'OLHL',
+      label: 'Overload',
+      val: 'OLHL',
+      std: true
+    }, {
+      code: 'ECL',
+      label: 'Emergency Car Lighting',
+      val: 'ECL',
+      std: true
+    }, {
+      code: 'MELD',
+      label: 'Emergency Lowering Device',
+      val: 'MELD',
+      std: true
+    }, {
+      code: 'SDE',
+      label: 'Safety Door Edge',
+      val: 'SDE',
+      std: true
+    }, {
+      code: 'ACB',
+      label: 'Sonic Car Button Click',
+      val: 'ACB',
+      std: true
+    }, {
+      code: 'FCC-P',
+      label: 'Floor Call Cancel',
+      val: 'FCC-P',
+      std: true
+    }, {
+      code: 'CCTV',
+      label: 'CCTV',
+      val: 'CCTV',
+      std: true
+    }, {
+      code: 'RSRL',
+      label: 'RSRL',
+      val: 'RSRL',
+      std: true
+    }, {
+      code: 'EMB',
+      label: 'Emergency Bell',
+      val: 'EMB',
+      std: true
+    }];
+    const optFeatList = [{
+      code: 'AECC',
+      label: 'Car Arrival Chime',
+      val: f.AECC ? `AECC (${f.AECC_type})` : null
+    }, {
+      code: 'MFP',
+      label: 'Main Floor Parking',
+      val: f.MFP ? 'MFP' : null
+    }, {
+      code: 'EER',
+      label: 'Earthquake Emergency Return',
+      val: f.EER ? `EER (${f.EER_type})` : null
+    }, {
+      code: 'HOS',
+      label: 'Out of Service by Hall Key Switch',
+      val: f.HOS ? 'HOS' : null
+    }, {
+      code: 'ABP',
+      label: 'Auto By-pass',
+      val: f.ABP ? 'ABP' : null
+    }, {
+      code: 'FE',
+      label: 'Firefighters Emergency Operation',
+      val: f.FE ? f.FE_FELC === 'Yes' ? 'FE + FELC' : 'FE' : null
+    }, {
+      code: 'AAN',
+      label: 'Voice Announcement',
+      val: f.AAN ? `AAN (${f.AAN_type})` : null
+    }, {
+      code: 'AS',
+      label: 'Attendant Service',
+      val: f.AS ? 'AS' : null
+    }, {
+      code: 'FCC-A',
+      label: 'False Call Cancel Auto',
+      val: f.FCC_A ? 'FCC-A' : null
+    }, {
+      code: 'Cardreader',
+      label: 'Interface Card Reader',
+      val: f.cardreader ? 'Cardreader' : null
+    }, {
+      code: 'OEPS-SA',
+      label: 'Operation by Emergency Power Source',
+      val: f.OEPS_SA ? 'OEPS-SA' : null
+    }].filter(x => x.val);
+    const allFeats = [...stdFeatList.map(x => ({
+      ...x,
+      isStd: true
+    })), ...optFeatList.map(x => ({
+      ...x,
+      isStd: false
+    }))];
+    const stdFeats = ['ECL', 'MELD', 'DKO-TB', 'FCC-P', 'OLHL', 'CCTV'];
+    const optList = Object.entries({
+      BMS_GW: 'BMS-GW',
+      EER: 'EER',
+      FER: 'FER',
+      FE: 'FE',
+      WP_W: 'WP-W',
+      OEPS_SA: 'OEPS-SA',
+      WP_S: 'WP-S',
+      Niagara: 'Niagara',
+      AS: 'AS',
+      ABP: 'ABP',
+      FCC_A: 'FCC-A',
+      LO: 'LO',
+      NS: 'NS',
+      cardreader: 'Cardreader',
+      PCNV: 'PCNV',
+      BSO: 'BSO',
+      AAN: 'AAN',
+      AECC: 'AECC',
+      AIL: 'AIL',
+      ITP: 'ITP',
+      ACB: 'ACB',
+      AHC: 'AHC',
+      ELCS_RB: 'ELCS-RB',
+      ELCS_SP: 'ELCS-SP',
+      MFP: 'MFP',
+      VIP_S: 'VIP-S'
+    });
+    const optFeats = optList.filter(([k]) => f[k]).map(([k, v]) => v);
+    const scopeColor = v => v === 'By MET' ? {
+      color: "#166534",
+      fontWeight: 500
+    } : v === 'By owner' ? {
+      color: "#92400e",
+      fontWeight: 500
+    } : {
+      color: "#64748b"
+    };
+    const rows = [['General Info', null, null, true], ['Elevator No.', e.elevNo, e.elevNo, false], ['Usage', e.usage, p.usage || e.usage, false], ['Brand / Product', e.brand, [p.source, p.product, p.code].filter(Boolean).join(' / '), false], ['Capacity', e.capacity ? e.capacity + ' kg' : '—', p.kg ? p.kg + ' kg (' + p.persons + 'P)' : '—', false], ['Door Type', e.doorType, p.doorType, false], ['Speed', e.speed ? e.speed + ' m/s' : '—', p.speed ? p.speed + ' m/s' : '—', false], ['Operation', e.operation, p.operation, false], ['Travel', e.travel ? e.travel + ' m' : '—', p.travel ? p.travel + ' m' : '—', false], ['No. of Stop', e.noOfStop, p.noOfStop || e.noOfStop, false], ['Machine Room', e.machineRoom, p.machineRoom, false], ['Shaft & Civil', null, null, true], ['Car AA×BB', e.carW && e.carD ? e.carW + '×' + e.carD + ' mm' : '—', p.carWidth && p.carDepth ? p.carWidth + '×' + p.carDepth + ' mm' : '—', false], ['Ceiling HL', e.ceilingHL ? e.ceilingHL + ' mm' : '—', p.ceilingHeight ? p.ceilingHeight + ' mm' : '—', false], ['Entrance JJ×HH', e.entranceJJ && e.entranceHH ? e.entranceJJ + '×' + e.entranceHH + ' mm' : '—', p.carDoorWidth && p.carDoorHeight ? p.carDoorWidth + '×' + p.carDoorHeight + ' mm' : '—', false], ['CWT Location', e.cwtLocation, p.cwtLocation, false], ['Shaft AH×BH', e.shaftAH && e.shaftBH ? e.shaftAH + '×' + e.shaftBH + ' mm' : '—', p.shaftAH && p.shaftBH ? p.shaftAH + '×' + p.shaftBH + ' mm' : '—', false], ['LE Wall', e.leWall ? e.leWall + ' mm' : '—', p.leWall ? p.leWall + ' mm' : '—', false], ['RE Wall', e.reWall ? e.reWall + ' mm' : '—', p.reWall ? p.reWall + ' mm' : '—', false], ['Overhead OH', e.overhead ? e.overhead + ' mm' : '—', p.overhead ? p.overhead + ' mm' : '—', false, 'OH'], ['Pit Depth PD', e.pitDepth ? e.pitDepth + ' mm' : '—', p.pitDepth ? p.pitDepth + ' mm' : '—', false, 'PIT'], ['Hoistway', e.hoistway, p.hoistway, false], ['Car Design', null, null, true], ['COP Main', e.cop, p.mainCOP + (p.mainCOPRemark ? ' (' + p.mainCOPRemark + ')' : ''), false], ['Ceiling', e.ceiling, p.ceilingType + (p.ceilingTypeRemark ? ' (' + p.ceilingTypeRemark + ')' : ''), false], ['Car Wall', e.carWall, p.carWallFinish, false], ['Car Door', e.carDoor, p.carDoorFinish, false], ['Flooring', e.flooring, p.flooring, false], ['Entrance Design', null, null, true], ['Landing door (main)', e.landingDoorMain, p.landingDoorMain, false], ['Landing door (typical)', e.landingDoorTypical, p.landingDoorTypical, false], ['Jamb (main)', e.jambMain, p.jambMain, false], ['Jamb (typical)', e.jambTypical, p.jambTypical, false], ['Jamb type (main)', e.jambTypeMain, p.jambTypeMain + (p.jambTypeMainRemark ? ' (' + p.jambTypeMainRemark + ')' : ''), false], ['Jamb type (typical)', e.jambTypeTypical, p.jambTypeTypical + (p.jambTypeTypicalRemark ? ' (' + p.jambTypeTypicalRemark + ')' : ''), false], e.hallBtnMain || p.hallBtnMain ? ['Hall button (main)', e.hallBtnMain, p.hallBtnMain + (p.hallBtnMainRemark ? ' (' + p.hallBtnMainRemark + ')' : ''), false] : null, e.hallBtnTypical || p.hallBtnTypical ? ['Hall button (typical)', e.hallBtnTypical, p.hallBtnTypical + (p.hallBtnTypicalRemark ? ' (' + p.hallBtnTypicalRemark + ')' : ''), false] : null, e.hallLanternMain || p.hallLanternMain ? ['Hall lantern (main)', e.hallLanternMain, p.hallLanternMain + (p.hallLanternMainRemark ? ' (' + p.hallLanternMainRemark + ')' : ''), false] : null, e.hallPIVMain || p.hallPIVMain ? ['Hall pos. ind. (main)', e.hallPIVMain, p.hallPIVMain + (p.hallPIVMainRemark ? ' (' + p.hallPIVMainRemark + ')' : ''), false] : null].filter(Boolean);
+    const localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance]].filter(([, v]) => v && v !== 'No');
+    return /*#__PURE__*/React.createElement("div", {
+      key: g.id,
+      style: {
+        borderBottom: gi < groups.length - 1 ? "0.5px solid #e2e8f0" : "none"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      onClick: () => setExpanded(ex => ({
+        ...ex,
+        [g.id]: !isOpen
+      })),
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        padding: "10px 14px",
+        background: "#fafafa",
+        cursor: "pointer",
+        userSelect: "none"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 26,
+        height: 26,
+        borderRadius: 6,
+        background: AMBER,
+        color: NAV,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: 11,
+        fontWeight: 500,
+        flexShrink: 0
+      }
+    }, "G", gi + 1), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 13,
+        fontWeight: 500,
+        color: "#d97706"
+      }
+    }, e.elevNo || "Lift " + (gi + 1)), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11,
+        color: "#64748b"
+      }
+    }, e.brand || "—", " → ", [p.source, p.product, p.code].filter(Boolean).join(' ') || "—", " · ", p.speed || e.speed || "—", " m/s")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11,
+        color: "#d97706",
+        fontWeight: 500
+      }
+    }, isOpen ? "▼" : "▶")), isOpen && /*#__PURE__*/React.createElement("table", {
+      style: {
+        width: "100%",
+        borderCollapse: "collapse"
+      }
+    }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
+      style: {
+        background: "#f8fafc"
+      }
+    }, /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11,
+        fontWeight: 500,
+        color: "#94a3b8",
+        textAlign: "left",
+        borderRight: "0.5px solid #e2e8f0",
+        width: 140,
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "Field"), /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11,
+        fontWeight: 500,
+        color: "#475569",
+        textAlign: "center",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "Existing lift"), /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11,
+        fontWeight: 500,
+        color: "#1e3a5f",
+        textAlign: "center",
+        background: "#fef3c7",
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "🏢 Modernization Full Replacement"))), /*#__PURE__*/React.createElement("tbody", null, rows.map((row, ri) => {
+      if (!row) return null;
+      const [label, ex, pr, isHdr, badge] = row;
+      if (isHdr) return /*#__PURE__*/React.createElement("tr", {
+        key: ri
+      }, /*#__PURE__*/React.createElement("td", {
+        colSpan: 3,
+        style: {
+          padding: "5px 8px",
+          fontSize: 11,
+          fontWeight: 600,
+          color: "#1e3a5f",
+          background: "#eef2f7",
+          borderBottom: "0.5px solid #e2e8f0",
+          letterSpacing: ".02em"
+        }
+      }, label));
+      const badgeEl = badge === 'OH' ? diffBadge(e.overhead, p.overhead) : badge === 'PIT' ? diffBadge(e.pitDepth, p.pitDepth) : null;
+      return /*#__PURE__*/React.createElement("tr", {
+        key: ri
+      }, /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 11.5,
+          color: "#64748b",
+          fontWeight: 500,
+          background: "#f8fafc",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, label), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 11.5,
+          color: "#475569",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, ex || "—"), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 11.5,
+          color: "#1e3a5f",
+          fontWeight: 500,
+          background: "#fff7ed",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, pr || "—", badgeEl));
+    }), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+      colSpan: 3,
+      style: {
+        padding: "5px 8px",
+        fontSize: 11,
+        fontWeight: 500,
+        color: "#1e3a5f",
+        background: "#eef2f7",
+        borderBottom: "0.5px solid #e2e8f0",
+        letterSpacing: ".02em"
+      }
+    }, "Features (Proposed)")), (() => {
+      const pf = g.feats || {};
+      const pfStd = [{
+        code: 'ITP',
+        label: 'Intercom',
+        isStd: true
+      }, {
+        code: 'DKO-TB',
+        label: 'Door Hold',
+        isStd: true
+      }, {
+        code: 'OLHL',
+        label: 'Overload',
+        isStd: true
+      }, {
+        code: 'ECL',
+        label: 'Emergency Car Lighting',
+        isStd: true
+      }, {
+        code: 'MELD',
+        label: 'Emergency Lowering Device',
+        isStd: true
+      }, {
+        code: 'SDE',
+        label: 'Safety Door Edge',
+        isStd: true
+      }, {
+        code: 'ACB',
+        label: 'Sonic Car Button Click',
+        isStd: true
+      }, {
+        code: 'FCC-P',
+        label: 'Floor Call Cancel',
+        isStd: true
+      }, {
+        code: 'CCTV',
+        label: 'CCTV',
+        isStd: true
+      }, {
+        code: 'RSRL',
+        label: 'RSRL',
+        isStd: true
+      }, {
+        code: 'EMB',
+        label: 'Emergency Bell',
+        isStd: true
+      }, {
+        code: `AECC (${pf.AECC_type || 'AECC'})`,
+        label: 'Car Arrival Chime',
+        isStd: true
+      }, {
+        code: 'MFP',
+        label: 'Main Floor Parking',
+        isStd: true
+      }, {
+        code: 'HOS',
+        label: 'Out of Service by Hall Key Switch',
+        isStd: true
+      }];
+      const pfOpt = [...(pf.EER ? [{
+        code: `EER (${pf.EER_type})`,
+        label: 'Earthquake Emergency Return',
+        isStd: false
+      }] : []), ...(pf.ABP ? [{
+        code: 'ABP',
+        label: 'Auto By-pass',
+        isStd: false
+      }] : []), ...(pf.FE ? [{
+        code: pf.FE_FELC === 'Yes' ? 'FE + FELC' : 'FE',
+        label: "Firefighters' Emergency Operation",
+        isStd: false
+      }] : []), ...(pf.AAN ? [{
+        code: `AAN (${pf.AAN_type})`,
+        label: 'Voice Announcement',
+        isStd: false
+      }] : []), ...(pf.AS ? [{
+        code: 'AS',
+        label: 'Attendant Service',
+        isStd: false
+      }] : []), ...(pf.FCC_A ? [{
+        code: 'FCC-A',
+        label: 'False Call Cancel Auto',
+        isStd: false
+      }] : []), ...(pf.cardreader ? [{
+        code: 'Cardreader',
+        label: 'Interface Card Reader',
+        isStd: false
+      }] : []), ...(pf.OEPS_SA ? [{
+        code: 'OEPS-SA',
+        label: 'Operation by Emergency Power Source',
+        isStd: false
+      }] : [])];
+      return [...pfStd, ...pfOpt].map((ft, fi) => /*#__PURE__*/React.createElement("tr", {
+        key: ft.code + fi
+      }, /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 11,
+          color: "#94a3b8",
+          background: "#f8fafc",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9",
+          textAlign: "center",
+          width: 40
+        }
+      }, fi + 1), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 12,
+          color: "#475569",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, ft.code, " — ", ft.label), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "4px 8px",
+          fontSize: 11,
+          background: "#fff7ed",
+          borderBottom: "0.5px solid #f1f5f9",
+          textAlign: "center"
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          padding: "2px 7px",
+          borderRadius: 3,
+          fontSize: 10,
+          fontWeight: 500,
+          background: ft.isStd ? "#eef2f7" : "#fff7ed",
+          color: ft.isStd ? "#1e3a5f" : "#c2410c"
+        }
+      }, ft.isStd ? "Standard" : "Optional"))));
+    })(), localScope.length > 0 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+      colSpan: 3,
+      style: {
+        padding: "5px 8px",
+        fontSize: 11,
+        fontWeight: 500,
+        color: "#166534",
+        background: "#f0fdf4",
+        borderBottom: "0.5px solid #e2e8f0",
+        letterSpacing: ".02em"
+      }
+    }, "Local Scope (MOD)")), localScope.map(([label, val]) => /*#__PURE__*/React.createElement("tr", {
+      key: label
+    }, /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11.5,
+        color: "#64748b",
+        background: "#f8fafc",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, label), /*#__PURE__*/React.createElement("td", {
+      colSpan: 2,
+      style: {
+        padding: "5px 8px",
+        fontSize: 11.5,
+        ...scopeColor(val),
+        background: "#f0fdf4",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, val)))))));
+  }))), previewGroup && (() => {
+    const g = previewGroup;
+    const e = g.existing || {},
+      p = g.proposed || {},
+      f = g.feats || {},
+      l = g.local || {};
+    const diffBadge = (ex, pr) => {
+      const ev = Number(ex),
+        pv = Number(pr);
+      if (!ex || !pr) return null;
+      if (pv <= ev) return /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 10,
+          background: "#dcf5e8",
+          color: "#166534",
+          padding: "1px 5px",
+          borderRadius: 3,
+          marginLeft: 4,
+          fontWeight: 500
+        }
+      }, "OK");
+      return /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 10,
+          background: "#fef2f2",
+          color: "#dc2626",
+          padding: "1px 5px",
+          borderRadius: 3,
+          marginLeft: 4,
+          fontWeight: 600
+        }
+      }, "+", pv - ev, "mm");
+    };
+    const stdFeatList = [{
+      code: 'ITP',
+      label: 'Intercom',
+      val: f.ITP ? `ITP (${f.ITP_volt})` : null,
+      std: false
+    }, {
+      code: 'DKO-TB',
+      label: 'Door Hold',
+      val: 'DKO-TB',
+      std: true
+    }, {
+      code: 'OLHL',
+      label: 'Overload',
+      val: 'OLHL',
+      std: true
+    }, {
+      code: 'ECL',
+      label: 'Emergency Car Lighting',
+      val: 'ECL',
+      std: true
+    }, {
+      code: 'MELD',
+      label: 'Emergency Lowering Device',
+      val: 'MELD',
+      std: true
+    }, {
+      code: 'SDE',
+      label: 'Safety Door Edge',
+      val: 'SDE',
+      std: true
+    }, {
+      code: 'ACB',
+      label: 'Sonic Car Button Click',
+      val: 'ACB',
+      std: true
+    }, {
+      code: 'FCC-P',
+      label: 'Floor Call Cancel',
+      val: 'FCC-P',
+      std: true
+    }, {
+      code: 'CCTV',
+      label: 'CCTV',
+      val: 'CCTV',
+      std: true
+    }, {
+      code: 'RSRL',
+      label: 'RSRL',
+      val: 'RSRL',
+      std: true
+    }, {
+      code: 'EMB',
+      label: 'Emergency Bell',
+      val: 'EMB',
+      std: true
+    }];
+    const optFeatList = [{
+      code: 'AECC',
+      label: 'Car Arrival Chime',
+      val: f.AECC ? `AECC (${f.AECC_type})` : null
+    }, {
+      code: 'MFP',
+      label: 'Main Floor Parking',
+      val: f.MFP ? 'MFP' : null
+    }, {
+      code: 'EER',
+      label: 'Earthquake Emergency Return',
+      val: f.EER ? `EER (${f.EER_type})` : null
+    }, {
+      code: 'HOS',
+      label: 'Out of Service by Hall Key Switch',
+      val: f.HOS ? 'HOS' : null
+    }, {
+      code: 'ABP',
+      label: 'Auto By-pass',
+      val: f.ABP ? 'ABP' : null
+    }, {
+      code: 'FE',
+      label: 'Firefighters Emergency Operation',
+      val: f.FE ? f.FE_FELC === 'Yes' ? 'FE + FELC' : 'FE' : null
+    }, {
+      code: 'AAN',
+      label: 'Voice Announcement',
+      val: f.AAN ? `AAN (${f.AAN_type})` : null
+    }, {
+      code: 'AS',
+      label: 'Attendant Service',
+      val: f.AS ? 'AS' : null
+    }, {
+      code: 'FCC-A',
+      label: 'False Call Cancel Auto',
+      val: f.FCC_A ? 'FCC-A' : null
+    }, {
+      code: 'Cardreader',
+      label: 'Interface Card Reader',
+      val: f.cardreader ? 'Cardreader' : null
+    }, {
+      code: 'OEPS-SA',
+      label: 'Operation by Emergency Power Source',
+      val: f.OEPS_SA ? 'OEPS-SA' : null
+    }].filter(x => x.val);
+    const allFeats = [...stdFeatList.map(x => ({
+      ...x,
+      isStd: true
+    })), ...optFeatList.map(x => ({
+      ...x,
+      isStd: false
+    }))];
+    const stdFeats = ['ECL', 'MELD', 'DKO-TB', 'FCC-P', 'OLHL', 'CCTV'];
+    const optList = Object.entries({
+      BMS_GW: 'BMS-GW',
+      EER: 'EER',
+      FER: 'FER',
+      FE: 'FE',
+      WP_W: 'WP-W',
+      OEPS_SA: 'OEPS-SA',
+      WP_S: 'WP-S',
+      Niagara: 'Niagara',
+      AS: 'AS',
+      cardreader: 'Cardreader',
+      PCNV: 'PCNV',
+      BSO: 'BSO',
+      AAN: 'AAN',
+      AECC: 'AECC',
+      AIL: 'AIL',
+      ITP: 'ITP',
+      ACB: 'ACB',
+      AHC: 'AHC'
+    });
+    const optFeats = optList.filter(([k]) => f[k]).map(([k, v]) => v);
+    const localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(([, v]) => v && v !== 'No');
+    const scopeColor = v => v === 'By MET' ? {
+      color: "#166534",
+      fontWeight: 500
+    } : v === 'By owner' ? {
+      color: "#92400e",
+      fontWeight: 500
+    } : {
+      color: "#64748b"
+    };
+    const TblHdr = ({
+      title
+    }) => /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+      colSpan: 3,
+      style: {
+        padding: "6px 10px",
+        fontSize: 12,
+        fontWeight: 600,
+        color: "#fff",
+        background: "#d97706",
+        borderBottom: "0.5px solid #e2e8f0",
+        letterSpacing: ".02em"
+      }
+    }, title));
+    const Row = ({
+      n,
+      ex,
+      pr,
+      OH,
+      PIT
+    }) => /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "6px 10px",
+        fontSize: 12,
+        color: "#94a3b8",
+        background: "#f8fafc",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9",
+        textAlign: "center"
+      }
+    }, n), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "6px 10px",
+        fontSize: 13.5,
+        color: "#475569",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, ex || "—"), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "6px 10px",
+        fontSize: 13.5,
+        color: NAV,
+        fontWeight: 500,
+        background: "#fff7ed",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, pr || "—", OH ? diffBadge(e.overhead, p.overhead) : null, PIT ? diffBadge(e.pitDepth, p.pitDepth) : null));
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.5)",
+        zIndex: 1000,
+        overflowY: "auto",
+        padding: "20px 12px"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        maxWidth: 700,
+        margin: "0 auto",
+        background: "#fff",
+        borderRadius: 12,
+        overflow: "hidden",
+        boxShadow: "0 20px 60px rgba(0,0,0,0.3)"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        background: "#d97706",
+        padding: "12px 16px",
+        display: "flex",
+        alignItems: "center",
+        gap: 12
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: () => setPreviewGroup(null),
+      style: {
+        padding: "6px 12px",
+        borderRadius: 6,
+        border: "0.5px solid rgba(255,255,255,0.4)",
+        background: "transparent",
+        color: "#fff",
+        fontSize: 12,
+        cursor: "pointer",
+        fontFamily: "inherit"
+      }
+    }, "← Back"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        color: "#fff",
+        fontSize: 14,
+        fontWeight: 500
+      }
+    }, e.elevNo || "Lift", " — Modernization Full Replacement"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        color: "rgba(255,255,255,0.7)",
+        fontSize: 11
+      }
+    }, e.brand || "—", " → ", [p.source, p.product, p.code].filter(Boolean).join(' ') || "—")), /*#__PURE__*/React.createElement("button", {
+      onClick: () => setPreviewGroup(null),
+      style: {
+        width: 28,
+        height: 28,
+        borderRadius: 6,
+        border: "0.5px solid rgba(255,255,255,0.4)",
+        background: "transparent",
+        color: "#fff",
+        fontSize: 16,
+        cursor: "pointer",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+      }
+    }, "×")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "0"
+      }
+    }, /*#__PURE__*/React.createElement("table", {
+      style: {
+        width: "100%",
+        borderCollapse: "collapse"
+      }
+    }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
+      style: {
+        background: "#f8fafc"
+      }
+    }, /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11,
+        fontWeight: 500,
+        color: "#94a3b8",
+        textAlign: "center",
+        borderRight: "0.5px solid #e2e8f0",
+        width: 36,
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "#"), /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11,
+        fontWeight: 500,
+        color: "#475569",
+        textAlign: "center",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "Existing lift"), /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11,
+        fontWeight: 500,
+        color: NAV,
+        textAlign: "center",
+        background: "#fef3c7",
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "🏢 Modernization"))), /*#__PURE__*/React.createElement("tbody", null, /*#__PURE__*/React.createElement(TblHdr, {
+      title: "General Info"
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 1,
+      ex: e.brand,
+      pr: [p.source, p.product, p.code].filter(Boolean).join(' / ')
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 2,
+      ex: e.capacity ? e.capacity + ' kg' : '—',
+      pr: p.kg ? p.kg + ' kg (' + p.persons + 'P)' : '—'
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 3,
+      ex: e.doorType,
+      pr: p.doorType
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 4,
+      ex: e.speed ? e.speed + ' m/s' : '—',
+      pr: p.speed ? p.speed + ' m/s' : '—'
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 5,
+      ex: e.noOfStop ? e.noOfStop + ' stops' : '—',
+      pr: p.noOfStop ? p.noOfStop + ' stops' : '—'
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 6,
+      ex: e.travel ? e.travel + ' m' : '—',
+      pr: p.travel ? p.travel + ' m' : '—'
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 7,
+      ex: e.machineRoom,
+      pr: p.machineRoom
+    }), /*#__PURE__*/React.createElement(TblHdr, {
+      title: "Shaft & Civil Dimensions"
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 1,
+      ex: e.carW && e.carD ? e.carW + '×' + e.carD + ' mm' : '—',
+      pr: p.carWidth && p.carDepth ? p.carWidth + '×' + p.carDepth + ' mm' : '—'
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 2,
+      ex: e.shaftAH && e.shaftBH ? e.shaftAH + '×' + e.shaftBH + ' mm' : '—',
+      pr: p.shaftAH && p.shaftBH ? p.shaftAH + '×' + p.shaftBH + ' mm' : '—'
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 3,
+      ex: e.overhead ? e.overhead + ' mm' : '—',
+      pr: p.overhead ? p.overhead + ' mm' : '—',
+      OH: true
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 4,
+      ex: e.pitDepth ? e.pitDepth + ' mm' : '—',
+      pr: p.pitDepth ? p.pitDepth + ' mm' : '—',
+      PIT: true
+    }), e.hoistway && /*#__PURE__*/React.createElement(Row, {
+      n: 5,
+      ex: e.hoistway,
+      pr: p.hoistway || '—'
+    }), /*#__PURE__*/React.createElement(TblHdr, {
+      title: "Car Design"
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 1,
+      ex: e.cop || '—',
+      pr: p.mainCOP || '—'
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 2,
+      ex: e.carWall,
+      pr: p.carWallFinish
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 3,
+      ex: e.flooring,
+      pr: p.flooring
+    }), /*#__PURE__*/React.createElement(TblHdr, {
+      title: "Entrance Design"
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 1,
+      ex: e.landingDoorMain,
+      pr: p.landingDoorMain
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 2,
+      ex: e.jambMain,
+      pr: p.jambMain
+    }), /*#__PURE__*/React.createElement(Row, {
+      n: 3,
+      ex: e.jambTypeMain,
+      pr: p.jambTypeMain
+    }), (e.hallBtnMain || p.hallBtnMain) && /*#__PURE__*/React.createElement(Row, {
+      n: 4,
+      ex: e.hallBtnMain,
+      pr: p.hallBtnMain
+    }), (e.hallPIVMain || p.hallPIVMain) && /*#__PURE__*/React.createElement(Row, {
+      n: 5,
+      ex: e.hallPIVMain,
+      pr: p.hallPIVMain
+    }), /*#__PURE__*/React.createElement(TblHdr, {
+      title: "Features (Proposed)"
+    }), allFeats.map((ft, fi) => /*#__PURE__*/React.createElement("tr", {
+      key: ft.code
+    }, /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11,
+        color: "#94a3b8",
+        background: "#f8fafc",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9",
+        textAlign: "center"
+      }
+    }, fi + 1), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 13,
+        color: "#475569",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, ft.code, " — ", ft.label), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "4px 8px",
+        fontSize: 11,
+        background: "#fff7ed",
+        borderBottom: "0.5px solid #f1f5f9",
+        textAlign: "center",
+        width: 80
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        padding: "2px 7px",
+        borderRadius: 3,
+        fontSize: 10,
+        fontWeight: 500,
+        background: ft.isStd ? "#eef2f7" : "#fff7ed",
+        color: ft.isStd ? "#1e3a5f" : "#c2410c"
+      }
+    }, ft.isStd ? "Standard" : "Optional")))), localScope.length > 0 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(TblHdr, {
+      title: "Local Scope (MOD)"
+    }), localScope.map(([label, val]) => /*#__PURE__*/React.createElement("tr", {
+      key: label
+    }, /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11,
+        color: "#94a3b8",
+        background: "#f8fafc",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9",
+        textAlign: "center"
+      }
+    }, "—"), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 12,
+        color: "#64748b",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, label), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 12,
+        ...scopeColor(val),
+        background: "#f0fdf4",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, val))))))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "12px 16px",
+        borderTop: "0.5px solid #e2e8f0",
+        textAlign: "center"
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: () => setPreviewGroup(null),
+      style: {
+        padding: "8px 24px",
+        borderRadius: 7,
+        border: "0.5px solid #cbd5e1",
+        background: "#fff",
+        cursor: "pointer",
+        fontSize: 13,
+        fontFamily: "inherit"
+      }
+    }, "← Back to List"))));
+  })()));
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App,null));
+</script></body></html>
