@@ -3946,7 +3946,7 @@ function App() {
   }();
   var handleJobSiteUpload = /*#__PURE__*/function () {
     var _handleJobSiteUpload = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(file) {
-      var _data$candidates, toB64, b64, ext, mimeMap, mime, PROMPT, resp, data, raw, clean, p, filled, se, _t;
+      var _data$candidates, toB64, b64, ext, mimeMap, mime, PROMPT, resp, data, _data$error, msg, raw, clean, p, filled, se, _t;
       return _regenerator().w(function (_context2) {
         while (1) switch (_context2.p = _context2.n) {
           case 0:
@@ -3983,11 +3983,10 @@ function App() {
             mime = mimeMap[ext] || 'application/pdf';
             PROMPT = "Analyze this elevator/lift job site check or specification document. Extract existing lift information and return ONLY valid JSON:\n{\n  \"brand\":\"brand name or null\",\n  \"usage\":\"Passenger/Service/Fireman/Bed or null\",\n  \"capacity\":\"number in kg or null\",\n  \"speed\":\"number in m/s or null\",\n  \"doorType\":\"CO or 2S or null\",\n  \"noOfStop\":\"number or null\",\n  \"travel\":\"number in meters or null\",\n  \"machineRoom\":\"MR or MRL or null\",\n  \"carType\":\"Standard or Non-standard or null\",\n  \"carW\":\"car width in mm or null\",\n  \"carD\":\"car depth in mm or null\",\n  \"ceilingHL\":\"ceiling height in mm or null\",\n  \"entranceJJ\":\"door width in mm or null\",\n  \"entranceHH\":\"door height in mm or null\",\n  \"shaftAH\":\"shaft width in mm or null\",\n  \"shaftBH\":\"shaft depth in mm or null\",\n  \"overhead\":\"overhead in mm or null\",\n  \"pitDepth\":\"pit depth in mm or null\",\n  \"hoistway\":\"RCC or Brick or Steel or null\",\n  \"cwtLocation\":\"Rear or Left or Right or Side or null\",\n  \"carWall\":\"finish description or null\",\n  \"carDoor\":\"finish description or null\",\n  \"flooring\":\"flooring description or null\",\n  \"cop\":\"COP description or null\",\n  \"operation\":\"Passenger or Service or null\",\n  \"filledFields\":[\"list of field names that were successfully extracted\"]\n}";
             _context2.n = 4;
-            return fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent", {
+            return fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=".concat(GEMINI_KEY), {
               method: 'POST',
               headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + GEMINI_KEY
+                'Content-Type': 'application/json'
               },
               body: JSON.stringify({
                 contents: [{
@@ -4008,11 +4007,12 @@ function App() {
             return resp.json();
           case 5:
             data = _context2.v;
-            if (!data.error) {
+            if (!(!resp.ok || data.error)) {
               _context2.n = 6;
               break;
             }
-            alert('Gemini API Error: ' + data.error.message + '\n\nKey อาจไม่ถูกต้อง กรุณาตรวจสอบ API Key');
+            msg = ((_data$error = data.error) === null || _data$error === void 0 ? void 0 : _data$error.message) || JSON.stringify(data).slice(0, 200);
+            alert('Gemini Error: ' + msg);
             setUploading(false);
             return _context2.a(2);
           case 6:
