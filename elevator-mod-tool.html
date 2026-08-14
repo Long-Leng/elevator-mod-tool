@@ -833,6 +833,7 @@ var JAMB = ["Painted by local", "Painted by factory", "SUS-HL", "SUS-M", "remark
 var GROUP_OP = ["1C-2BC", "2C-2BC", "2C-ΣAI22", "3C-ΣAI22", "4C-ΣAI22", "3C-ΣAI2200C", "4C-ΣAI2200C", "5C-ΣAI2200C", "6C-ΣAI2200C", "7C-ΣAI2200C", "8C-ΣAI2200C", "remark"];
 
 // ── CONSTANTS ────────────────────────────────────────────────────────
+var GEMINI_KEY = "YOUR_GEMINI_API_KEY_HERE";
 var NAV = "#1e3a5f",
   AMBER = "#d97706",
   AMBERD = "#92400e",
@@ -1758,7 +1759,91 @@ function LiftEditor(_ref12) {
       }, o);
     }));
   };
-  if (step === 2) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  if (step === 2) return /*#__PURE__*/React.createElement(React.Fragment, null, autoFilled && /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 14px",
+      background: "#f0fdf4",
+      border: "0.5px solid #86efac",
+      borderRadius: 8,
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 16
+    }
+  }, "\u2705"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12.5,
+      fontWeight: 500,
+      color: "#166534"
+    }
+  }, "Auto fill \u0E2A\u0E33\u0E40\u0E23\u0E47\u0E08 \u2014 \u0E01\u0E23\u0E38\u0E13\u0E32 verify \u0E02\u0E49\u0E2D\u0E21\u0E39\u0E25\u0E01\u0E48\u0E2D\u0E19 save"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#16a34a"
+    }
+  }, autoFilledFields.length, " fields \u0E16\u0E39\u0E01 fill \u0E2D\u0E31\u0E15\u0E42\u0E19\u0E21\u0E31\u0E15\u0E34")), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      setAutoFilled(false);
+      setAutoFilledFields([]);
+    },
+    style: {
+      marginLeft: "auto",
+      padding: "3px 8px",
+      borderRadius: 5,
+      border: "0.5px solid #86efac",
+      background: "transparent",
+      color: "#166534",
+      fontSize: 11,
+      cursor: "pointer"
+    }
+  }, "\u2715")), /*#__PURE__*/React.createElement("div", {
+    onClick: function onClick() {
+      var _fileUploadRef$curren;
+      return (_fileUploadRef$curren = fileUploadRef.current) === null || _fileUploadRef$curren === void 0 ? void 0 : _fileUploadRef$curren.click();
+    },
+    style: {
+      border: "2px dashed #d97706",
+      borderRadius: 10,
+      padding: 14,
+      textAlign: "center",
+      background: "#fffbf0",
+      cursor: uploading ? "wait" : "pointer",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 20,
+      marginBottom: 4
+    }
+  }, "\uD83D\uDCC4"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 500,
+      color: "#d97706",
+      marginBottom: 2
+    }
+  }, uploading ? "⏳ กำลังอ่านเอกสาร..." : "Upload Job Site → Auto Fill"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "var(--color-text-secondary)"
+    }
+  }, "PDF, \u0E23\u0E39\u0E1B\u0E20\u0E32\u0E1E \u2014 Auto fill \u0E02\u0E49\u0E2D\u0E21\u0E39\u0E25 Existing lift"), /*#__PURE__*/React.createElement("input", {
+    ref: fileUploadRef,
+    type: "file",
+    accept: ".pdf,.jpg,.jpeg,.png,.webp",
+    style: {
+      display: "none"
+    },
+    onChange: function onChange(e) {
+      var _e$target$files;
+      if ((_e$target$files = e.target.files) !== null && _e$target$files !== void 0 && _e$target$files[0]) handleJobSiteUpload(e.target.files[0]);
+      e.target.value = '';
+    }
+  })), /*#__PURE__*/React.createElement("div", {
     style: {
       background: "var(--color-background-primary)",
       border: "0.5px solid var(--color-border-tertiary)",
@@ -3304,6 +3389,19 @@ function App() {
     _useState10 = _slicedToArray(_useState1, 2),
     previewGroup = _useState10[0],
     setPreviewGroup = _useState10[1];
+  var _useState11 = useState(false),
+    _useState12 = _slicedToArray(_useState11, 2),
+    autoFilled = _useState12[0],
+    setAutoFilled = _useState12[1];
+  var _useState13 = useState([]),
+    _useState14 = _slicedToArray(_useState13, 2),
+    autoFilledFields = _useState14[0],
+    setAutoFilledFields = _useState14[1];
+  var _useState15 = useState(false),
+    _useState16 = _slicedToArray(_useState15, 2),
+    uploading = _useState16[0],
+    setUploading = _useState16[1];
+  var fileUploadRef = useRef(null);
 
   // ── AUTO-SAVE to localStorage ──────────────────────────────────────
   useEffect(function () {
@@ -3337,34 +3435,34 @@ function App() {
       }
     } catch (e) {}
   }, []); // list | edit
-  var _useState11 = useState(null),
-    _useState12 = _slicedToArray(_useState11, 2),
-    editIdx = _useState12[0],
-    setEditIdx = _useState12[1];
-  var _useState13 = useState(_objectSpread({}, INIT_EXISTING)),
-    _useState14 = _slicedToArray(_useState13, 2),
-    editExisting = _useState14[0],
-    setEditExisting = _useState14[1];
-  var _useState15 = useState(_objectSpread({}, INIT_PROPOSED)),
-    _useState16 = _slicedToArray(_useState15, 2),
-    editProposed = _useState16[0],
-    setEditProposed = _useState16[1];
-  var _useState17 = useState(_objectSpread({}, INIT_FEATS)),
+  var _useState17 = useState(null),
     _useState18 = _slicedToArray(_useState17, 2),
-    editFeats = _useState18[0],
-    setEditFeats = _useState18[1];
-  var _useState19 = useState(_objectSpread({}, INIT_LOCAL)),
+    editIdx = _useState18[0],
+    setEditIdx = _useState18[1];
+  var _useState19 = useState(_objectSpread({}, INIT_EXISTING)),
     _useState20 = _slicedToArray(_useState19, 2),
-    editLocal = _useState20[0],
-    setEditLocal = _useState20[1];
-  var _useState21 = useState(1),
+    editExisting = _useState20[0],
+    setEditExisting = _useState20[1];
+  var _useState21 = useState(_objectSpread({}, INIT_PROPOSED)),
     _useState22 = _slicedToArray(_useState21, 2),
-    wizStep = _useState22[0],
-    setWizStep = _useState22[1];
-  var _useState23 = useState(''),
+    editProposed = _useState22[0],
+    setEditProposed = _useState22[1];
+  var _useState23 = useState(_objectSpread({}, INIT_FEATS)),
     _useState24 = _slicedToArray(_useState23, 2),
-    saveMsg = _useState24[0],
-    setSaveMsg = _useState24[1];
+    editFeats = _useState24[0],
+    setEditFeats = _useState24[1];
+  var _useState25 = useState(_objectSpread({}, INIT_LOCAL)),
+    _useState26 = _slicedToArray(_useState25, 2),
+    editLocal = _useState26[0],
+    setEditLocal = _useState26[1];
+  var _useState27 = useState(1),
+    _useState28 = _slicedToArray(_useState27, 2),
+    wizStep = _useState28[0],
+    setWizStep = _useState28[1];
+  var _useState29 = useState(''),
+    _useState30 = _slicedToArray(_useState29, 2),
+    saveMsg = _useState30[0],
+    setSaveMsg = _useState30[1];
   var importRef = useRef(null);
   var sp = function sp(v) {
     return setProj(function (p) {
@@ -3838,6 +3936,128 @@ function App() {
     }
     return generateXls;
   }();
+  var handleJobSiteUpload = /*#__PURE__*/function () {
+    var _handleJobSiteUpload = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(file) {
+      var _data$candidates, toB64, b64, ext, mimeMap, mime, PROMPT, resp, data, raw, clean, p, filled, se, _t;
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.p = _context2.n) {
+          case 0:
+            if (file) {
+              _context2.n = 1;
+              break;
+            }
+            return _context2.a(2);
+          case 1:
+            setUploading(true);
+            _context2.p = 2;
+            toB64 = function toB64(f) {
+              return new Promise(function (res, rej) {
+                var r = new FileReader();
+                r.onload = function () {
+                  return res(r.result.split(',')[1]);
+                };
+                r.onerror = rej;
+                r.readAsDataURL(f);
+              });
+            };
+            _context2.n = 3;
+            return toB64(file);
+          case 3:
+            b64 = _context2.v;
+            ext = file.name.split('.').pop().toLowerCase();
+            mimeMap = {
+              pdf: 'application/pdf',
+              jpg: 'image/jpeg',
+              jpeg: 'image/jpeg',
+              png: 'image/png',
+              webp: 'image/webp'
+            };
+            mime = mimeMap[ext] || 'application/pdf';
+            PROMPT = "Analyze this elevator/lift job site check or specification document. Extract existing lift information and return ONLY valid JSON:\n{\n  \"brand\":\"brand name or null\",\n  \"usage\":\"Passenger/Service/Fireman/Bed or null\",\n  \"capacity\":\"number in kg or null\",\n  \"speed\":\"number in m/s or null\",\n  \"doorType\":\"CO or 2S or null\",\n  \"noOfStop\":\"number or null\",\n  \"travel\":\"number in meters or null\",\n  \"machineRoom\":\"MR or MRL or null\",\n  \"carType\":\"Standard or Non-standard or null\",\n  \"carW\":\"car width in mm or null\",\n  \"carD\":\"car depth in mm or null\",\n  \"ceilingHL\":\"ceiling height in mm or null\",\n  \"entranceJJ\":\"door width in mm or null\",\n  \"entranceHH\":\"door height in mm or null\",\n  \"shaftAH\":\"shaft width in mm or null\",\n  \"shaftBH\":\"shaft depth in mm or null\",\n  \"overhead\":\"overhead in mm or null\",\n  \"pitDepth\":\"pit depth in mm or null\",\n  \"hoistway\":\"RCC or Brick or Steel or null\",\n  \"cwtLocation\":\"Rear or Left or Right or Side or null\",\n  \"carWall\":\"finish description or null\",\n  \"carDoor\":\"finish description or null\",\n  \"flooring\":\"flooring description or null\",\n  \"cop\":\"COP description or null\",\n  \"operation\":\"Passenger or Service or null\",\n  \"filledFields\":[\"list of field names that were successfully extracted\"]\n}";
+            _context2.n = 4;
+            return fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=".concat(GEMINI_KEY), {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                contents: [{
+                  parts: [{
+                    inline_data: {
+                      mime_type: mime,
+                      data: b64
+                    }
+                  }, {
+                    text: PROMPT
+                  }]
+                }]
+              })
+            });
+          case 4:
+            resp = _context2.v;
+            _context2.n = 5;
+            return resp.json();
+          case 5:
+            data = _context2.v;
+            raw = ((_data$candidates = data.candidates) === null || _data$candidates === void 0 || (_data$candidates = _data$candidates[0]) === null || _data$candidates === void 0 || (_data$candidates = _data$candidates.content) === null || _data$candidates === void 0 || (_data$candidates = _data$candidates.parts) === null || _data$candidates === void 0 || (_data$candidates = _data$candidates[0]) === null || _data$candidates === void 0 ? void 0 : _data$candidates.text) || '{}';
+            clean = raw.replace(/```json|```/g, '').trim();
+            p = JSON.parse(clean);
+            filled = [];
+            se = function se(k, v) {
+              if (v != null && v !== '') {
+                setEditExisting(function (prev) {
+                  return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, k, String(v)));
+                });
+                filled.push(k);
+              }
+            };
+            se('brand', p.brand);
+            se('usage', p.usage);
+            se('capacity', p.capacity);
+            se('speed', p.speed);
+            se('doorType', p.doorType);
+            se('noOfStop', p.noOfStop);
+            se('travel', p.travel);
+            se('machineRoom', p.machineRoom);
+            se('carType', p.carType);
+            se('carW', p.carW);
+            se('carD', p.carD);
+            se('ceilingHL', p.ceilingHL);
+            se('entranceJJ', p.entranceJJ);
+            se('entranceHH', p.entranceHH);
+            se('shaftAH', p.shaftAH);
+            se('shaftBH', p.shaftBH);
+            se('overhead', p.overhead);
+            se('pitDepth', p.pitDepth);
+            se('hoistway', p.hoistway);
+            se('cwtLocation', p.cwtLocation);
+            se('carWall', p.carWall);
+            se('carDoor', p.carDoor);
+            se('flooring', p.flooring);
+            se('cop', p.cop);
+            se('operation', p.operation);
+            setAutoFilled(true);
+            setAutoFilledFields(filled);
+            _context2.n = 7;
+            break;
+          case 6:
+            _context2.p = 6;
+            _t = _context2.v;
+            alert('Auto fill failed: ' + _t.message);
+          case 7:
+            _context2.p = 7;
+            setUploading(false);
+            return _context2.f(7);
+          case 8:
+            return _context2.a(2);
+        }
+      }, _callee2, null, [[2, 6, 7, 8]]);
+    }));
+    function handleJobSiteUpload(_x) {
+      return _handleJobSiteUpload.apply(this, arguments);
+    }
+    return handleJobSiteUpload;
+  }();
   var saveGroup = function saveGroup() {
     var g = {
       id: editIdx !== null ? groups[editIdx].id : uid(),
@@ -3983,7 +4203,7 @@ function App() {
       cursor: "pointer",
       fontFamily: "inherit"
     }
-  }, "\uD83D\uDCC2 Load"), /*#__PURE__*/React.createElement("input", {
+  }, "\uD83D\uDCC2 Upload"), /*#__PURE__*/React.createElement("input", {
     ref: importRef,
     type: "file",
     accept: ".json",
@@ -3991,8 +4211,8 @@ function App() {
       display: "none"
     },
     onChange: function onChange(e) {
-      var _e$target$files;
-      if ((_e$target$files = e.target.files) !== null && _e$target$files !== void 0 && _e$target$files[0]) importJSON(e.target.files[0]);
+      var _e$target$files2;
+      if ((_e$target$files2 = e.target.files) !== null && _e$target$files2 !== void 0 && _e$target$files2[0]) importJSON(e.target.files[0]);
       e.target.value = '';
     }
   }))), /*#__PURE__*/React.createElement("div", {
