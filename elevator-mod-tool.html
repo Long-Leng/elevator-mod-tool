@@ -4007,6 +4007,14 @@ function App() {
             return resp.json();
           case 5:
             data = _context2.v;
+            if (!data.error) {
+              _context2.n = 6;
+              break;
+            }
+            alert('Gemini API Error: ' + data.error.message + '\n\nKey อาจไม่ถูกต้อง กรุณาตรวจสอบ API Key');
+            setUploading(false);
+            return _context2.a(2);
+          case 6:
             raw = ((_data$candidates = data.candidates) === null || _data$candidates === void 0 || (_data$candidates = _data$candidates[0]) === null || _data$candidates === void 0 || (_data$candidates = _data$candidates.content) === null || _data$candidates === void 0 || (_data$candidates = _data$candidates.parts) === null || _data$candidates === void 0 || (_data$candidates = _data$candidates[0]) === null || _data$candidates === void 0 ? void 0 : _data$candidates.text) || '{}';
             clean = raw.replace(/```json|```/g, '').trim();
             p = JSON.parse(clean);
@@ -4046,20 +4054,20 @@ function App() {
             se('operation', p.operation);
             setAutoFilled(true);
             setAutoFilledFields(filled);
-            _context2.n = 7;
+            _context2.n = 8;
             break;
-          case 6:
-            _context2.p = 6;
-            _t = _context2.v;
-            alert('Auto fill failed: ' + _t.message);
           case 7:
             _context2.p = 7;
-            setUploading(false);
-            return _context2.f(7);
+            _t = _context2.v;
+            alert('Auto fill failed: ' + _t.message);
           case 8:
+            _context2.p = 8;
+            setUploading(false);
+            return _context2.f(8);
+          case 9:
             return _context2.a(2);
         }
-      }, _callee2, null, [[2, 6, 7, 8]]);
+      }, _callee2, null, [[2, 7, 8, 9]]);
     }));
     function handleJobSiteUpload(_x) {
       return _handleJobSiteUpload.apply(this, arguments);
