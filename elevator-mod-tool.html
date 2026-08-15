@@ -1085,7 +1085,7 @@ var INIT_CM = {
   mirror: "No",
   handrail: "No",
   mainCOP: "",
-  auxCOP: "No",
+  auxCOP: "",
   // Step 4
   landingDoorMain: "SUS-HL",
   landingDoorTypical: "SUS-HL",
@@ -3963,49 +3963,46 @@ function CMEditor(_ref22) {
   })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Car Wall Finish",
     half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
   }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.carWallFinish,
     onChange: function onChange(e) {
       return sc("carWallFinish")(e.target.value);
     },
     opts: FINISH
-  })), cm.carWallFinish === "remark" && /*#__PURE__*/React.createElement(CMfield, {
-    label: "Car Wall (specify)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
+  }), cm.carWallFinish === "remark" && /*#__PURE__*/React.createElement(CMinp, {
     val: cm.carWallRemark,
     onChange: function onChange(e) {
       return sc("carWallRemark")(e.target.value);
     },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CMfield, {
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Car Door Finish",
     half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
   }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.carDoorFinish,
     onChange: function onChange(e) {
       return sc("carDoorFinish")(e.target.value);
     },
     opts: FINISH
-  })), cm.carDoorFinish === "remark" && /*#__PURE__*/React.createElement(CMfield, {
-    label: "Car Door (specify)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
+  }), cm.carDoorFinish === "remark" && /*#__PURE__*/React.createElement(CMinp, {
     val: cm.carDoorRemark,
     onChange: function onChange(e) {
       return sc("carDoorRemark")(e.target.value);
     },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CMfield, {
-    label: "Ceiling Type",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
-    val: cm.ceilingType,
-    onChange: function onChange(e) {
-      return sc("ceilingType")(e.target.value);
-    },
-    ph: "e.g. CL1"
-  })), /*#__PURE__*/React.createElement(CMfield, {
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Flooring",
     half: true
   }, /*#__PURE__*/React.createElement(CMsel, {
@@ -4153,7 +4150,7 @@ function CMEditor(_ref22) {
     label: "Aux COP",
     half: true
   }, /*#__PURE__*/React.createElement(CMinp, {
-    val: cm.auxCOP,
+    val: cm.auxCOP === undefined ? "" : cm.auxCOP,
     onChange: function onChange(e) {
       return sc("auxCOP")(e.target.value);
     },
