@@ -1049,6 +1049,10 @@ var INIT_FEATS = {
   AHC: false
 };
 var INIT_CM = {
+  ITP_volt: "6V",
+  EER_type: "EER-P",
+  SDE_side: "one side",
+  AECC_type: "AECC",
   // Step 1
   product: "GS51AA",
   capacity: "",
@@ -3722,7 +3726,7 @@ function CMaddR(_ref21) {
   }, "+ Add remark"));
 }
 
-// ── CM EDITOR ─────────────────────────────────────────────────────────
+// ──
 function CMEditor(_ref22) {
   var _cm$governorRopeM;
   var cm = _ref22.cm,
@@ -3845,24 +3849,6 @@ function CMEditor(_ref22) {
     },
     ph: "m"
   })), /*#__PURE__*/React.createElement(CMfield, {
-    label: "Car Door Width (mm)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
-    val: cm.carDoorWidth,
-    onChange: function onChange(e) {
-      return sc("carDoorWidth")(e.target.value);
-    },
-    ph: "mm"
-  })), /*#__PURE__*/React.createElement(CMfield, {
-    label: "Car Door Height (mm)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
-    val: cm.carDoorHeight,
-    onChange: function onChange(e) {
-      return sc("carDoorHeight")(e.target.value);
-    },
-    ph: "mm"
-  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Operation",
     half: true
   }, /*#__PURE__*/React.createElement(CMsel, {
@@ -3889,19 +3875,10 @@ function CMEditor(_ref22) {
       return sc("quantity")(e.target.value);
     },
     ph: "1"
-  })), /*#__PURE__*/React.createElement(CMfield, {
-    label: "Group Operation",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMsel, {
-    val: cm.groupOp,
-    onChange: function onChange(e) {
-      return sc("groupOp")(e.target.value);
-    },
-    opts: ["No", "2 cars", "3 cars", "4 cars", "5 cars", "6 cars", "7 cars", "8 cars"]
   })));
   if (step === 3) return /*#__PURE__*/React.createElement(CMsec, {
     icon: "\uD83C\uDFA8",
-    title: "Car Design & COP"
+    title: "Car Dimension and Design"
   }, /*#__PURE__*/React.createElement(CMfield, {
     label: "Car Width AA (mm)",
     half: true
@@ -3918,6 +3895,24 @@ function CMEditor(_ref22) {
     val: cm.carDepth,
     onChange: function onChange(e) {
       return sc("carDepth")(e.target.value);
+    },
+    ph: "mm"
+  })), /*#__PURE__*/React.createElement(CMfield, {
+    label: "Car Door Width (mm)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.carDoorWidth,
+    onChange: function onChange(e) {
+      return sc("carDoorWidth")(e.target.value);
+    },
+    ph: "mm"
+  })), /*#__PURE__*/React.createElement(CMfield, {
+    label: "Car Door Height (mm)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.carDoorHeight,
+    onChange: function onChange(e) {
+      return sc("carDoorHeight")(e.target.value);
     },
     ph: "mm"
   })), /*#__PURE__*/React.createElement(CMfield, {
@@ -4002,6 +3997,15 @@ function CMEditor(_ref22) {
     },
     ph: "specify..."
   })), /*#__PURE__*/React.createElement(CMfield, {
+    label: "Ceiling Type",
+    half: true
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.ceilingType,
+    onChange: function onChange(e) {
+      return sc("ceilingType")(e.target.value);
+    },
+    ph: "e.g. CL1"
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Flooring",
     half: true
   }, /*#__PURE__*/React.createElement(CMsel, {
@@ -4020,33 +4024,6 @@ function CMEditor(_ref22) {
     },
     ph: "specify..."
   })), /*#__PURE__*/React.createElement(CMfield, {
-    label: "Kick Plate",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMsel, {
-    val: cm.kickPlate,
-    onChange: function onChange(e) {
-      return sc("kickPlate")(e.target.value);
-    },
-    opts: ["SUS-HL304", "SUS-HL316", "Painted", "No", "remark"]
-  })), /*#__PURE__*/React.createElement(CMfield, {
-    label: "Front Return Panel",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMsel, {
-    val: cm.frontReturnPanel,
-    onChange: function onChange(e) {
-      return sc("frontReturnPanel")(e.target.value);
-    },
-    opts: FINISH
-  })), /*#__PURE__*/React.createElement(CMfield, {
-    label: "Transom Panel (Car)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMsel, {
-    val: cm.transomPanel,
-    onChange: function onChange(e) {
-      return sc("transomPanel")(e.target.value);
-    },
-    opts: TRANSOM
-  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Glass Window (Car)",
     half: true
   }, /*#__PURE__*/React.createElement(CMsel, {
@@ -4055,7 +4032,79 @@ function CMEditor(_ref22) {
       return sc("glassWindowSize")(e.target.value);
     },
     opts: ["No", "Small", "Large", "remark"]
+  })), cm.glassWindowSize === "remark" && /*#__PURE__*/React.createElement(CMfield, {
+    label: "Glass Window (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.glassWindowSizeR,
+    onChange: function onChange(e) {
+      return sc("glassWindowSizeR")(e.target.value);
+    },
+    ph: "specify..."
   })), /*#__PURE__*/React.createElement(CMfield, {
+    label: "Front Return Panel",
+    half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.frontReturnPanel,
+    onChange: function onChange(e) {
+      return sc("frontReturnPanel")(e.target.value);
+    },
+    opts: FINISH
+  }), cm.frontReturnPanel === "remark" && /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.frontReturnPanelR,
+    onChange: function onChange(e) {
+      return sc("frontReturnPanelR")(e.target.value);
+    },
+    ph: "specify..."
+  }))), /*#__PURE__*/React.createElement(CMfield, {
+    label: "Transom Panel (Car)",
+    half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.transomPanel,
+    onChange: function onChange(e) {
+      return sc("transomPanel")(e.target.value);
+    },
+    opts: TRANSOM
+  }), cm.transomPanel === "remark" && /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.transomPanelR,
+    onChange: function onChange(e) {
+      return sc("transomPanelR")(e.target.value);
+    },
+    ph: "specify..."
+  }))), /*#__PURE__*/React.createElement(CMfield, {
+    label: "Kick Plate",
+    half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.kickPlate,
+    onChange: function onChange(e) {
+      return sc("kickPlate")(e.target.value);
+    },
+    opts: ["SUS-HL304", "SUS-HL316", "Painted", "No", "remark"]
+  }), cm.kickPlate === "remark" && /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.kickPlateR,
+    onChange: function onChange(e) {
+      return sc("kickPlateR")(e.target.value);
+    },
+    ph: "specify..."
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Mirror",
     half: true
   }, /*#__PURE__*/React.createElement(CMsel, {
@@ -4064,6 +4113,15 @@ function CMEditor(_ref22) {
       return sc("mirror")(e.target.value);
     },
     opts: ["No", "Half", "Full", "remark"]
+  })), cm.mirror === "remark" && /*#__PURE__*/React.createElement(CMfield, {
+    label: "Mirror (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.mirrorR,
+    onChange: function onChange(e) {
+      return sc("mirrorR")(e.target.value);
+    },
+    ph: "specify..."
   })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Handrail",
     half: true
@@ -4073,6 +4131,15 @@ function CMEditor(_ref22) {
       return sc("handrail")(e.target.value);
     },
     opts: ["No", "Flat type", "Pipe type", "remark"]
+  })), cm.handrail === "remark" && /*#__PURE__*/React.createElement(CMfield, {
+    label: "Handrail (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.handrailR,
+    onChange: function onChange(e) {
+      return sc("handrailR")(e.target.value);
+    },
+    ph: "specify..."
   })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Main COP",
     half: true
@@ -4085,12 +4152,12 @@ function CMEditor(_ref22) {
   })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Aux COP",
     half: true
-  }, /*#__PURE__*/React.createElement(CMsel, {
+  }, /*#__PURE__*/React.createElement(CMinp, {
     val: cm.auxCOP,
     onChange: function onChange(e) {
       return sc("auxCOP")(e.target.value);
     },
-    opts: ["No", "Yes"]
+    ph: "AUX COP model"
   })));
   if (step === 4) return /*#__PURE__*/React.createElement(CMsec, {
     icon: "\uD83D\uDEAA",
@@ -4098,166 +4165,193 @@ function CMEditor(_ref22) {
   }, /*#__PURE__*/React.createElement(CMfield, {
     label: "Landing Door (Main)",
     half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
   }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.landingDoorMain,
     onChange: function onChange(e) {
       return sc("landingDoorMain")(e.target.value);
     },
     opts: FINISH
-  })), cm.landingDoorMain === "remark" && /*#__PURE__*/React.createElement(CMfield, {
-    label: "Landing Door Main (specify)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
+  }), cm.landingDoorMain === "remark" && /*#__PURE__*/React.createElement(CMinp, {
     val: cm.ldMainR,
     onChange: function onChange(e) {
       return sc("ldMainR")(e.target.value);
     },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CMfield, {
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Landing Door (Typical)",
     half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
   }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.landingDoorTypical,
     onChange: function onChange(e) {
       return sc("landingDoorTypical")(e.target.value);
     },
     opts: FINISH
-  })), cm.landingDoorTypical === "remark" && /*#__PURE__*/React.createElement(CMfield, {
-    label: "Landing Door Typical (specify)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
+  }), cm.landingDoorTypical === "remark" && /*#__PURE__*/React.createElement(CMinp, {
     val: cm.ldTypicalR,
     onChange: function onChange(e) {
       return sc("ldTypicalR")(e.target.value);
     },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CMfield, {
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Door Jamb (Main)",
     half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
   }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.jambMain,
     onChange: function onChange(e) {
       return sc("jambMain")(e.target.value);
     },
     opts: JAMB
-  })), cm.jambMain === "remark" && /*#__PURE__*/React.createElement(CMfield, {
-    label: "Jamb Main (specify)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
+  }), cm.jambMain === "remark" && /*#__PURE__*/React.createElement(CMinp, {
     val: cm.jambMainR,
     onChange: function onChange(e) {
       return sc("jambMainR")(e.target.value);
     },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CMfield, {
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Door Jamb (Typical)",
     half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
   }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.jambTypical,
     onChange: function onChange(e) {
       return sc("jambTypical")(e.target.value);
     },
     opts: JAMB
-  })), cm.jambTypical === "remark" && /*#__PURE__*/React.createElement(CMfield, {
-    label: "Jamb Typical (specify)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
+  }), cm.jambTypical === "remark" && /*#__PURE__*/React.createElement(CMinp, {
     val: cm.jambTypicalR,
     onChange: function onChange(e) {
       return sc("jambTypicalR")(e.target.value);
     },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CMfield, {
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Jamb Type (Main)",
     half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
   }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.jambTypeMain,
     onChange: function onChange(e) {
       return sc("jambTypeMain")(e.target.value);
     },
     opts: ["E102", "E202", "E302", "No", "By local", "remark"]
-  })), cm.jambTypeMain === "remark" && /*#__PURE__*/React.createElement(CMfield, {
-    label: "Jamb Type Main (specify)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
+  }), cm.jambTypeMain === "remark" && /*#__PURE__*/React.createElement(CMinp, {
     val: cm.jambTypeMainR,
     onChange: function onChange(e) {
       return sc("jambTypeMainR")(e.target.value);
     },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CMfield, {
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Jamb Type (Typical)",
     half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
   }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.jambTypeTypical,
     onChange: function onChange(e) {
       return sc("jambTypeTypical")(e.target.value);
     },
     opts: ["E102", "E202", "E302", "No", "By local", "remark"]
-  })), cm.jambTypeTypical === "remark" && /*#__PURE__*/React.createElement(CMfield, {
-    label: "Jamb Type Typical (specify)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
+  }), cm.jambTypeTypical === "remark" && /*#__PURE__*/React.createElement(CMinp, {
     val: cm.jambTypeTypicalR,
     onChange: function onChange(e) {
       return sc("jambTypeTypicalR")(e.target.value);
     },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CMfield, {
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Transom Panel (Main)",
     half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
   }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.transomPanelMain,
     onChange: function onChange(e) {
       return sc("transomPanelMain")(e.target.value);
     },
     opts: TRANSOM
-  })), cm.transomPanelMain === "remark" && /*#__PURE__*/React.createElement(CMfield, {
-    label: "Transom Main (specify)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
+  }), cm.transomPanelMain === "remark" && /*#__PURE__*/React.createElement(CMinp, {
     val: cm.transomMainR,
     onChange: function onChange(e) {
       return sc("transomMainR")(e.target.value);
     },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CMfield, {
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Transom Panel (Typical)",
     half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
   }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.transomPanelTypical,
     onChange: function onChange(e) {
       return sc("transomPanelTypical")(e.target.value);
     },
     opts: TRANSOM
-  })), cm.transomPanelTypical === "remark" && /*#__PURE__*/React.createElement(CMfield, {
-    label: "Transom Typical (specify)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
+  }), cm.transomPanelTypical === "remark" && /*#__PURE__*/React.createElement(CMinp, {
     val: cm.transomTypicalR,
     onChange: function onChange(e) {
       return sc("transomTypicalR")(e.target.value);
     },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CMfield, {
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Glass Window (Landing)",
     half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
   }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.glassWindowLanding,
     onChange: function onChange(e) {
       return sc("glassWindowLanding")(e.target.value);
     },
     opts: ["No", "Small", "Large", "remark"]
-  })), cm.glassWindowLanding === "remark" && /*#__PURE__*/React.createElement(CMfield, {
-    label: "Glass Window (specify)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
+  }), cm.glassWindowLanding === "remark" && /*#__PURE__*/React.createElement(CMinp, {
     val: cm.glassWindowLandingR,
     onChange: function onChange(e) {
       return sc("glassWindowLandingR")(e.target.value);
     },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CMfield, {
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Hall Button (Main)",
     half: true
   }, /*#__PURE__*/React.createElement(CMinp, {
@@ -4332,7 +4426,9 @@ function CMEditor(_ref22) {
   })));
   if (step === 5) return /*#__PURE__*/React.createElement(FeatStep, {
     feats: feats,
-    sf: sf
+    sf: sf,
+    cm: cm,
+    sc: sc
   });
   if (step === 6) return /*#__PURE__*/React.createElement("div", {
     style: {
@@ -4680,12 +4776,37 @@ function FeatStep(_ref23) {
     checked: true,
     onChange: function onChange() {}
   }), /*#__PURE__*/React.createElement(FeatItem, {
-    code: "EER-P",
+    code: "EER",
     label: "Earthquake Emergency Return",
     locked: true,
     checked: true,
     onChange: function onChange() {}
-  }), /*#__PURE__*/React.createElement(FeatItem, {
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 12
+    }
+  }, ["EER-P", "EER-S"].map(function (o) {
+    return /*#__PURE__*/React.createElement("label", {
+      key: o,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 5,
+        cursor: "pointer"
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "radio",
+      checked: (feats.EER_type || "EER-P") === o,
+      onChange: function onChange() {
+        return sf('EER_type')(o);
+      }
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12
+      }
+    }, o));
+  }))), /*#__PURE__*/React.createElement(FeatItem, {
     code: "FER",
     label: "Fire Emergency Return",
     locked: true,
@@ -4703,7 +4824,32 @@ function FeatStep(_ref23) {
     locked: true,
     checked: true,
     onChange: function onChange() {}
-  }), /*#__PURE__*/React.createElement(FeatItem, {
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 12
+    }
+  }, ["one side", "both side"].map(function (o) {
+    return /*#__PURE__*/React.createElement("label", {
+      key: o,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 5,
+        cursor: "pointer"
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "radio",
+      checked: (feats.SDE_side || "one side") === o,
+      onChange: function onChange() {
+        return sf('SDE_side')(o);
+      }
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12
+      }
+    }, o));
+  }))), /*#__PURE__*/React.createElement(FeatItem, {
     code: "MBS",
     label: "Multi Beam Sensor",
     locked: true,
@@ -4745,7 +4891,32 @@ function FeatStep(_ref23) {
     locked: true,
     checked: true,
     onChange: function onChange() {}
-  }), /*#__PURE__*/React.createElement(FeatItem, {
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 12
+    }
+  }, ["AECC", "AECH"].map(function (o) {
+    return /*#__PURE__*/React.createElement("label", {
+      key: o,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 5,
+        cursor: "pointer"
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "radio",
+      checked: (feats.AECC_type || "AECC") === o,
+      onChange: function onChange() {
+        return sf('AECC_type')(o);
+      }
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12
+      }
+    }, o));
+  }))), /*#__PURE__*/React.createElement(FeatItem, {
     code: "MFP",
     label: "Main Floor Parking",
     locked: true,
@@ -4825,7 +4996,32 @@ function FeatStep(_ref23) {
     label: "Intercom",
     checked: feats.ITP,
     onChange: sf('ITP')
-  }))));
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 12
+    }
+  }, ["6V", "24V"].map(function (o) {
+    return /*#__PURE__*/React.createElement("label", {
+      key: o,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 5,
+        cursor: "pointer"
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "radio",
+      checked: (feats.ITP_volt || "6V") === o,
+      onChange: function onChange() {
+        return sf('ITP_volt')(o);
+      }
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12
+      }
+    }, o));
+  }))))));
 }
 function App() {
   var _useState3 = useState(_objectSpread({}, INIT_PROJ)),
