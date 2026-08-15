@@ -3943,6 +3943,27 @@ function CMEditor(_ref22) {
     },
     ph: "e.g. CL1"
   })), /*#__PURE__*/React.createElement(CMfield, {
+    label: "Flooring",
+    half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.flooring,
+    onChange: function onChange(e) {
+      return sc("flooring")(e.target.value);
+    },
+    opts: ["Vinyl tile", "Marble", "Granite", "Carpet", "Steel plate", "remark"]
+  }), cm.flooring === "remark" && /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.flooringRemark,
+    onChange: function onChange(e) {
+      return sc("flooringRemark")(e.target.value);
+    },
+    ph: "specify..."
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Recess Floor (mm)",
     half: true
   }, /*#__PURE__*/React.createElement(CMinp, {
@@ -4003,24 +4024,6 @@ function CMEditor(_ref22) {
     },
     ph: "specify..."
   }))), /*#__PURE__*/React.createElement(CMfield, {
-    label: "Flooring",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMsel, {
-    val: cm.flooring,
-    onChange: function onChange(e) {
-      return sc("flooring")(e.target.value);
-    },
-    opts: ["Vinyl tile", "Marble", "Granite", "Carpet", "Steel plate", "remark"]
-  })), cm.flooring === "remark" && /*#__PURE__*/React.createElement(CMfield, {
-    label: "Flooring (specify)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
-    val: cm.flooringRemark,
-    onChange: function onChange(e) {
-      return sc("flooringRemark")(e.target.value);
-    },
-    ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Glass Window (Car)",
     half: true
   }, /*#__PURE__*/React.createElement(CMsel, {
