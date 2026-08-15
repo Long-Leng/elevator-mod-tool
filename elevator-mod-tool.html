@@ -3485,7 +3485,7 @@ function CMEditor(_ref15) {
       });
     };
   };
-  var bInp = {
+  var bI = {
     width: "100%",
     padding: "5px 8px",
     borderRadius: 6,
@@ -3494,10 +3494,7 @@ function CMEditor(_ref15) {
     fontSize: 13,
     fontFamily: "inherit"
   };
-  var bSel = _objectSpread(_objectSpread({}, bInp), {}, {
-    cursor: "pointer"
-  });
-  var Inp = function Inp(_ref16) {
+  var CI = function CI(_ref16) {
     var _cm$k;
     var k = _ref16.k,
       ph = _ref16.ph,
@@ -3510,50 +3507,46 @@ function CMEditor(_ref15) {
         return sc(k)(e.target.value);
       },
       placeholder: ph || "",
-      style: bInp
+      style: bI
     });
   };
-  var Sel = function Sel(_ref17) {
-    var _cm$k2;
+  var CS = function CS(_ref17) {
     var k = _ref17.k,
       opts = _ref17.opts;
     return /*#__PURE__*/React.createElement("select", {
-      value: (_cm$k2 = cm[k]) !== null && _cm$k2 !== void 0 ? _cm$k2 : "",
+      value: cm[k] || opts[0] || "",
       onChange: function onChange(e) {
         return sc(k)(e.target.value);
       },
-      style: bSel
+      style: _objectSpread(_objectSpread({}, bI), {}, {
+        cursor: "pointer"
+      })
     }, opts.map(function (o) {
       return /*#__PURE__*/React.createElement("option", {
-        key: o,
-        value: o
+        key: o
       }, o);
     }));
   };
-  var Row = function Row(_ref18) {
+  var CF = function CF(_ref18) {
     var label = _ref18.label,
-      children = _ref18.children;
+      children = _ref18.children,
+      half = _ref18.half;
     return /*#__PURE__*/React.createElement("div", {
       style: {
+        gridColumn: half ? "span 1" : "span 2",
         display: "flex",
-        alignItems: "center",
-        padding: "7px 14px",
-        borderBottom: "0.5px solid var(--color-border-tertiary)"
+        flexDirection: "column",
+        gap: 4
       }
-    }, /*#__PURE__*/React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("label", {
       style: {
-        width: 200,
-        fontSize: 12.5,
+        fontSize: 11.5,
         color: "var(--color-text-secondary)",
-        flexShrink: 0
+        fontWeight: 500
       }
-    }, label), /*#__PURE__*/React.createElement("div", {
-      style: {
-        flex: 1
-      }
-    }, children));
+    }, label), children);
   };
-  var Sec = function Sec(_ref19) {
+  var CSec = function CSec(_ref19) {
     var icon = _ref19.icon,
       title = _ref19.title,
       children = _ref19.children;
@@ -3567,28 +3560,35 @@ function CMEditor(_ref15) {
       }
     }, /*#__PURE__*/React.createElement("div", {
       style: {
-        padding: "8px 14px",
+        padding: "8px 12px",
         background: AMBER,
         color: "#fff",
         fontSize: 13,
         fontWeight: 500
       }
-    }, icon, " ", title), children);
+    }, icon, " ", title), /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: 14,
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: 10
+      }
+    }, children));
   };
   var FINISH = ["SUS-HL", "SUS-M", "SUS-E", "Painted local", "Painted factory", "PPS", "No", "By local", "remark"];
   var TRANSOM = ["No", "SUS-HL", "SUS-M", "Painted local", "Painted factory", "PPS", "remark"];
   var JAMB = ["Painted by factory", "Painted by local", "SUS-HL", "No", "remark"];
-  var CEIL_HL = ["2100", "2200", "2300", "2400", "2500", "remark"];
   var OPS = ["1C-2BC", "2C-2BC", "2C-AI22", "3C-AI22", "4C-AI22", "3C-AI2200C", "4C-AI2200C", "5C-AI2200C", "6C-AI2200C", "7C-AI2200C", "8C-AI2200C", "remark"];
   var RR = function RR(_ref20) {
     var label = _ref20.label,
       k = _ref20.k;
     return /*#__PURE__*/React.createElement("div", {
       style: {
+        gridColumn: "span 2",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "7px 14px",
+        padding: "7px 0",
         borderBottom: "0.5px solid var(--color-border-tertiary)"
       }
     }, /*#__PURE__*/React.createElement("span", {
@@ -3601,7 +3601,7 @@ function CMEditor(_ref15) {
         gap: 16
       }
     }, ["Replace", "Reuse"].map(function (o) {
-      var _cm$k3;
+      var _cm$k2;
       return /*#__PURE__*/React.createElement("label", {
         key: o,
         style: {
@@ -3613,8 +3613,8 @@ function CMEditor(_ref15) {
         }
       }, /*#__PURE__*/React.createElement("input", {
         type: "radio",
-        name: "rr_".concat(k),
-        checked: ((_cm$k3 = cm[k]) !== null && _cm$k3 !== void 0 ? _cm$k3 : 'Replace') === o,
+        name: "rr_" + k,
+        checked: ((_cm$k2 = cm[k]) !== null && _cm$k2 !== void 0 ? _cm$k2 : 'Replace') === o,
         onChange: function onChange() {
           return sc(k)(o);
         },
@@ -3649,7 +3649,7 @@ function CMEditor(_ref15) {
         gap: 12
       }
     }, ["Yes", "No"].map(function (o) {
-      var _cm$k4;
+      var _cm$k3;
       return /*#__PURE__*/React.createElement("label", {
         key: o,
         style: {
@@ -3661,8 +3661,8 @@ function CMEditor(_ref15) {
         }
       }, /*#__PURE__*/React.createElement("input", {
         type: "radio",
-        name: "yn_".concat(k),
-        checked: ((_cm$k4 = cm[k]) !== null && _cm$k4 !== void 0 ? _cm$k4 : 'No') === o,
+        name: "yn_" + k,
+        checked: ((_cm$k3 = cm[k]) !== null && _cm$k3 !== void 0 ? _cm$k3 : 'No') === o,
         onChange: function onChange() {
           return sc(k)(o);
         },
@@ -3672,12 +3672,14 @@ function CMEditor(_ref15) {
       }), o);
     })));
   };
-  var AddRemarks = function AddRemarks(_ref22) {
+  var AddR = function AddR(_ref22) {
     var k = _ref22.k;
     var items = cm[k] || [];
     return /*#__PURE__*/React.createElement("div", {
       style: {
-        padding: "8px 12px",
+        gridColumn: "span 2",
+        paddingTop: 8,
+        marginTop: 4,
         borderTop: "0.5px solid var(--color-border-tertiary)"
       }
     }, /*#__PURE__*/React.createElement("div", {
@@ -3708,7 +3710,7 @@ function CMEditor(_ref15) {
           n[i] = e.target.value;
           sc(k)(n);
         },
-        style: _objectSpread(_objectSpread({}, bInp), {}, {
+        style: _objectSpread(_objectSpread({}, bI), {}, {
           flex: 1,
           fontSize: 12
         })
@@ -3727,7 +3729,7 @@ function CMEditor(_ref15) {
           cursor: "pointer",
           fontSize: 11
         }
-      }, "\xD7"));
+      }, "x"));
     }), /*#__PURE__*/React.createElement("button", {
       onClick: function onClick() {
         return sc(k)([].concat(_toConsumableArray(items), [""]));
@@ -3743,323 +3745,429 @@ function CMEditor(_ref15) {
       }
     }, "+ Add remark"));
   };
-  if (step === 1) return /*#__PURE__*/React.createElement(Sec, {
-    icon: "\uD83D\uDCCB",
-    title: "Source & Product"
-  }, /*#__PURE__*/React.createElement(Row, {
-    label: "Source"
+  if (step === 1) return /*#__PURE__*/React.createElement(CSec, {
+    icon: "S",
+    title: "Source and Product"
+  }, /*#__PURE__*/React.createElement(CF, {
+    label: "Source",
+    half: true
   }, /*#__PURE__*/React.createElement("input", {
     value: "AMEC",
     readOnly: true,
-    style: _objectSpread(_objectSpread({}, bInp), {}, {
+    style: _objectSpread(_objectSpread({}, bI), {}, {
       background: "var(--color-background-secondary)",
       color: "var(--color-text-muted)"
     })
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Product"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Product",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "product",
     opts: ["GS51AA", "GW51AA"]
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Capacity (kg)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Capacity (kg)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "capacity",
     ph: "e.g. 450"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Technical level"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Technical level",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "techLevel",
     opts: ["S", "A", "B", "C"]
-  })), /*#__PURE__*/React.createElement(Row, {
+  })), /*#__PURE__*/React.createElement(CF, {
     label: "Technical Inquiry No."
-  }, /*#__PURE__*/React.createElement(Inp, {
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "techInquiryNo",
     ph: "e.g. TI-2026-001"
-  })), /*#__PURE__*/React.createElement(Row, {
+  })), /*#__PURE__*/React.createElement(CF, {
     label: "Traction machine"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "tractionMachine",
     ph: "e.g. VFGL"
   })));
-  if (step === 2) return /*#__PURE__*/React.createElement(Sec, {
-    icon: "\u26A1",
+  if (step === 2) return /*#__PURE__*/React.createElement(CSec, {
+    icon: "P",
     title: "Performance Specification"
-  }, /*#__PURE__*/React.createElement(Row, {
-    label: "Speed (m/s)"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  }, /*#__PURE__*/React.createElement(CF, {
+    label: "Speed (m/s)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "speed",
     opts: ["0.75", "1.0", "1.5", "1.75", "2.0", "2.5"]
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "No. of Floor (stops)"
-  }, /*#__PURE__*/React.createElement(Inp, {
-    k: "floor",
-    ph: "stops"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Travel (m)"
-  }, /*#__PURE__*/React.createElement(Inp, {
-    k: "travel",
-    ph: "m"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Door Type"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Door Type",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "doorType",
     opts: ["CO", "2S"]
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Car Door Width (mm)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "No. of Floor",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
+    k: "floor",
+    ph: "stops"
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Travel (m)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
+    k: "travel",
+    ph: "m"
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Car Door Width (mm)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "carDoorWidth",
     ph: "mm"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Car Door Height (mm)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Car Door Height (mm)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "carDoorHeight",
     ph: "mm"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Operation"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Operation",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "operation",
     opts: OPS
-  })), cm.operation === "remark" && /*#__PURE__*/React.createElement(Row, {
-    label: "Operation (remark)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), cm.operation === "remark" && /*#__PURE__*/React.createElement(CF, {
+    label: "Operation (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "operationRemark",
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Quantity"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Quantity",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "quantity",
     ph: "1"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Group Operation"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Group Operation",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "groupOp",
     opts: ["No", "2 cars", "3 cars", "4 cars", "5 cars", "6 cars", "7 cars", "8 cars"]
   })));
-  if (step === 3) return /*#__PURE__*/React.createElement(Sec, {
-    icon: "\uD83C\uDFA8",
-    title: "Car Design & COP"
-  }, /*#__PURE__*/React.createElement(Row, {
-    label: "Car Width AA (mm)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  if (step === 3) return /*#__PURE__*/React.createElement(CSec, {
+    icon: "C",
+    title: "Car Design and COP"
+  }, /*#__PURE__*/React.createElement(CF, {
+    label: "Car Width AA (mm)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "carWidth",
     ph: "mm"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Car Depth BB (mm)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Car Depth BB (mm)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "carDepth",
     ph: "mm"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Ceiling HL (mm)"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Ceiling HL (mm)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "ceilingHL",
-    opts: CEIL_HL
-  })), cm.ceilingHL === "remark" && /*#__PURE__*/React.createElement(Row, {
-    label: "Ceiling HL (remark)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+    opts: ["2100", "2200", "2300", "2400", "2500", "remark"]
+  })), cm.ceilingHL === "remark" ? /*#__PURE__*/React.createElement(CF, {
+    label: "Ceiling HL (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "ceilingHLRemark",
-    ph: "specify mm"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Ceiling Type"
-  }, /*#__PURE__*/React.createElement(Inp, {
+    ph: "mm"
+  })) : /*#__PURE__*/React.createElement(CF, {
+    label: "Ceiling Type",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "ceilingType",
-    ph: "e.g. CL1, CL2"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Recess Floor (mm)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+    ph: "e.g. CL1"
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Recess Floor (mm)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "recessFloor",
     ph: "mm"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Decoration Weight (kg)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Decoration Weight (kg)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "decorationWeight",
     ph: "kg"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Car Wall Finish"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Car Wall Finish",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "carWallFinish",
     opts: FINISH
-  })), cm.carWallFinish === "remark" && /*#__PURE__*/React.createElement(Row, {
-    label: "Car Wall (remark)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), cm.carWallFinish === "remark" && /*#__PURE__*/React.createElement(CF, {
+    label: "Car Wall (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "carWallRemark",
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Car Door Finish"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Car Door Finish",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "carDoorFinish",
     opts: FINISH
-  })), cm.carDoorFinish === "remark" && /*#__PURE__*/React.createElement(Row, {
-    label: "Car Door (remark)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), cm.carDoorFinish === "remark" && /*#__PURE__*/React.createElement(CF, {
+    label: "Car Door (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "carDoorRemark",
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Flooring"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Flooring",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "flooring",
     opts: ["Vinyl tile", "Marble", "Granite", "Carpet", "Steel plate", "remark"]
-  })), cm.flooring === "remark" && /*#__PURE__*/React.createElement(Row, {
-    label: "Flooring (remark)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), cm.flooring === "remark" && /*#__PURE__*/React.createElement(CF, {
+    label: "Flooring (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "flooringRemark",
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Kick Plate"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Kick Plate",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "kickPlate",
     opts: ["SUS-HL304", "SUS-HL316", "Painted", "No", "remark"]
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Front Return Panel"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Front Return Panel",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "frontReturnPanel",
     opts: FINISH
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Transom Panel (Car)"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Transom Panel (Car)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "transomPanel",
     opts: TRANSOM
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Glass Window (Car)"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Glass Window (Car)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "glassWindowSize",
     opts: ["No", "Small", "Large", "remark"]
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Mirror"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Mirror",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "mirror",
     opts: ["No", "Half", "Full", "remark"]
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Handrail"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Handrail",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "handrail",
     opts: ["No", "Flat type", "Pipe type", "remark"]
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Main COP"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Main COP",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "mainCOP",
     ph: "COP model"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Aux COP"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Aux COP",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "auxCOP",
     opts: ["No", "Yes"]
   })));
-  if (step === 4) return /*#__PURE__*/React.createElement(Sec, {
-    icon: "\uD83D\uDEAA",
+  if (step === 4) return /*#__PURE__*/React.createElement(CSec, {
+    icon: "E",
     title: "Entrance Design"
-  }, /*#__PURE__*/React.createElement(Row, {
-    label: "Landing Door (Main)"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  }, /*#__PURE__*/React.createElement(CF, {
+    label: "Landing Door (Main)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "landingDoorMain",
     opts: FINISH
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Landing Door (Typical)"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), cm.landingDoorMain === "remark" && /*#__PURE__*/React.createElement(CF, {
+    label: "Landing Door Main (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
+    k: "ldMainR",
+    ph: "specify..."
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Landing Door (Typical)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "landingDoorTypical",
     opts: FINISH
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Door Jamb (Main)"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), cm.landingDoorTypical === "remark" && /*#__PURE__*/React.createElement(CF, {
+    label: "Landing Door Typical (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
+    k: "ldTypicalR",
+    ph: "specify..."
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Door Jamb (Main)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "jambMain",
     opts: JAMB
-  })), cm.jambMain === "remark" && /*#__PURE__*/React.createElement(Row, {
-    label: "Jamb Main (remark)"
-  }, /*#__PURE__*/React.createElement(Inp, {
-    k: "jambMainRemark",
+  })), cm.jambMain === "remark" && /*#__PURE__*/React.createElement(CF, {
+    label: "Jamb Main (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
+    k: "jambMainR",
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Door Jamb (Typical)"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Door Jamb (Typical)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "jambTypical",
     opts: JAMB
-  })), cm.jambTypical === "remark" && /*#__PURE__*/React.createElement(Row, {
-    label: "Jamb Typical (remark)"
-  }, /*#__PURE__*/React.createElement(Inp, {
-    k: "jambTypicalRemark",
+  })), cm.jambTypical === "remark" && /*#__PURE__*/React.createElement(CF, {
+    label: "Jamb Typical (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
+    k: "jambTypicalR",
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Jamb Type (Main)"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Jamb Type (Main)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "jambTypeMain",
     opts: ["E102", "E202", "E302", "No", "By local", "remark"]
-  })), cm.jambTypeMain === "remark" && /*#__PURE__*/React.createElement(Row, {
-    label: "Jamb Type Main (remark)"
-  }, /*#__PURE__*/React.createElement(Inp, {
-    k: "jambTypeMainRemark",
+  })), cm.jambTypeMain === "remark" && /*#__PURE__*/React.createElement(CF, {
+    label: "Jamb Type Main (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
+    k: "jambTypeMainR",
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Jamb Type (Typical)"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Jamb Type (Typical)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "jambTypeTypical",
     opts: ["E102", "E202", "E302", "No", "By local", "remark"]
-  })), cm.jambTypeTypical === "remark" && /*#__PURE__*/React.createElement(Row, {
-    label: "Jamb Type Typical (remark)"
-  }, /*#__PURE__*/React.createElement(Inp, {
-    k: "jambTypeTypicalRemark",
+  })), cm.jambTypeTypical === "remark" && /*#__PURE__*/React.createElement(CF, {
+    label: "Jamb Type Typical (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
+    k: "jambTypeTypicalR",
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Transom Panel (Main floor)"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Transom Panel (Main)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "transomPanelMain",
     opts: TRANSOM
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Transom Panel (Typical floor)"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), cm.transomPanelMain === "remark" && /*#__PURE__*/React.createElement(CF, {
+    label: "Transom Main (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
+    k: "transomMainR",
+    ph: "specify..."
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Transom Panel (Typical)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "transomPanelTypical",
     opts: TRANSOM
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Glass Window (Landing)"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), cm.transomPanelTypical === "remark" && /*#__PURE__*/React.createElement(CF, {
+    label: "Transom Typical (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
+    k: "transomTypicalR",
+    ph: "specify..."
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Glass Window (Landing)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "glassWindowLanding",
     opts: ["No", "Small", "Large", "remark"]
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Hall Button (Main)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), cm.glassWindowLanding === "remark" && /*#__PURE__*/React.createElement(CF, {
+    label: "Glass Window (specify)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
+    k: "glassWindowLandingR",
+    ph: "specify..."
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Hall Button (Main)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "hallBtnMain",
     ph: "model"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Hall Button (Typical)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Hall Button (Typical)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "hallBtnTypical",
     ph: "model"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Hall Lantern (Main)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Hall Lantern (Main)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "hallLanternMain",
     ph: "model"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Hall Lantern (Typical)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Hall Lantern (Typical)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "hallLanternTypical",
     ph: "model"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Hall Position Indicator (Main)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Hall PIV (Main)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "hallPIVMain",
     ph: "model"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Hall Position Indicator (Typical)"
-  }, /*#__PURE__*/React.createElement(Inp, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Hall PIV (Typical)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CI, {
     k: "hallPIVTypical",
     ph: "model"
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Handicap Hall Button"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Handicap Hall Button",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "handicapHallBtn",
     opts: ["No", "Yes"]
-  })), /*#__PURE__*/React.createElement(Row, {
-    label: "Braille Entrance"
-  }, /*#__PURE__*/React.createElement(Sel, {
+  })), /*#__PURE__*/React.createElement(CF, {
+    label: "Braille Entrance",
+    half: true
+  }, /*#__PURE__*/React.createElement(CS, {
     k: "brailleEntrance",
     opts: ["No", "Yes"]
   })));
-  if (step === 5) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(FeatStep, {
+  if (step === 5) return /*#__PURE__*/React.createElement(FeatStep, {
     feats: feats,
     sf: sf
-  }));
-  if (step === 6) return /*#__PURE__*/React.createElement(Sec, {
-    icon: "\uD83D\uDD29",
-    title: "Main Equipment"
+  });
+  if (step === 6) return /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--color-background-primary)",
+      border: "0.5px solid var(--color-border-tertiary)",
+      borderRadius: 10,
+      overflow: "hidden",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 12px",
+      background: AMBER,
+      color: "#fff",
+      fontSize: 13,
+      fontWeight: 500
+    }
+  }, "Main Equipment"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "10px 14px",
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 8
+    }
   }, /*#__PURE__*/React.createElement(RR, {
     label: "Machine Beam",
     k: "machineBeam"
@@ -4070,13 +4178,13 @@ function CMEditor(_ref15) {
     label: "Load weighing device",
     k: "loadWeighing"
   }), /*#__PURE__*/React.createElement(RR, {
-    label: "Car & CWT Guide Shoes",
+    label: "Car and CWT Guide Shoes",
     k: "guideShoes"
   }), /*#__PURE__*/React.createElement(RR, {
     label: "Governor tension sheave",
     k: "tensionSheave"
   }), /*#__PURE__*/React.createElement(RR, {
-    label: "Hanger roller (Hall door & Car door)",
+    label: "Hanger roller",
     k: "hangerRollerEq"
   }), /*#__PURE__*/React.createElement(RR, {
     label: "Rope shackle wedge type",
@@ -4084,31 +4192,26 @@ function CMEditor(_ref15) {
   }), /*#__PURE__*/React.createElement(RR, {
     label: "Rubber Door Shoes",
     k: "rubberDoorShoes"
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: "8px 14px"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 11.5,
-      color: "var(--color-text-secondary)",
-      marginBottom: 4
-    }
-  }, "Additional remark"), /*#__PURE__*/React.createElement("textarea", {
-    value: cm.mainEquipRemark || "",
-    onChange: function onChange(e) {
-      return sc("mainEquipRemark")(e.target.value);
-    },
-    rows: 2,
-    style: _objectSpread(_objectSpread({}, bInp), {}, {
-      resize: "vertical"
-    }),
-    placeholder: "Remark..."
+  }), /*#__PURE__*/React.createElement(AddR, {
+    k: "mainEquipRemarks"
   })));
-  if (step === 7) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Sec, {
-    icon: "\uD83D\uDD27",
-    title: "Local Part"
+  if (step === 7) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--color-background-primary)",
+      border: "0.5px solid var(--color-border-tertiary)",
+      borderRadius: 10,
+      overflow: "hidden",
+      marginBottom: 10
+    }
   }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 12px",
+      background: AMBER,
+      color: "#fff",
+      fontSize: 13,
+      fontWeight: 500
+    }
+  }, "Local Part"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
       gridTemplateColumns: "1fr 1fr"
@@ -4152,8 +4255,8 @@ function CMEditor(_ref15) {
     onChange: function onChange(e) {
       return sc("governorRopeM")(e.target.value);
     },
-    placeholder: "\u2014",
-    style: _objectSpread(_objectSpread({}, bInp), {}, {
+    placeholder: "m",
+    style: _objectSpread(_objectSpread({}, bI), {}, {
       width: 55,
       fontSize: 12
     })
@@ -4168,12 +4271,32 @@ function CMEditor(_ref15) {
   }), /*#__PURE__*/React.createElement(YN, {
     label: "Installation material",
     k: "localInstallMaterial"
-  })), /*#__PURE__*/React.createElement(AddRemarks, {
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "10px 14px",
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement(AddR, {
     k: "localRemarks"
-  })), /*#__PURE__*/React.createElement(Sec, {
-    icon: "\uD83D\uDC77",
-    title: "Subcontract Labor"
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--color-background-primary)",
+      border: "0.5px solid var(--color-border-tertiary)",
+      borderRadius: 10,
+      overflow: "hidden",
+      marginBottom: 10
+    }
   }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 12px",
+      background: AMBER,
+      color: "#fff",
+      fontSize: 13,
+      fontWeight: 500
+    }
+  }, "Subcontract Labor"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
       gridTemplateColumns: "1fr 1fr"
@@ -4190,12 +4313,32 @@ function CMEditor(_ref15) {
   }), /*#__PURE__*/React.createElement(YN, {
     label: "Protection sheet",
     k: "subProtectionSheet"
-  })), /*#__PURE__*/React.createElement(AddRemarks, {
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "10px 14px",
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement(AddR, {
     k: "subRemarks"
-  })), /*#__PURE__*/React.createElement(Sec, {
-    icon: "\uD83C\uDFD7\uFE0F",
-    title: "Additional Work"
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--color-background-primary)",
+      border: "0.5px solid var(--color-border-tertiary)",
+      borderRadius: 10,
+      overflow: "hidden",
+      marginBottom: 10
+    }
   }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 12px",
+      background: AMBER,
+      color: "#fff",
+      fontSize: 13,
+      fontWeight: 500
+    }
+  }, "Additional Work"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
       gridTemplateColumns: "1fr 1fr"
@@ -4222,9 +4365,16 @@ function CMEditor(_ref15) {
     label: "MELEYE Labor",
     k: "addMELEYELabor",
     full: true
-  })), /*#__PURE__*/React.createElement(AddRemarks, {
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "10px 14px",
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement(AddR, {
     k: "addRemarks"
-  })));
+  }))));
   return null;
 }
 function FeatStep(_ref23) {
