@@ -1048,6 +1048,90 @@ var INIT_FEATS = {
   ACB: true,
   AHC: false
 };
+var INIT_CM = {
+  // Step 1
+  product: "GS51AA",
+  capacity: "",
+  techInquiryNo: "",
+  techLevel: "A",
+  tractionMachine: "",
+  // Step 2
+  speed: "1.0",
+  floor: "",
+  travel: "",
+  doorType: "CO",
+  carDoorWidth: "",
+  carDoorHeight: "",
+  operation: "1BC",
+  quantity: "1",
+  // Step 3
+  carWidth: "",
+  carDepth: "",
+  ceilingHeight: "",
+  recessFloor: "",
+  decorationWeight: "",
+  ceilingType: "",
+  flooring: "Vinyl tile",
+  carWallFinish: "SUS-HL",
+  carDoorFinish: "SUS-HL",
+  glassWindowSize: "No",
+  frontReturnPanel: "SUS-HL",
+  transomPanel: "SUS-HL",
+  kickPlate: "SUS-HL304",
+  mirror: "No",
+  handrail: "No",
+  mainCOP: "",
+  auxCOP: "No",
+  // Step 4
+  landingDoorMain: "SUS-HL",
+  landingDoorTypical: "SUS-HL",
+  jambMain: "Painted by factory",
+  jambMainColor: "",
+  jambTypical: "Painted by factory",
+  jambTypicalColor: "",
+  jambTypeMain: "E102",
+  jambTypeTypical: "E102",
+  transomPanelMain: "No",
+  transomPanelTypical: "No",
+  hallBtn: "",
+  hallLantern: "",
+  hallPIV: "",
+  // Step 6 - Main Equipment
+  machineBeam: "Replace",
+  governorCover: "Replace",
+  loadWeighing: "Replace",
+  guideShoes: "Replace",
+  tensionSheave: "Replace",
+  hangerRollerEq: "Replace",
+  ropeShackle: "Replace",
+  rubberDoorShoes: "Replace",
+  mainEquipRemark: "",
+  // Step 7 - Local Part
+  localHangerRoller: "No",
+  localRubberDoorShoe: "No",
+  localInterphone: "No",
+  localGuideShoe: "No",
+  localMELDBattery: "No",
+  governorRopeM: "",
+  localCarVentilation: "No",
+  localInstallMaterial: "No",
+  localRemarks: [],
+  // Subcontract
+  subInstallation: "No",
+  subLiftUp: "No",
+  subNightWork: "No",
+  subProtectionSheet: "No",
+  subRemarks: [],
+  // Additional Work
+  addOpeningStructure: "No",
+  addRemovalConcrete: "No",
+  addBrokerageFee: "No",
+  addProtectionPine: "No",
+  addBoxFEFER: "No",
+  addMELEYEWiring: "No",
+  addMELEYELabor: "No",
+  addRemarks: []
+};
 var INIT_LOCAL = {
   newJamb: "No",
   newJambRemark: "",
@@ -3376,6 +3460,846 @@ function LiftEditor(_ref12) {
 }
 
 // ── MAIN APP ──────────────────────────────────────────────────────────
+// ── CM EDITOR ─────────────────────────────────────────────────────────
+function CMEditor(_ref15) {
+  var cm = _ref15.cm,
+    setCM = _ref15.setCM,
+    feats = _ref15.feats,
+    setFeats = _ref15.setFeats,
+    step = _ref15.step,
+    setStep = _ref15.setStep,
+    fileUploadRef = _ref15.fileUploadRef,
+    uploading = _ref15.uploading,
+    handleJobSiteUpload = _ref15.handleJobSiteUpload,
+    autoFilled = _ref15.autoFilled,
+    autoFilledFields = _ref15.autoFilledFields,
+    onClearAutoFill = _ref15.onClearAutoFill;
+  var sc = function sc(k) {
+    return function (v) {
+      return setCM(function (p) {
+        return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, k, v));
+      });
+    };
+  };
+  var sf = function sf(k) {
+    return function (v) {
+      return setFeats(function (p) {
+        return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, k, v));
+      });
+    };
+  };
+  var bInp = {
+    width: "100%",
+    padding: "5px 7px",
+    borderRadius: 6,
+    border: "0.5px solid var(--color-border-secondary)",
+    background: "var(--color-background-primary)",
+    fontSize: 13,
+    fontFamily: "inherit"
+  };
+  var Inp = function Inp(_ref16) {
+    var v = _ref16.v,
+      on = _ref16.on,
+      ph = _ref16.ph,
+      _ref16$type = _ref16.type,
+      type = _ref16$type === void 0 ? "text" : _ref16$type;
+    return /*#__PURE__*/React.createElement("input", {
+      type: type,
+      value: v || "",
+      onChange: function onChange(e) {
+        return on(e.target.value);
+      },
+      placeholder: ph || "",
+      style: bInp
+    });
+  };
+  var Sel = function Sel(_ref17) {
+    var v = _ref17.v,
+      on = _ref17.on,
+      opts = _ref17.opts;
+    return /*#__PURE__*/React.createElement("select", {
+      value: v || "",
+      onChange: function onChange(e) {
+        return on(e.target.value);
+      },
+      style: bInp
+    }, opts.map(function (o) {
+      return /*#__PURE__*/React.createElement("option", {
+        key: o,
+        value: o
+      }, o);
+    }));
+  };
+  var RR = function RR(_ref18) {
+    var label = _ref18.label,
+      k = _ref18.k;
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "7px 10px",
+        borderBottom: "0.5px solid var(--color-border-tertiary)"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12.5
+      }
+    }, label), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 12
+      }
+    }, ["Replace", "Reuse"].map(function (o) {
+      return /*#__PURE__*/React.createElement("label", {
+        key: o,
+        style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 5,
+          cursor: "pointer",
+          fontSize: 12
+        }
+      }, /*#__PURE__*/React.createElement("input", {
+        type: "radio",
+        name: k,
+        checked: cm[k] === o,
+        onChange: function onChange() {
+          return sc(k)(o);
+        },
+        style: {
+          accentColor: AMBER
+        }
+      }), o);
+    })));
+  };
+  var YN = function YN(_ref19) {
+    var label = _ref19.label,
+      k = _ref19.k;
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "8px 10px",
+        borderBottom: "0.5px solid var(--color-border-tertiary)",
+        borderRight: "0.5px solid var(--color-border-tertiary)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12
+      }
+    }, label), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 10
+      }
+    }, ["Yes", "No"].map(function (o) {
+      return /*#__PURE__*/React.createElement("label", {
+        key: o,
+        style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 4,
+          cursor: "pointer",
+          fontSize: 12
+        }
+      }, /*#__PURE__*/React.createElement("input", {
+        type: "radio",
+        name: k,
+        checked: cm[k] === o,
+        onChange: function onChange() {
+          return sc(k)(o);
+        },
+        style: {
+          accentColor: AMBER
+        }
+      }), o);
+    })));
+  };
+  var AddRemarks = function AddRemarks(_ref20) {
+    var k = _ref20.k;
+    var items = cm[k] || [];
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "8px 12px",
+        borderTop: "0.5px solid var(--color-border-tertiary)"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11,
+        color: "var(--color-text-muted)",
+        marginBottom: 6
+      }
+    }, "Additional remark"), items.map(function (r, i) {
+      return /*#__PURE__*/React.createElement("div", {
+        key: i,
+        style: {
+          display: "flex",
+          gap: 6,
+          marginBottom: 4,
+          alignItems: "center"
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 11,
+          color: "var(--color-text-muted)",
+          width: 16
+        }
+      }, i + 1, "."), /*#__PURE__*/React.createElement("input", {
+        value: r,
+        onChange: function onChange(e) {
+          var n = _toConsumableArray(items);
+          n[i] = e.target.value;
+          sc(k)(n);
+        },
+        style: _objectSpread(_objectSpread({}, bInp), {}, {
+          flex: 1,
+          fontSize: 12
+        })
+      }), /*#__PURE__*/React.createElement("button", {
+        onClick: function onClick() {
+          return sc(k)(items.filter(function (_, j) {
+            return j !== i;
+          }));
+        },
+        style: {
+          padding: "3px 7px",
+          borderRadius: 4,
+          border: "0.5px solid var(--color-border-secondary)",
+          background: "transparent",
+          color: "var(--color-text-danger)",
+          cursor: "pointer",
+          fontSize: 11
+        }
+      }, "\xD7"));
+    }), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return sc(k)([].concat(_toConsumableArray(items), [""]));
+      },
+      style: {
+        padding: "4px 10px",
+        borderRadius: 5,
+        border: "0.5px dashed var(--color-border-secondary)",
+        background: "transparent",
+        fontSize: 11,
+        cursor: "pointer",
+        color: "var(--color-text-secondary)"
+      }
+    }, "+ Add remark"));
+  };
+  var Sec = function Sec(_ref21) {
+    var title = _ref21.title,
+      children = _ref21.children;
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        background: "var(--color-background-primary)",
+        border: "0.5px solid var(--color-border-tertiary)",
+        borderRadius: 10,
+        overflow: "hidden",
+        marginBottom: 10
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "8px 14px",
+        background: AMBER,
+        color: "#fff",
+        fontSize: 13,
+        fontWeight: 500
+      }
+    }, title), children);
+  };
+  var F = function F(_ref22) {
+    var label = _ref22.label,
+      children = _ref22.children,
+      half = _ref22.half;
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginBottom: 8,
+        width: half ? "calc(50% - 4px)" : undefined
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11,
+        color: "var(--color-text-secondary)",
+        marginBottom: 3
+      }
+    }, label), children);
+  };
+
+  // STEP 1 - Source & Product
+  if (step === 1) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Sec, {
+    title: "Source & Product"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement(F, {
+    label: "Source",
+    half: true
+  }, /*#__PURE__*/React.createElement("input", {
+    value: "AMEC",
+    readOnly: true,
+    style: _objectSpread(_objectSpread({}, bInp), {}, {
+      background: "var(--color-background-secondary)",
+      color: "var(--color-text-muted)"
+    })
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Product",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.product,
+    on: sc("product"),
+    opts: ["GS51AA", "GW51AA"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Capacity (kg)",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.capacity,
+    on: sc("capacity"),
+    ph: "e.g. 450"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Technical level",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.techLevel,
+    on: sc("techLevel"),
+    opts: ["S", "A", "B", "C"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Technical Inquiry No."
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.techInquiryNo,
+    on: sc("techInquiryNo"),
+    ph: "e.g. TI-2026-001"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Traction machine"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.tractionMachine,
+    on: sc("tractionMachine"),
+    ph: "e.g. VFGL"
+  }))))));
+
+  // STEP 2 - Performance
+  if (step === 2) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Sec, {
+    title: "Performance Specification"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement(F, {
+    label: "Speed (m/s)",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.speed,
+    on: sc("speed"),
+    opts: ["0.75", "1.0", "1.5", "1.75", "2.0", "2.5"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Door Type",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.doorType,
+    on: sc("doorType"),
+    opts: ["CO", "2S"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "No. of Floor",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.floor,
+    on: sc("floor"),
+    ph: "stops"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Travel (m)",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.travel,
+    on: sc("travel"),
+    ph: "m"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Car Door W\xD7H (mm)",
+    half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 4
+    }
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.carDoorWidth,
+    on: sc("carDoorWidth"),
+    ph: "W"
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      alignSelf: "center",
+      color: "var(--color-text-muted)"
+    }
+  }, "\xD7"), /*#__PURE__*/React.createElement(Inp, {
+    v: cm.carDoorHeight,
+    on: sc("carDoorHeight"),
+    ph: "H"
+  }))), /*#__PURE__*/React.createElement(F, {
+    label: "Operation",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.operation,
+    on: sc("operation"),
+    opts: ["1BC", "2BC", "3BC", "4BC", "GC", "CC"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Quantity",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.quantity,
+    on: sc("quantity"),
+    ph: "1"
+  }))))));
+
+  // STEP 3 - Car Design
+  if (step === 3) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Sec, {
+    title: "Car Design & COP"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement(F, {
+    label: "Car AA\xD7BB (mm)",
+    half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 4
+    }
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.carWidth,
+    on: sc("carWidth"),
+    ph: "W"
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      alignSelf: "center"
+    }
+  }, "\xD7"), /*#__PURE__*/React.createElement(Inp, {
+    v: cm.carDepth,
+    on: sc("carDepth"),
+    ph: "D"
+  }))), /*#__PURE__*/React.createElement(F, {
+    label: "Ceiling HL (mm)",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.ceilingHeight,
+    on: sc("ceilingHeight"),
+    ph: "mm"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Car Wall Finish",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.carWallFinish,
+    on: sc("carWallFinish"),
+    opts: ["SUS-HL", "SUS-M", "SUS-E", "Painted local", "Painted factory", "PPS"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Car Door Finish",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.carDoorFinish,
+    on: sc("carDoorFinish"),
+    opts: ["SUS-HL", "SUS-M", "SUS-E", "Painted local", "Painted factory", "PPS"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Flooring",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.flooring,
+    on: sc("flooring"),
+    opts: ["Vinyl tile", "Marble", "Granite", "Carpet", "Steel plate", "remark"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Kick Plate",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.kickPlate,
+    on: sc("kickPlate"),
+    opts: ["SUS-HL304", "SUS-HL316", "Painted", "No"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Ceiling",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.ceilingType,
+    on: sc("ceilingType"),
+    ph: "Ceiling type"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Main COP",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.mainCOP,
+    on: sc("mainCOP"),
+    ph: "COP model"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Mirror",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.mirror,
+    on: sc("mirror"),
+    opts: ["No", "Half", "Full", "remark"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Handrail",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.handrail,
+    on: sc("handrail"),
+    opts: ["No", "Flat type", "Pipe type", "remark"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Recess Floor (mm)",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.recessFloor,
+    on: sc("recessFloor"),
+    ph: "mm"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Decoration Weight (kg)",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.decorationWeight,
+    on: sc("decorationWeight"),
+    ph: "kg"
+  }))))));
+
+  // STEP 4 - Entrance
+  if (step === 4) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Sec, {
+    title: "Entrance Design"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement(F, {
+    label: "Landing Door (Main)",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.landingDoorMain,
+    on: sc("landingDoorMain"),
+    opts: ["SUS-HL", "SUS-M", "SUS-E", "Painted local", "Painted factory", "PPS"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Landing Door (Typical)",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.landingDoorTypical,
+    on: sc("landingDoorTypical"),
+    opts: ["SUS-HL", "SUS-M", "SUS-E", "Painted local", "Painted factory", "PPS"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Door Jamb (Main)",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.jambMain,
+    on: sc("jambMain"),
+    opts: ["Painted by factory", "Painted by local", "SUS-HL", "No", "remark"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Door Jamb (Typical)",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.jambTypical,
+    on: sc("jambTypical"),
+    opts: ["Painted by factory", "Painted by local", "SUS-HL", "No", "remark"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Jamb Type (Main)",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.jambTypeMain,
+    on: sc("jambTypeMain"),
+    opts: ["E102", "E202", "E302", "No", "By local", "remark"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Jamb Type (Typical)",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: cm.jambTypeTypical,
+    on: sc("jambTypeTypical"),
+    opts: ["E102", "E202", "E302", "No", "By local", "remark"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Hall Button",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.hallBtn,
+    on: sc("hallBtn"),
+    ph: "model"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Hall Lantern",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.hallLantern,
+    on: sc("hallLantern"),
+    ph: "model"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Hall Position Indicator",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: cm.hallPIV,
+    on: sc("hallPIV"),
+    ph: "model"
+  }))))));
+
+  // STEP 5 - Features (reuse from FM)
+  if (step === 5) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "9px 14px",
+      background: AMBER,
+      color: "#fff",
+      fontSize: 13,
+      fontWeight: 500,
+      borderRadius: "8px 8px 0 0"
+    }
+  }, "\u2B50 Features (Proposed)"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--color-background-primary)",
+      border: "0.5px solid var(--color-border-tertiary)",
+      borderTop: "none",
+      borderRadius: "0 0 8px 8px",
+      overflow: "hidden",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement(FeatStep, {
+    feats: feats,
+    sf: sf
+  })));
+
+  // STEP 6 - Main Equipment
+  if (step === 6) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Sec, {
+    title: "\uD83D\uDD29 Main Equipment"
+  }, /*#__PURE__*/React.createElement(RR, {
+    label: "Machine Beam",
+    k: "machineBeam"
+  }), /*#__PURE__*/React.createElement(RR, {
+    label: "Governor with cover",
+    k: "governorCover"
+  }), /*#__PURE__*/React.createElement(RR, {
+    label: "Load weighing device",
+    k: "loadWeighing"
+  }), /*#__PURE__*/React.createElement(RR, {
+    label: "Car & CWT Guide Shoes",
+    k: "guideShoes"
+  }), /*#__PURE__*/React.createElement(RR, {
+    label: "Governor tension sheave",
+    k: "tensionSheave"
+  }), /*#__PURE__*/React.createElement(RR, {
+    label: "Hanger roller (Hall & Car door)",
+    k: "hangerRollerEq"
+  }), /*#__PURE__*/React.createElement(RR, {
+    label: "Rope shackle wedge type",
+    k: "ropeShackle"
+  }), /*#__PURE__*/React.createElement(RR, {
+    label: "Rubber Door Shoes",
+    k: "rubberDoorShoes"
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 12px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "var(--color-text-muted)",
+      marginBottom: 4
+    }
+  }, "Additional remark"), /*#__PURE__*/React.createElement("textarea", {
+    value: cm.mainEquipRemark || "",
+    onChange: function onChange(e) {
+      return sc("mainEquipRemark")(e.target.value);
+    },
+    rows: 2,
+    style: _objectSpread(_objectSpread({}, bInp), {}, {
+      resize: "vertical"
+    }),
+    placeholder: "Remark..."
+  }))));
+
+  // STEP 7 - Local Scope
+  if (step === 7) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Sec, {
+    title: "\uD83D\uDD27 Local Part"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr"
+    }
+  }, /*#__PURE__*/React.createElement(YN, {
+    label: "Hanger roller",
+    k: "localHangerRoller"
+  }), /*#__PURE__*/React.createElement(YN, {
+    label: "Rubber door shoe",
+    k: "localRubberDoorShoe"
+  }), /*#__PURE__*/React.createElement(YN, {
+    label: "Interphone",
+    k: "localInterphone"
+  }), /*#__PURE__*/React.createElement(YN, {
+    label: "Car and CWT guide shoe",
+    k: "localGuideShoe"
+  }), /*#__PURE__*/React.createElement(YN, {
+    label: "MELD Battery",
+    k: "localMELDBattery"
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 10px",
+      borderBottom: "0.5px solid var(--color-border-tertiary)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12
+    }
+  }, "Governor rope"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 4
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    value: cm.governorRopeM || "",
+    onChange: function onChange(e) {
+      return sc("governorRopeM")(e.target.value);
+    },
+    placeholder: "\u2014 m",
+    style: _objectSpread(_objectSpread({}, bInp), {}, {
+      width: 60,
+      fontSize: 11.5
+    })
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "var(--color-text-muted)"
+    }
+  }, "m"))), /*#__PURE__*/React.createElement(YN, {
+    label: "Car ventilation",
+    k: "localCarVentilation"
+  }), /*#__PURE__*/React.createElement(YN, {
+    label: "Installation material",
+    k: "localInstallMaterial"
+  })), /*#__PURE__*/React.createElement(AddRemarks, {
+    k: "localRemarks"
+  })), /*#__PURE__*/React.createElement(Sec, {
+    title: "\uD83D\uDC77 Subcontract Labor"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr"
+    }
+  }, /*#__PURE__*/React.createElement(YN, {
+    label: "Installation",
+    k: "subInstallation"
+  }), /*#__PURE__*/React.createElement(YN, {
+    label: "Lift up cost",
+    k: "subLiftUp"
+  }), /*#__PURE__*/React.createElement(YN, {
+    label: "Night time work",
+    k: "subNightWork"
+  }), /*#__PURE__*/React.createElement(YN, {
+    label: "Protection sheet",
+    k: "subProtectionSheet"
+  })), /*#__PURE__*/React.createElement(AddRemarks, {
+    k: "subRemarks"
+  })), /*#__PURE__*/React.createElement(Sec, {
+    title: "\uD83C\uDFD7\uFE0F Additional Work"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr"
+    }
+  }, /*#__PURE__*/React.createElement(YN, {
+    label: "Opening structure for lift up",
+    k: "addOpeningStructure"
+  }), /*#__PURE__*/React.createElement(YN, {
+    label: "Removal Concrete",
+    k: "addRemovalConcrete"
+  }), /*#__PURE__*/React.createElement(YN, {
+    label: "Brokerage fee",
+    k: "addBrokerageFee"
+  }), /*#__PURE__*/React.createElement(YN, {
+    label: "Protection Pine wood",
+    k: "addProtectionPine"
+  }), /*#__PURE__*/React.createElement(YN, {
+    label: "Box FE FER",
+    k: "addBoxFEFER"
+  }), /*#__PURE__*/React.createElement(YN, {
+    label: "MELEYE Wiring",
+    k: "addMELEYEWiring"
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 10px",
+      borderBottom: "0.5px solid var(--color-border-tertiary)",
+      borderRight: "0.5px solid var(--color-border-tertiary)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 8,
+      gridColumn: "span 1"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12
+    }
+  }, "MELEYE Labor"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 10
+    }
+  }, ["Yes", "No"].map(function (o) {
+    return /*#__PURE__*/React.createElement("label", {
+      key: o,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 4,
+        cursor: "pointer",
+        fontSize: 12
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "radio",
+      name: "addMELEYELabor",
+      checked: cm.addMELEYELabor === o,
+      onChange: function onChange() {
+        return sc("addMELEYELabor")(o);
+      },
+      style: {
+        accentColor: AMBER
+      }
+    }), o);
+  })))), /*#__PURE__*/React.createElement(AddRemarks, {
+    k: "addRemarks"
+  })));
+  return null;
+}
+
+// FeatStep extracted for reuse in CM
+function FeatStep(_ref23) {
+  var feats = _ref23.feats,
+    sf = _ref23.sf;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 10
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      color: "var(--color-text-secondary)"
+    }
+  }, "Features same as FM \u2014 use checkboxes in FM step 5"));
+}
 function App() {
   var _useState3 = useState(_objectSpread({}, INIT_PROJ)),
     _useState4 = _slicedToArray(_useState3, 2),
@@ -3399,16 +4323,24 @@ function App() {
     setPreviewGroup = _useState10[1];
   var _useState11 = useState(false),
     _useState12 = _slicedToArray(_useState11, 2),
-    autoFilled = _useState12[0],
-    setAutoFilled = _useState12[1];
-  var _useState13 = useState([]),
+    showTypeModal = _useState12[0],
+    setShowTypeModal = _useState12[1];
+  var _useState13 = useState(_objectSpread({}, INIT_CM)),
     _useState14 = _slicedToArray(_useState13, 2),
-    autoFilledFields = _useState14[0],
-    setAutoFilledFields = _useState14[1];
+    editCM = _useState14[0],
+    setEditCM = _useState14[1];
   var _useState15 = useState(false),
     _useState16 = _slicedToArray(_useState15, 2),
-    uploading = _useState16[0],
-    setUploading = _useState16[1];
+    autoFilled = _useState16[0],
+    setAutoFilled = _useState16[1];
+  var _useState17 = useState([]),
+    _useState18 = _slicedToArray(_useState17, 2),
+    autoFilledFields = _useState18[0],
+    setAutoFilledFields = _useState18[1];
+  var _useState19 = useState(false),
+    _useState20 = _slicedToArray(_useState19, 2),
+    uploading = _useState20[0],
+    setUploading = _useState20[1];
   var fileUploadRef = useRef(null);
 
   // ── AUTO-SAVE to localStorage ──────────────────────────────────────
@@ -3443,34 +4375,34 @@ function App() {
       }
     } catch (e) {}
   }, []); // list | edit
-  var _useState17 = useState(null),
-    _useState18 = _slicedToArray(_useState17, 2),
-    editIdx = _useState18[0],
-    setEditIdx = _useState18[1];
-  var _useState19 = useState(_objectSpread({}, INIT_EXISTING)),
-    _useState20 = _slicedToArray(_useState19, 2),
-    editExisting = _useState20[0],
-    setEditExisting = _useState20[1];
-  var _useState21 = useState(_objectSpread({}, INIT_PROPOSED)),
+  var _useState21 = useState(null),
     _useState22 = _slicedToArray(_useState21, 2),
-    editProposed = _useState22[0],
-    setEditProposed = _useState22[1];
-  var _useState23 = useState(_objectSpread({}, INIT_FEATS)),
+    editIdx = _useState22[0],
+    setEditIdx = _useState22[1];
+  var _useState23 = useState(_objectSpread({}, INIT_EXISTING)),
     _useState24 = _slicedToArray(_useState23, 2),
-    editFeats = _useState24[0],
-    setEditFeats = _useState24[1];
-  var _useState25 = useState(_objectSpread({}, INIT_LOCAL)),
+    editExisting = _useState24[0],
+    setEditExisting = _useState24[1];
+  var _useState25 = useState(_objectSpread({}, INIT_PROPOSED)),
     _useState26 = _slicedToArray(_useState25, 2),
-    editLocal = _useState26[0],
-    setEditLocal = _useState26[1];
-  var _useState27 = useState(1),
+    editProposed = _useState26[0],
+    setEditProposed = _useState26[1];
+  var _useState27 = useState(_objectSpread({}, INIT_FEATS)),
     _useState28 = _slicedToArray(_useState27, 2),
-    wizStep = _useState28[0],
-    setWizStep = _useState28[1];
-  var _useState29 = useState(''),
+    editFeats = _useState28[0],
+    setEditFeats = _useState28[1];
+  var _useState29 = useState(_objectSpread({}, INIT_LOCAL)),
     _useState30 = _slicedToArray(_useState29, 2),
-    saveMsg = _useState30[0],
-    setSaveMsg = _useState30[1];
+    editLocal = _useState30[0],
+    setEditLocal = _useState30[1];
+  var _useState31 = useState(1),
+    _useState32 = _slicedToArray(_useState31, 2),
+    wizStep = _useState32[0],
+    setWizStep = _useState32[1];
+  var _useState33 = useState(''),
+    _useState34 = _slicedToArray(_useState33, 2),
+    saveMsg = _useState34[0],
+    setSaveMsg = _useState34[1];
   var importRef = useRef(null);
   var sp = function sp(v) {
     return setProj(function (p) {
@@ -3506,6 +4438,19 @@ function App() {
       }
     };
     reader.readAsText(file);
+  };
+  var openNewGroup = function openNewGroup() {
+    return setShowTypeModal(true);
+  };
+  var openCM = function openCM() {
+    var _groups$idx;
+    var idx = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+    setEditIdx(idx);
+    setEditCM(idx !== null && ((_groups$idx = groups[idx]) === null || _groups$idx === void 0 ? void 0 : _groups$idx.type) === 'CM' ? _objectSpread(_objectSpread({}, INIT_CM), groups[idx].cm) : _objectSpread({}, INIT_CM));
+    setEditFeats(_objectSpread({}, INIT_FEATS));
+    setWizStep(1);
+    setShowTypeModal(false);
+    setView('cm');
   };
   var openNew = function openNew() {
     setEditIdx(null);
@@ -3857,14 +4802,14 @@ function App() {
                 AIL: 'AIL',
                 ITP: 'ITP'
               });
-              var optFeats = optList.filter(function (_ref15) {
-                var _ref16 = _slicedToArray(_ref15, 1),
-                  k = _ref16[0];
+              var optFeats = optList.filter(function (_ref24) {
+                var _ref25 = _slicedToArray(_ref24, 1),
+                  k = _ref25[0];
                 return f[k];
-              }).map(function (_ref17) {
-                var _ref18 = _slicedToArray(_ref17, 2),
-                  k = _ref18[0],
-                  v = _ref18[1];
+              }).map(function (_ref26) {
+                var _ref27 = _slicedToArray(_ref26, 2),
+                  k = _ref27[0],
+                  v = _ref27[1];
                 return v;
               }).join(' · ');
               secHdr('Features (Proposed)');
@@ -3880,9 +4825,9 @@ function App() {
                   v: v,
                   std: false
                 };
-              }))).forEach(function (_ref19, fi) {
-                var v = _ref19.v,
-                  std = _ref19.std;
+              }))).forEach(function (_ref28, fi) {
+                var v = _ref28.v,
+                  std = _ref28.std;
                 var r2 = ws.addRow([fi + 1, v, std ? 'Standard' : 'Optional', '']);
                 ws.mergeCells("C".concat(r2.number, ":D").concat(r2.number));
                 r2.height = 16;
@@ -3906,17 +4851,17 @@ function App() {
                 };
                 bd(vb);
               });
-              var localItems = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(function (_ref20) {
-                var _ref21 = _slicedToArray(_ref20, 2),
-                  v = _ref21[1];
+              var localItems = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(function (_ref29) {
+                var _ref30 = _slicedToArray(_ref29, 2),
+                  v = _ref30[1];
                 return v && v !== 'No';
               });
               if (localItems.length > 0) {
                 secHdr('Local Scope (MOD)');
-                localItems.forEach(function (_ref22) {
-                  var _ref23 = _slicedToArray(_ref22, 2),
-                    label = _ref23[0],
-                    val = _ref23[1];
+                localItems.forEach(function (_ref31) {
+                  var _ref32 = _slicedToArray(_ref31, 2),
+                    label = _ref32[0],
+                    val = _ref32[1];
                   return locRow(label, val);
                 });
               }
@@ -4076,6 +5021,31 @@ function App() {
     }
     return handleJobSiteUpload;
   }();
+  var saveCM = function saveCM() {
+    var g = {
+      id: editIdx !== null ? groups[editIdx].id : uid(),
+      type: 'CM',
+      cm: _objectSpread({}, editCM),
+      feats: _objectSpread({}, editFeats)
+    };
+    if (editIdx !== null) {
+      setGroups(function (prev) {
+        return prev.map(function (x, i) {
+          return i === editIdx ? g : x;
+        });
+      });
+    } else {
+      setGroups(function (prev) {
+        return [].concat(_toConsumableArray(prev), [g]);
+      });
+    }
+    setSaveMsg('Saved!');
+    setTimeout(function () {
+      return setSaveMsg('');
+    }, 2000);
+    setView('list');
+    window.scrollTo(0, 0);
+  };
   var saveGroup = function saveGroup() {
     var g = {
       id: editIdx !== null ? groups[editIdx].id : uid(),
@@ -4141,7 +5111,7 @@ function App() {
       color: NAV,
       flexShrink: 0
     }
-  }, "M"), view !== 'edit' && /*#__PURE__*/React.createElement("button", {
+  }, "M"), (view === 'list' || view === 'preview') && /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
       return setView('list');
     },
@@ -4156,7 +5126,7 @@ function App() {
       cursor: "pointer",
       fontFamily: "inherit"
     }
-  }, "Group List"), view !== 'edit' && /*#__PURE__*/React.createElement("button", {
+  }, "Group List"), (view === 'list' || view === 'preview') && /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
       return setView('preview');
     },
@@ -4392,8 +5362,107 @@ function App() {
       });
     },
     ph: "Engineer name"
-  })))), /*#__PURE__*/React.createElement("button", {
-    onClick: openNew,
+  })))), showTypeModal && /*#__PURE__*/React.createElement("div", {
+    style: {
+      border: "0.5px solid var(--color-border-secondary)",
+      borderRadius: 12,
+      overflow: "hidden",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "12px 16px",
+      background: NAV,
+      color: "#fff",
+      fontSize: 14,
+      fontWeight: 500,
+      textAlign: "center"
+    }
+  }, "Select Modernization Type"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    onClick: function onClick() {
+      setShowTypeModal(false);
+      openNew();
+    },
+    style: {
+      padding: "28px 20px",
+      textAlign: "center",
+      cursor: "pointer",
+      borderRight: "0.5px solid var(--color-border-secondary)",
+      background: "var(--color-background-primary)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 30,
+      marginBottom: 10
+    }
+  }, "\uD83D\uDD04"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 600,
+      color: NAV,
+      marginBottom: 4
+    }
+  }, "FM"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      fontWeight: 600,
+      color: "var(--color-text-primary)"
+    }
+  }, "Full Replacement")), /*#__PURE__*/React.createElement("div", {
+    onClick: function onClick() {
+      return openCM();
+    },
+    style: {
+      padding: "28px 20px",
+      textAlign: "center",
+      cursor: "pointer",
+      background: "var(--color-background-primary)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 30,
+      marginBottom: 10
+    }
+  }, "\u2699\uFE0F"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 600,
+      color: AMBER,
+      marginBottom: 4
+    }
+  }, "CM"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      fontWeight: 600,
+      color: "var(--color-text-primary)"
+    }
+  }, "Control Modernization"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px",
+      borderTop: "0.5px solid var(--color-border-secondary)",
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setShowTypeModal(false);
+    },
+    style: {
+      padding: "5px 16px",
+      borderRadius: 6,
+      border: "0.5px solid var(--color-border-secondary)",
+      background: "transparent",
+      cursor: "pointer",
+      fontSize: 12,
+      fontFamily: "inherit"
+    }
+  }, "Cancel"))), /*#__PURE__*/React.createElement("button", {
+    onClick: openNewGroup,
     style: {
       width: "100%",
       padding: "10px",
@@ -4473,7 +5542,7 @@ function App() {
       return /*#__PURE__*/React.createElement("button", {
         key: a,
         onClick: function onClick() {
-          return a === 'Edit' ? openEdit(i) : a === 'Copy' ? copyGroup(i) : a === 'Preview' ? setPreviewGroup(g) : deleteGroup(i);
+          return a === 'Edit' ? g.type === 'CM' ? openCM(i) : openEdit(i) : a === 'Copy' ? copyGroup(i) : a === 'Preview' ? setPreviewGroup(g) : deleteGroup(i);
         },
         style: {
           padding: "5px 10px",
@@ -4494,10 +5563,10 @@ function App() {
         gridTemplateColumns: "repeat(3,1fr)",
         gap: 8
       }
-    }, [["Existing speed", e.speed ? e.speed + " m/s" : "—"], ["Proposed speed", p.speed ? p.speed + " m/s" : "—"], ["Capacity", p.kg ? p.kg + " kg" : "—"], ["No. of Stop", e.noOfStop || "—"], ["Travel", e.travel ? e.travel + " m" : "—"], ["Machine Room", p.machineRoom || "—"]].map(function (_ref24) {
-      var _ref25 = _slicedToArray(_ref24, 2),
-        l = _ref25[0],
-        v = _ref25[1];
+    }, [["Existing speed", e.speed ? e.speed + " m/s" : "—"], ["Proposed speed", p.speed ? p.speed + " m/s" : "—"], ["Capacity", p.kg ? p.kg + " kg" : "—"], ["No. of Stop", e.noOfStop || "—"], ["Travel", e.travel ? e.travel + " m" : "—"], ["Machine Room", p.machineRoom || "—"]].map(function (_ref33) {
+      var _ref34 = _slicedToArray(_ref33, 2),
+        l = _ref34[0],
+        v = _ref34[1];
       return /*#__PURE__*/React.createElement("div", {
         key: l,
         style: {
@@ -4671,6 +5740,105 @@ function App() {
       fontWeight: 500,
       fontFamily: "inherit"
     }
+  }, "\uD83D\uDCBE Save Lift"))), view === 'cm' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      setView('list');
+      setWizStep(1);
+    },
+    style: {
+      padding: "7px 12px",
+      borderRadius: 7,
+      border: "0.5px solid var(--color-border-secondary)",
+      background: "var(--color-background-primary)",
+      cursor: "pointer",
+      fontSize: 13,
+      fontFamily: "inherit"
+    }
+  }, "\u2190 Back"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      fontWeight: 500
+    }
+  }, "CM \u2014 Control Modernization")), /*#__PURE__*/React.createElement(WizBar, {
+    step: wizStep,
+    onStep: setWizStep
+  }), /*#__PURE__*/React.createElement(CMEditor, {
+    cm: editCM,
+    setCM: setEditCM,
+    feats: editFeats,
+    setFeats: setEditFeats,
+    step: wizStep,
+    setStep: setWizStep,
+    fileUploadRef: fileUploadRef,
+    uploading: uploading,
+    handleJobSiteUpload: handleJobSiteUpload,
+    autoFilled: autoFilled,
+    autoFilledFields: autoFilledFields,
+    onClearAutoFill: function onClearAutoFill() {
+      setAutoFilled(false);
+      setAutoFilledFields([]);
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 10,
+      paddingBottom: 20
+    }
+  }, wizStep > 1 && /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setWizStep(function (s) {
+        return s - 1;
+      });
+    },
+    style: {
+      flex: 1,
+      padding: "10px",
+      borderRadius: 8,
+      border: "0.5px solid var(--color-border-secondary)",
+      background: "var(--color-background-primary)",
+      cursor: "pointer",
+      fontSize: 14,
+      fontFamily: "inherit"
+    }
+  }, "\u2190 Back"), wizStep < 7 ? /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setWizStep(function (s) {
+        return s + 1;
+      });
+    },
+    style: {
+      flex: 2,
+      padding: "10px",
+      borderRadius: 8,
+      border: "none",
+      background: AMBER,
+      color: NAV,
+      cursor: "pointer",
+      fontSize: 14,
+      fontWeight: 500,
+      fontFamily: "inherit"
+    }
+  }, "Next \u2192") : /*#__PURE__*/React.createElement("button", {
+    onClick: saveCM,
+    style: {
+      flex: 2,
+      padding: "10px",
+      borderRadius: 8,
+      border: "none",
+      background: AMBER,
+      color: NAV,
+      cursor: "pointer",
+      fontSize: 14,
+      fontWeight: 500,
+      fontFamily: "inherit"
+    }
   }, "\uD83D\uDCBE Save Lift"))), view === 'preview' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     style: {
       textAlign: "right",
@@ -4750,10 +5918,10 @@ function App() {
       display: "flex",
       gap: 20
     }
-  }, [["Lifts", groups.length], ["Date", proj.date || "—"], ["Revision", proj.rev]].map(function (_ref26) {
-    var _ref27 = _slicedToArray(_ref26, 2),
-      l = _ref27[0],
-      v = _ref27[1];
+  }, [["Lifts", groups.length], ["Date", proj.date || "—"], ["Revision", proj.rev]].map(function (_ref35) {
+    var _ref36 = _slicedToArray(_ref35, 2),
+      l = _ref36[0],
+      v = _ref36[1];
     return /*#__PURE__*/React.createElement("div", {
       key: l
     }, /*#__PURE__*/React.createElement("div", {
@@ -4950,14 +6118,14 @@ function App() {
       MFP: 'MFP',
       VIP_S: 'VIP-S'
     });
-    var optFeats = optList.filter(function (_ref28) {
-      var _ref29 = _slicedToArray(_ref28, 1),
-        k = _ref29[0];
+    var optFeats = optList.filter(function (_ref37) {
+      var _ref38 = _slicedToArray(_ref37, 1),
+        k = _ref38[0];
       return f[k];
-    }).map(function (_ref30) {
-      var _ref31 = _slicedToArray(_ref30, 2),
-        k = _ref31[0],
-        v = _ref31[1];
+    }).map(function (_ref39) {
+      var _ref40 = _slicedToArray(_ref39, 2),
+        k = _ref40[0],
+        v = _ref40[1];
       return v;
     });
     var scopeColor = function scopeColor(v) {
@@ -4972,9 +6140,9 @@ function App() {
       };
     };
     var rows = [['General Info', null, null, true], ['Elevator No.', e.elevNo, e.elevNo, false], ['Usage', e.usage, p.usage || e.usage, false], ['Brand / Product', e.brand, [p.source, p.product, p.code].filter(Boolean).join(' / '), false], ['Capacity', e.capacity ? e.capacity + ' kg' : '—', p.kg ? p.kg + ' kg (' + p.persons + 'P)' : '—', false], ['Door Type', e.doorType, p.doorType, false], ['Speed', e.speed ? e.speed + ' m/s' : '—', p.speed ? p.speed + ' m/s' : '—', false], ['Operation', e.operation, p.operation, false], ['Travel', e.travel ? e.travel + ' m' : '—', p.travel ? p.travel + ' m' : '—', false], ['No. of Stop', e.noOfStop, p.noOfStop || e.noOfStop, false], ['Machine Room', e.machineRoom, p.machineRoom, false], ['Shaft & Civil', null, null, true], ['Car AA×BB', e.carW && e.carD ? e.carW + '×' + e.carD + ' mm' : '—', p.carWidth && p.carDepth ? p.carWidth + '×' + p.carDepth + ' mm' : '—', false], ['Ceiling HL', e.ceilingHL ? e.ceilingHL + ' mm' : '—', p.ceilingHeight ? p.ceilingHeight + ' mm' : '—', false], ['Entrance JJ×HH', e.entranceJJ && e.entranceHH ? e.entranceJJ + '×' + e.entranceHH + ' mm' : '—', p.carDoorWidth && p.carDoorHeight ? p.carDoorWidth + '×' + p.carDoorHeight + ' mm' : '—', false], ['CWT Location', e.cwtLocation, p.cwtLocation, false], ['Shaft AH×BH', e.shaftAH && e.shaftBH ? e.shaftAH + '×' + e.shaftBH + ' mm' : '—', p.shaftAH && p.shaftBH ? p.shaftAH + '×' + p.shaftBH + ' mm' : '—', false], ['LE Wall', e.leWall ? e.leWall + ' mm' : '—', p.leWall ? p.leWall + ' mm' : '—', false], ['RE Wall', e.reWall ? e.reWall + ' mm' : '—', p.reWall ? p.reWall + ' mm' : '—', false], ['Overhead OH', e.overhead ? e.overhead + ' mm' : '—', p.overhead ? p.overhead + ' mm' : '—', false, 'OH'], ['Pit Depth PD', e.pitDepth ? e.pitDepth + ' mm' : '—', p.pitDepth ? p.pitDepth + ' mm' : '—', false, 'PIT'], ['Hoistway', e.hoistway, p.hoistway, false], ['Car Design', null, null, true], ['COP Main', e.cop, p.mainCOP + (p.mainCOPRemark ? ' (' + p.mainCOPRemark + ')' : ''), false], ['Ceiling', e.ceiling, p.ceilingType + (p.ceilingTypeRemark ? ' (' + p.ceilingTypeRemark + ')' : ''), false], ['Car Wall', e.carWall, p.carWallFinish, false], ['Car Door', e.carDoor, p.carDoorFinish, false], ['Flooring', e.flooring, p.flooring, false], ['Entrance Design', null, null, true], ['Landing door (main)', e.landingDoorMain, p.landingDoorMain, false], ['Landing door (typical)', e.landingDoorTypical, p.landingDoorTypical, false], ['Jamb (main)', e.jambMain, p.jambMain, false], ['Jamb (typical)', e.jambTypical, p.jambTypical, false], ['Jamb type (main)', e.jambTypeMain, p.jambTypeMain + (p.jambTypeMainRemark ? ' (' + p.jambTypeMainRemark + ')' : ''), false], ['Jamb type (typical)', e.jambTypeTypical, p.jambTypeTypical + (p.jambTypeTypicalRemark ? ' (' + p.jambTypeTypicalRemark + ')' : ''), false], e.hallBtnMain || p.hallBtnMain ? ['Hall button (main)', e.hallBtnMain, p.hallBtnMain + (p.hallBtnMainRemark ? ' (' + p.hallBtnMainRemark + ')' : ''), false] : null, e.hallBtnTypical || p.hallBtnTypical ? ['Hall button (typical)', e.hallBtnTypical, p.hallBtnTypical + (p.hallBtnTypicalRemark ? ' (' + p.hallBtnTypicalRemark + ')' : ''), false] : null, e.hallLanternMain || p.hallLanternMain ? ['Hall lantern (main)', e.hallLanternMain, p.hallLanternMain + (p.hallLanternMainRemark ? ' (' + p.hallLanternMainRemark + ')' : ''), false] : null, e.hallPIVMain || p.hallPIVMain ? ['Hall pos. ind. (main)', e.hallPIVMain, p.hallPIVMain + (p.hallPIVMainRemark ? ' (' + p.hallPIVMainRemark + ')' : ''), false] : null].filter(Boolean);
-    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance]].filter(function (_ref32) {
-      var _ref33 = _slicedToArray(_ref32, 2),
-        v = _ref33[1];
+    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance]].filter(function (_ref41) {
+      var _ref42 = _slicedToArray(_ref41, 2),
+        v = _ref42[1];
       return v && v !== 'No';
     });
     return /*#__PURE__*/React.createElement("div", {
@@ -5273,10 +6441,10 @@ function App() {
         borderBottom: "0.5px solid #e2e8f0",
         letterSpacing: ".02em"
       }
-    }, "Local Scope (MOD)")), localScope.map(function (_ref34) {
-      var _ref35 = _slicedToArray(_ref34, 2),
-        label = _ref35[0],
-        val = _ref35[1];
+    }, "Local Scope (MOD)")), localScope.map(function (_ref43) {
+      var _ref44 = _slicedToArray(_ref43, 2),
+        label = _ref44[0],
+        val = _ref44[1];
       return /*#__PURE__*/React.createElement("tr", {
         key: label
       }, /*#__PURE__*/React.createElement("td", {
@@ -5465,19 +6633,19 @@ function App() {
       ACB: 'ACB',
       AHC: 'AHC'
     });
-    var optFeats = optList.filter(function (_ref36) {
-      var _ref37 = _slicedToArray(_ref36, 1),
-        k = _ref37[0];
+    var optFeats = optList.filter(function (_ref45) {
+      var _ref46 = _slicedToArray(_ref45, 1),
+        k = _ref46[0];
       return f[k];
-    }).map(function (_ref38) {
-      var _ref39 = _slicedToArray(_ref38, 2),
-        k = _ref39[0],
-        v = _ref39[1];
+    }).map(function (_ref47) {
+      var _ref48 = _slicedToArray(_ref47, 2),
+        k = _ref48[0],
+        v = _ref48[1];
       return v;
     });
-    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(function (_ref40) {
-      var _ref41 = _slicedToArray(_ref40, 2),
-        v = _ref41[1];
+    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(function (_ref49) {
+      var _ref50 = _slicedToArray(_ref49, 2),
+        v = _ref50[1];
       return v && v !== 'No';
     });
     var scopeColor = function scopeColor(v) {
@@ -5491,8 +6659,8 @@ function App() {
         color: "#64748b"
       };
     };
-    var TblHdr = function TblHdr(_ref42) {
-      var title = _ref42.title;
+    var TblHdr = function TblHdr(_ref51) {
+      var title = _ref51.title;
       return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
         colSpan: 3,
         style: {
@@ -5506,12 +6674,12 @@ function App() {
         }
       }, title));
     };
-    var Row = function Row(_ref43) {
-      var n = _ref43.n,
-        ex = _ref43.ex,
-        pr = _ref43.pr,
-        OH = _ref43.OH,
-        PIT = _ref43.PIT;
+    var Row = function Row(_ref52) {
+      var n = _ref52.n,
+        ex = _ref52.ex,
+        pr = _ref52.pr,
+        OH = _ref52.OH,
+        PIT = _ref52.PIT;
       return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
         style: {
           padding: "6px 10px",
@@ -5793,10 +6961,10 @@ function App() {
       }, ft.isStd ? "Standard" : "Optional")));
     }), localScope.length > 0 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(TblHdr, {
       title: "Local Scope (MOD)"
-    }), localScope.map(function (_ref44) {
-      var _ref45 = _slicedToArray(_ref44, 2),
-        label = _ref45[0],
-        val = _ref45[1];
+    }), localScope.map(function (_ref53) {
+      var _ref54 = _slicedToArray(_ref53, 2),
+        label = _ref54[0],
+        val = _ref54[1];
       return /*#__PURE__*/React.createElement("tr", {
         key: label
       }, /*#__PURE__*/React.createElement("td", {
