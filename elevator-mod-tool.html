@@ -3464,13 +3464,272 @@ function LiftEditor(_ref12) {
 
 // ── MAIN APP ──────────────────────────────────────────────────────────
 // ── CM EDITOR ─────────────────────────────────────────────────────────
-function CMEditor(_ref15) {
+// ── CM HELPERS (outside CMEditor to prevent remount) ─────────────────
+var bICM = {
+  width: "100%",
+  padding: "5px 8px",
+  borderRadius: 6,
+  border: "0.5px solid var(--color-border-secondary)",
+  background: "var(--color-background-primary)",
+  fontSize: 13,
+  fontFamily: "inherit"
+};
+function CMinp(_ref15) {
+  var val = _ref15.val,
+    onChange = _ref15.onChange,
+    ph = _ref15.ph,
+    type = _ref15.type;
+  return /*#__PURE__*/React.createElement("input", {
+    type: type || "text",
+    value: val !== null && val !== void 0 ? val : "",
+    onChange: onChange,
+    placeholder: ph || "",
+    style: bICM
+  });
+}
+function CMsel(_ref16) {
+  var val = _ref16.val,
+    onChange = _ref16.onChange,
+    opts = _ref16.opts;
+  return /*#__PURE__*/React.createElement("select", {
+    value: val || opts[0] || "",
+    onChange: onChange,
+    style: _objectSpread(_objectSpread({}, bICM), {}, {
+      cursor: "pointer"
+    })
+  }, opts.map(function (o) {
+    return /*#__PURE__*/React.createElement("option", {
+      key: o
+    }, o);
+  }));
+}
+function CMfield(_ref17) {
+  var label = _ref17.label,
+    children = _ref17.children,
+    half = _ref17.half;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      gridColumn: half ? "span 1" : "span 2",
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 11.5,
+      color: "var(--color-text-secondary)",
+      fontWeight: 500
+    }
+  }, label), children);
+}
+function CMsec(_ref18) {
+  var icon = _ref18.icon,
+    title = _ref18.title,
+    children = _ref18.children;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--color-background-primary)",
+      border: "0.5px solid var(--color-border-tertiary)",
+      borderRadius: 10,
+      overflow: "hidden",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 12px",
+      background: AMBER,
+      color: "#fff",
+      fontSize: 13,
+      fontWeight: 500
+    }
+  }, icon, " ", title), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 14,
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 10
+    }
+  }, children));
+}
+function CMrr(_ref19) {
+  var label = _ref19.label,
+    k = _ref19.k,
+    cm = _ref19.cm,
+    sc = _ref19.sc;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      gridColumn: "span 2",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: "7px 0",
+      borderBottom: "0.5px solid var(--color-border-tertiary)"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12.5
+    }
+  }, label), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 16
+    }
+  }, ["Replace", "Reuse"].map(function (o) {
+    return /*#__PURE__*/React.createElement("label", {
+      key: o,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 5,
+        cursor: "pointer",
+        fontSize: 12.5
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "radio",
+      name: "rr_" + k,
+      checked: (cm[k] || "Replace") === o,
+      onChange: function onChange() {
+        return sc(k)(o);
+      },
+      style: {
+        accentColor: AMBER
+      }
+    }), o);
+  })));
+}
+function CMyn(_ref20) {
+  var label = _ref20.label,
+    k = _ref20.k,
+    cm = _ref20.cm,
+    sc = _ref20.sc,
+    full = _ref20.full;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 10px",
+      borderBottom: "0.5px solid var(--color-border-tertiary)",
+      borderRight: full ? "none" : "0.5px solid var(--color-border-tertiary)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 6,
+      gridColumn: full ? "span 2" : undefined
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12
+    }
+  }, label), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 12
+    }
+  }, ["Yes", "No"].map(function (o) {
+    return /*#__PURE__*/React.createElement("label", {
+      key: o,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 4,
+        cursor: "pointer",
+        fontSize: 12
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "radio",
+      name: "yn_" + k,
+      checked: (cm[k] || "No") === o,
+      onChange: function onChange() {
+        return sc(k)(o);
+      },
+      style: {
+        accentColor: AMBER
+      }
+    }), o);
+  })));
+}
+function CMaddR(_ref21) {
+  var k = _ref21.k,
+    cm = _ref21.cm,
+    sc = _ref21.sc;
+  var items = cm[k] || [];
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      gridColumn: "span 2",
+      paddingTop: 8,
+      marginTop: 4,
+      borderTop: "0.5px solid var(--color-border-tertiary)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "var(--color-text-muted)",
+      marginBottom: 5
+    }
+  }, "Additional remark"), items.map(function (r, i) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      style: {
+        display: "flex",
+        gap: 5,
+        marginBottom: 4,
+        alignItems: "center"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 11,
+        color: "var(--color-text-muted)",
+        width: 16
+      }
+    }, i + 1, "."), /*#__PURE__*/React.createElement("input", {
+      value: r,
+      onChange: function onChange(e) {
+        var n = _toConsumableArray(items);
+        n[i] = e.target.value;
+        sc(k)(n);
+      },
+      style: _objectSpread(_objectSpread({}, bICM), {}, {
+        flex: 1,
+        fontSize: 12
+      })
+    }), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return sc(k)(items.filter(function (_, j) {
+          return j !== i;
+        }));
+      },
+      style: {
+        padding: "2px 7px",
+        borderRadius: 4,
+        border: "0.5px solid var(--color-border-secondary)",
+        background: "transparent",
+        color: "var(--color-text-danger)",
+        cursor: "pointer",
+        fontSize: 11
+      }
+    }, "x"));
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return sc(k)([].concat(_toConsumableArray(items), [""]));
+    },
+    style: {
+      padding: "4px 10px",
+      borderRadius: 5,
+      border: "0.5px dashed var(--color-border-secondary)",
+      background: "transparent",
+      fontSize: 11,
+      cursor: "pointer",
+      color: "var(--color-text-secondary)"
+    }
+  }, "+ Add remark"));
+}
+
+// ── CM EDITOR ─────────────────────────────────────────────────────────
+function CMEditor(_ref22) {
   var _cm$governorRopeM;
-  var cm = _ref15.cm,
-    setCM = _ref15.setCM,
-    feats = _ref15.feats,
-    setFeats = _ref15.setFeats,
-    step = _ref15.step;
+  var cm = _ref22.cm,
+    setCM = _ref22.setCM,
+    feats = _ref22.feats,
+    setFeats = _ref22.setFeats,
+    step = _ref22.step;
   var sc = function sc(k) {
     return function (v) {
       return setCM(function (p) {
@@ -3485,660 +3744,590 @@ function CMEditor(_ref15) {
       });
     };
   };
-  var bI = {
-    width: "100%",
-    padding: "5px 8px",
-    borderRadius: 6,
-    border: "0.5px solid var(--color-border-secondary)",
-    background: "var(--color-background-primary)",
-    fontSize: 13,
-    fontFamily: "inherit"
-  };
-  var CI = function CI(_ref16) {
-    var _cm$k;
-    var k = _ref16.k,
-      ph = _ref16.ph,
-      _ref16$type = _ref16.type,
-      type = _ref16$type === void 0 ? "text" : _ref16$type;
-    return /*#__PURE__*/React.createElement("input", {
-      type: type,
-      value: (_cm$k = cm[k]) !== null && _cm$k !== void 0 ? _cm$k : "",
-      onChange: function onChange(e) {
-        return sc(k)(e.target.value);
-      },
-      placeholder: ph || "",
-      style: bI
-    });
-  };
-  var CS = function CS(_ref17) {
-    var k = _ref17.k,
-      opts = _ref17.opts;
-    return /*#__PURE__*/React.createElement("select", {
-      value: cm[k] || opts[0] || "",
-      onChange: function onChange(e) {
-        return sc(k)(e.target.value);
-      },
-      style: _objectSpread(_objectSpread({}, bI), {}, {
-        cursor: "pointer"
-      })
-    }, opts.map(function (o) {
-      return /*#__PURE__*/React.createElement("option", {
-        key: o
-      }, o);
-    }));
-  };
-  var CF = function CF(_ref18) {
-    var label = _ref18.label,
-      children = _ref18.children,
-      half = _ref18.half;
-    return /*#__PURE__*/React.createElement("div", {
-      style: {
-        gridColumn: half ? "span 1" : "span 2",
-        display: "flex",
-        flexDirection: "column",
-        gap: 4
-      }
-    }, /*#__PURE__*/React.createElement("label", {
-      style: {
-        fontSize: 11.5,
-        color: "var(--color-text-secondary)",
-        fontWeight: 500
-      }
-    }, label), children);
-  };
-  var CSec = function CSec(_ref19) {
-    var icon = _ref19.icon,
-      title = _ref19.title,
-      children = _ref19.children;
-    return /*#__PURE__*/React.createElement("div", {
-      style: {
-        background: "var(--color-background-primary)",
-        border: "0.5px solid var(--color-border-tertiary)",
-        borderRadius: 10,
-        overflow: "hidden",
-        marginBottom: 10
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      style: {
-        padding: "8px 12px",
-        background: AMBER,
-        color: "#fff",
-        fontSize: 13,
-        fontWeight: 500
-      }
-    }, icon, " ", title), /*#__PURE__*/React.createElement("div", {
-      style: {
-        padding: 14,
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 10
-      }
-    }, children));
-  };
   var FINISH = ["SUS-HL", "SUS-M", "SUS-E", "Painted local", "Painted factory", "PPS", "No", "By local", "remark"];
   var TRANSOM = ["No", "SUS-HL", "SUS-M", "Painted local", "Painted factory", "PPS", "remark"];
   var JAMB = ["Painted by factory", "Painted by local", "SUS-HL", "No", "remark"];
   var OPS = ["1C-2BC", "2C-2BC", "2C-AI22", "3C-AI22", "4C-AI22", "3C-AI2200C", "4C-AI2200C", "5C-AI2200C", "6C-AI2200C", "7C-AI2200C", "8C-AI2200C", "remark"];
-  var RR = function RR(_ref20) {
-    var label = _ref20.label,
-      k = _ref20.k;
-    return /*#__PURE__*/React.createElement("div", {
-      style: {
-        gridColumn: "span 2",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "7px 0",
-        borderBottom: "0.5px solid var(--color-border-tertiary)"
-      }
-    }, /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 12.5
-      }
-    }, label), /*#__PURE__*/React.createElement("div", {
-      style: {
-        display: "flex",
-        gap: 16
-      }
-    }, ["Replace", "Reuse"].map(function (o) {
-      var _cm$k2;
-      return /*#__PURE__*/React.createElement("label", {
-        key: o,
-        style: {
-          display: "flex",
-          alignItems: "center",
-          gap: 5,
-          cursor: "pointer",
-          fontSize: 12.5
-        }
-      }, /*#__PURE__*/React.createElement("input", {
-        type: "radio",
-        name: "rr_" + k,
-        checked: ((_cm$k2 = cm[k]) !== null && _cm$k2 !== void 0 ? _cm$k2 : 'Replace') === o,
-        onChange: function onChange() {
-          return sc(k)(o);
-        },
-        style: {
-          accentColor: AMBER
-        }
-      }), o);
-    })));
-  };
-  var YN = function YN(_ref21) {
-    var label = _ref21.label,
-      k = _ref21.k,
-      full = _ref21.full;
-    return /*#__PURE__*/React.createElement("div", {
-      style: {
-        padding: "8px 10px",
-        borderBottom: "0.5px solid var(--color-border-tertiary)",
-        borderRight: full ? 'none' : "0.5px solid var(--color-border-tertiary)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: 6,
-        gridColumn: full ? "span 2" : undefined
-      }
-    }, /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 12
-      }
-    }, label), /*#__PURE__*/React.createElement("div", {
-      style: {
-        display: "flex",
-        gap: 12
-      }
-    }, ["Yes", "No"].map(function (o) {
-      var _cm$k3;
-      return /*#__PURE__*/React.createElement("label", {
-        key: o,
-        style: {
-          display: "flex",
-          alignItems: "center",
-          gap: 4,
-          cursor: "pointer",
-          fontSize: 12
-        }
-      }, /*#__PURE__*/React.createElement("input", {
-        type: "radio",
-        name: "yn_" + k,
-        checked: ((_cm$k3 = cm[k]) !== null && _cm$k3 !== void 0 ? _cm$k3 : 'No') === o,
-        onChange: function onChange() {
-          return sc(k)(o);
-        },
-        style: {
-          accentColor: AMBER
-        }
-      }), o);
-    })));
-  };
-  var AddR = function AddR(_ref22) {
-    var k = _ref22.k;
-    var items = cm[k] || [];
-    return /*#__PURE__*/React.createElement("div", {
-      style: {
-        gridColumn: "span 2",
-        paddingTop: 8,
-        marginTop: 4,
-        borderTop: "0.5px solid var(--color-border-tertiary)"
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      style: {
-        fontSize: 11,
-        color: "var(--color-text-muted)",
-        marginBottom: 5
-      }
-    }, "Additional remark"), items.map(function (r, i) {
-      return /*#__PURE__*/React.createElement("div", {
-        key: i,
-        style: {
-          display: "flex",
-          gap: 5,
-          marginBottom: 4,
-          alignItems: "center"
-        }
-      }, /*#__PURE__*/React.createElement("span", {
-        style: {
-          fontSize: 11,
-          color: "var(--color-text-muted)",
-          width: 16
-        }
-      }, i + 1, "."), /*#__PURE__*/React.createElement("input", {
-        value: r,
-        onChange: function onChange(e) {
-          var n = _toConsumableArray(items);
-          n[i] = e.target.value;
-          sc(k)(n);
-        },
-        style: _objectSpread(_objectSpread({}, bI), {}, {
-          flex: 1,
-          fontSize: 12
-        })
-      }), /*#__PURE__*/React.createElement("button", {
-        onClick: function onClick() {
-          return sc(k)(items.filter(function (_, j) {
-            return j !== i;
-          }));
-        },
-        style: {
-          padding: "2px 7px",
-          borderRadius: 4,
-          border: "0.5px solid var(--color-border-secondary)",
-          background: "transparent",
-          color: "var(--color-text-danger)",
-          cursor: "pointer",
-          fontSize: 11
-        }
-      }, "x"));
-    }), /*#__PURE__*/React.createElement("button", {
-      onClick: function onClick() {
-        return sc(k)([].concat(_toConsumableArray(items), [""]));
-      },
-      style: {
-        padding: "4px 10px",
-        borderRadius: 5,
-        border: "0.5px dashed var(--color-border-secondary)",
-        background: "transparent",
-        fontSize: 11,
-        cursor: "pointer",
-        color: "var(--color-text-secondary)"
-      }
-    }, "+ Add remark"));
-  };
-  if (step === 1) return /*#__PURE__*/React.createElement(CSec, {
-    icon: "S",
-    title: "Source and Product"
-  }, /*#__PURE__*/React.createElement(CF, {
+  if (step === 1) return /*#__PURE__*/React.createElement(CMsec, {
+    icon: "\uD83D\uDCCB",
+    title: "Source & Product"
+  }, /*#__PURE__*/React.createElement(CMfield, {
     label: "Source",
     half: true
   }, /*#__PURE__*/React.createElement("input", {
     value: "AMEC",
     readOnly: true,
-    style: _objectSpread(_objectSpread({}, bI), {}, {
+    style: _objectSpread(_objectSpread({}, bICM), {}, {
       background: "var(--color-background-secondary)",
       color: "var(--color-text-muted)"
     })
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Product",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "product",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.product,
+    onChange: function onChange(e) {
+      return sc("product")(e.target.value);
+    },
     opts: ["GS51AA", "GW51AA"]
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Capacity (kg)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "capacity",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.capacity,
+    onChange: function onChange(e) {
+      return sc("capacity")(e.target.value);
+    },
     ph: "e.g. 450"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Technical level",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "techLevel",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.techLevel,
+    onChange: function onChange(e) {
+      return sc("techLevel")(e.target.value);
+    },
     opts: ["S", "A", "B", "C"]
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Technical Inquiry No."
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "techInquiryNo",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.techInquiryNo,
+    onChange: function onChange(e) {
+      return sc("techInquiryNo")(e.target.value);
+    },
     ph: "e.g. TI-2026-001"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Traction machine"
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "tractionMachine",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.tractionMachine,
+    onChange: function onChange(e) {
+      return sc("tractionMachine")(e.target.value);
+    },
     ph: "e.g. VFGL"
   })));
-  if (step === 2) return /*#__PURE__*/React.createElement(CSec, {
-    icon: "P",
+  if (step === 2) return /*#__PURE__*/React.createElement(CMsec, {
+    icon: "\u26A1",
     title: "Performance Specification"
-  }, /*#__PURE__*/React.createElement(CF, {
+  }, /*#__PURE__*/React.createElement(CMfield, {
     label: "Speed (m/s)",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "speed",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.speed,
+    onChange: function onChange(e) {
+      return sc("speed")(e.target.value);
+    },
     opts: ["0.75", "1.0", "1.5", "1.75", "2.0", "2.5"]
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Door Type",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "doorType",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.doorType,
+    onChange: function onChange(e) {
+      return sc("doorType")(e.target.value);
+    },
     opts: ["CO", "2S"]
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "No. of Floor",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "floor",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.floor,
+    onChange: function onChange(e) {
+      return sc("floor")(e.target.value);
+    },
     ph: "stops"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Travel (m)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "travel",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.travel,
+    onChange: function onChange(e) {
+      return sc("travel")(e.target.value);
+    },
     ph: "m"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Car Door Width (mm)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "carDoorWidth",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.carDoorWidth,
+    onChange: function onChange(e) {
+      return sc("carDoorWidth")(e.target.value);
+    },
     ph: "mm"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Car Door Height (mm)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "carDoorHeight",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.carDoorHeight,
+    onChange: function onChange(e) {
+      return sc("carDoorHeight")(e.target.value);
+    },
     ph: "mm"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Operation",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "operation",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.operation,
+    onChange: function onChange(e) {
+      return sc("operation")(e.target.value);
+    },
     opts: OPS
-  })), cm.operation === "remark" && /*#__PURE__*/React.createElement(CF, {
+  })), cm.operation === "remark" && /*#__PURE__*/React.createElement(CMfield, {
     label: "Operation (specify)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "operationRemark",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.operationRemark,
+    onChange: function onChange(e) {
+      return sc("operationRemark")(e.target.value);
+    },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Quantity",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "quantity",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.quantity,
+    onChange: function onChange(e) {
+      return sc("quantity")(e.target.value);
+    },
     ph: "1"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Group Operation",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "groupOp",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.groupOp,
+    onChange: function onChange(e) {
+      return sc("groupOp")(e.target.value);
+    },
     opts: ["No", "2 cars", "3 cars", "4 cars", "5 cars", "6 cars", "7 cars", "8 cars"]
   })));
-  if (step === 3) return /*#__PURE__*/React.createElement(CSec, {
-    icon: "C",
-    title: "Car Design and COP"
-  }, /*#__PURE__*/React.createElement(CF, {
+  if (step === 3) return /*#__PURE__*/React.createElement(CMsec, {
+    icon: "\uD83C\uDFA8",
+    title: "Car Design & COP"
+  }, /*#__PURE__*/React.createElement(CMfield, {
     label: "Car Width AA (mm)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "carWidth",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.carWidth,
+    onChange: function onChange(e) {
+      return sc("carWidth")(e.target.value);
+    },
     ph: "mm"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Car Depth BB (mm)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "carDepth",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.carDepth,
+    onChange: function onChange(e) {
+      return sc("carDepth")(e.target.value);
+    },
     ph: "mm"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Ceiling HL (mm)",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "ceilingHL",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.ceilingHL,
+    onChange: function onChange(e) {
+      return sc("ceilingHL")(e.target.value);
+    },
     opts: ["2100", "2200", "2300", "2400", "2500", "remark"]
-  })), cm.ceilingHL === "remark" ? /*#__PURE__*/React.createElement(CF, {
+  })), cm.ceilingHL === "remark" ? /*#__PURE__*/React.createElement(CMfield, {
     label: "Ceiling HL (specify)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "ceilingHLRemark",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.ceilingHLRemark,
+    onChange: function onChange(e) {
+      return sc("ceilingHLRemark")(e.target.value);
+    },
     ph: "mm"
-  })) : /*#__PURE__*/React.createElement(CF, {
+  })) : /*#__PURE__*/React.createElement(CMfield, {
     label: "Ceiling Type",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "ceilingType",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.ceilingType,
+    onChange: function onChange(e) {
+      return sc("ceilingType")(e.target.value);
+    },
     ph: "e.g. CL1"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Recess Floor (mm)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "recessFloor",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.recessFloor,
+    onChange: function onChange(e) {
+      return sc("recessFloor")(e.target.value);
+    },
     ph: "mm"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Decoration Weight (kg)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "decorationWeight",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.decorationWeight,
+    onChange: function onChange(e) {
+      return sc("decorationWeight")(e.target.value);
+    },
     ph: "kg"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Car Wall Finish",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "carWallFinish",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.carWallFinish,
+    onChange: function onChange(e) {
+      return sc("carWallFinish")(e.target.value);
+    },
     opts: FINISH
-  })), cm.carWallFinish === "remark" && /*#__PURE__*/React.createElement(CF, {
+  })), cm.carWallFinish === "remark" && /*#__PURE__*/React.createElement(CMfield, {
     label: "Car Wall (specify)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "carWallRemark",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.carWallRemark,
+    onChange: function onChange(e) {
+      return sc("carWallRemark")(e.target.value);
+    },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Car Door Finish",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "carDoorFinish",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.carDoorFinish,
+    onChange: function onChange(e) {
+      return sc("carDoorFinish")(e.target.value);
+    },
     opts: FINISH
-  })), cm.carDoorFinish === "remark" && /*#__PURE__*/React.createElement(CF, {
+  })), cm.carDoorFinish === "remark" && /*#__PURE__*/React.createElement(CMfield, {
     label: "Car Door (specify)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "carDoorRemark",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.carDoorRemark,
+    onChange: function onChange(e) {
+      return sc("carDoorRemark")(e.target.value);
+    },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Flooring",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "flooring",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.flooring,
+    onChange: function onChange(e) {
+      return sc("flooring")(e.target.value);
+    },
     opts: ["Vinyl tile", "Marble", "Granite", "Carpet", "Steel plate", "remark"]
-  })), cm.flooring === "remark" && /*#__PURE__*/React.createElement(CF, {
+  })), cm.flooring === "remark" && /*#__PURE__*/React.createElement(CMfield, {
     label: "Flooring (specify)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "flooringRemark",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.flooringRemark,
+    onChange: function onChange(e) {
+      return sc("flooringRemark")(e.target.value);
+    },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Kick Plate",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "kickPlate",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.kickPlate,
+    onChange: function onChange(e) {
+      return sc("kickPlate")(e.target.value);
+    },
     opts: ["SUS-HL304", "SUS-HL316", "Painted", "No", "remark"]
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Front Return Panel",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "frontReturnPanel",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.frontReturnPanel,
+    onChange: function onChange(e) {
+      return sc("frontReturnPanel")(e.target.value);
+    },
     opts: FINISH
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Transom Panel (Car)",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "transomPanel",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.transomPanel,
+    onChange: function onChange(e) {
+      return sc("transomPanel")(e.target.value);
+    },
     opts: TRANSOM
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Glass Window (Car)",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "glassWindowSize",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.glassWindowSize,
+    onChange: function onChange(e) {
+      return sc("glassWindowSize")(e.target.value);
+    },
     opts: ["No", "Small", "Large", "remark"]
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Mirror",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "mirror",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.mirror,
+    onChange: function onChange(e) {
+      return sc("mirror")(e.target.value);
+    },
     opts: ["No", "Half", "Full", "remark"]
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Handrail",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "handrail",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.handrail,
+    onChange: function onChange(e) {
+      return sc("handrail")(e.target.value);
+    },
     opts: ["No", "Flat type", "Pipe type", "remark"]
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Main COP",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "mainCOP",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.mainCOP,
+    onChange: function onChange(e) {
+      return sc("mainCOP")(e.target.value);
+    },
     ph: "COP model"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Aux COP",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "auxCOP",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.auxCOP,
+    onChange: function onChange(e) {
+      return sc("auxCOP")(e.target.value);
+    },
     opts: ["No", "Yes"]
   })));
-  if (step === 4) return /*#__PURE__*/React.createElement(CSec, {
-    icon: "E",
+  if (step === 4) return /*#__PURE__*/React.createElement(CMsec, {
+    icon: "\uD83D\uDEAA",
     title: "Entrance Design"
-  }, /*#__PURE__*/React.createElement(CF, {
+  }, /*#__PURE__*/React.createElement(CMfield, {
     label: "Landing Door (Main)",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "landingDoorMain",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.landingDoorMain,
+    onChange: function onChange(e) {
+      return sc("landingDoorMain")(e.target.value);
+    },
     opts: FINISH
-  })), cm.landingDoorMain === "remark" && /*#__PURE__*/React.createElement(CF, {
+  })), cm.landingDoorMain === "remark" && /*#__PURE__*/React.createElement(CMfield, {
     label: "Landing Door Main (specify)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "ldMainR",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.ldMainR,
+    onChange: function onChange(e) {
+      return sc("ldMainR")(e.target.value);
+    },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Landing Door (Typical)",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "landingDoorTypical",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.landingDoorTypical,
+    onChange: function onChange(e) {
+      return sc("landingDoorTypical")(e.target.value);
+    },
     opts: FINISH
-  })), cm.landingDoorTypical === "remark" && /*#__PURE__*/React.createElement(CF, {
+  })), cm.landingDoorTypical === "remark" && /*#__PURE__*/React.createElement(CMfield, {
     label: "Landing Door Typical (specify)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "ldTypicalR",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.ldTypicalR,
+    onChange: function onChange(e) {
+      return sc("ldTypicalR")(e.target.value);
+    },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Door Jamb (Main)",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "jambMain",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.jambMain,
+    onChange: function onChange(e) {
+      return sc("jambMain")(e.target.value);
+    },
     opts: JAMB
-  })), cm.jambMain === "remark" && /*#__PURE__*/React.createElement(CF, {
+  })), cm.jambMain === "remark" && /*#__PURE__*/React.createElement(CMfield, {
     label: "Jamb Main (specify)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "jambMainR",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.jambMainR,
+    onChange: function onChange(e) {
+      return sc("jambMainR")(e.target.value);
+    },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Door Jamb (Typical)",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "jambTypical",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.jambTypical,
+    onChange: function onChange(e) {
+      return sc("jambTypical")(e.target.value);
+    },
     opts: JAMB
-  })), cm.jambTypical === "remark" && /*#__PURE__*/React.createElement(CF, {
+  })), cm.jambTypical === "remark" && /*#__PURE__*/React.createElement(CMfield, {
     label: "Jamb Typical (specify)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "jambTypicalR",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.jambTypicalR,
+    onChange: function onChange(e) {
+      return sc("jambTypicalR")(e.target.value);
+    },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Jamb Type (Main)",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "jambTypeMain",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.jambTypeMain,
+    onChange: function onChange(e) {
+      return sc("jambTypeMain")(e.target.value);
+    },
     opts: ["E102", "E202", "E302", "No", "By local", "remark"]
-  })), cm.jambTypeMain === "remark" && /*#__PURE__*/React.createElement(CF, {
+  })), cm.jambTypeMain === "remark" && /*#__PURE__*/React.createElement(CMfield, {
     label: "Jamb Type Main (specify)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "jambTypeMainR",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.jambTypeMainR,
+    onChange: function onChange(e) {
+      return sc("jambTypeMainR")(e.target.value);
+    },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Jamb Type (Typical)",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "jambTypeTypical",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.jambTypeTypical,
+    onChange: function onChange(e) {
+      return sc("jambTypeTypical")(e.target.value);
+    },
     opts: ["E102", "E202", "E302", "No", "By local", "remark"]
-  })), cm.jambTypeTypical === "remark" && /*#__PURE__*/React.createElement(CF, {
+  })), cm.jambTypeTypical === "remark" && /*#__PURE__*/React.createElement(CMfield, {
     label: "Jamb Type Typical (specify)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "jambTypeTypicalR",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.jambTypeTypicalR,
+    onChange: function onChange(e) {
+      return sc("jambTypeTypicalR")(e.target.value);
+    },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Transom Panel (Main)",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "transomPanelMain",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.transomPanelMain,
+    onChange: function onChange(e) {
+      return sc("transomPanelMain")(e.target.value);
+    },
     opts: TRANSOM
-  })), cm.transomPanelMain === "remark" && /*#__PURE__*/React.createElement(CF, {
+  })), cm.transomPanelMain === "remark" && /*#__PURE__*/React.createElement(CMfield, {
     label: "Transom Main (specify)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "transomMainR",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.transomMainR,
+    onChange: function onChange(e) {
+      return sc("transomMainR")(e.target.value);
+    },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Transom Panel (Typical)",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "transomPanelTypical",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.transomPanelTypical,
+    onChange: function onChange(e) {
+      return sc("transomPanelTypical")(e.target.value);
+    },
     opts: TRANSOM
-  })), cm.transomPanelTypical === "remark" && /*#__PURE__*/React.createElement(CF, {
+  })), cm.transomPanelTypical === "remark" && /*#__PURE__*/React.createElement(CMfield, {
     label: "Transom Typical (specify)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "transomTypicalR",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.transomTypicalR,
+    onChange: function onChange(e) {
+      return sc("transomTypicalR")(e.target.value);
+    },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Glass Window (Landing)",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "glassWindowLanding",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.glassWindowLanding,
+    onChange: function onChange(e) {
+      return sc("glassWindowLanding")(e.target.value);
+    },
     opts: ["No", "Small", "Large", "remark"]
-  })), cm.glassWindowLanding === "remark" && /*#__PURE__*/React.createElement(CF, {
+  })), cm.glassWindowLanding === "remark" && /*#__PURE__*/React.createElement(CMfield, {
     label: "Glass Window (specify)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "glassWindowLandingR",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.glassWindowLandingR,
+    onChange: function onChange(e) {
+      return sc("glassWindowLandingR")(e.target.value);
+    },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Hall Button (Main)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "hallBtnMain",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.hallBtnMain,
+    onChange: function onChange(e) {
+      return sc("hallBtnMain")(e.target.value);
+    },
     ph: "model"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Hall Button (Typical)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "hallBtnTypical",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.hallBtnTypical,
+    onChange: function onChange(e) {
+      return sc("hallBtnTypical")(e.target.value);
+    },
     ph: "model"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Hall Lantern (Main)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "hallLanternMain",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.hallLanternMain,
+    onChange: function onChange(e) {
+      return sc("hallLanternMain")(e.target.value);
+    },
     ph: "model"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Hall Lantern (Typical)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "hallLanternTypical",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.hallLanternTypical,
+    onChange: function onChange(e) {
+      return sc("hallLanternTypical")(e.target.value);
+    },
     ph: "model"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Hall PIV (Main)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "hallPIVMain",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.hallPIVMain,
+    onChange: function onChange(e) {
+      return sc("hallPIVMain")(e.target.value);
+    },
     ph: "model"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Hall PIV (Typical)",
     half: true
-  }, /*#__PURE__*/React.createElement(CI, {
-    k: "hallPIVTypical",
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.hallPIVTypical,
+    onChange: function onChange(e) {
+      return sc("hallPIVTypical")(e.target.value);
+    },
     ph: "model"
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Handicap Hall Button",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "handicapHallBtn",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.handicapHallBtn,
+    onChange: function onChange(e) {
+      return sc("handicapHallBtn")(e.target.value);
+    },
     opts: ["No", "Yes"]
-  })), /*#__PURE__*/React.createElement(CF, {
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Braille Entrance",
     half: true
-  }, /*#__PURE__*/React.createElement(CS, {
-    k: "brailleEntrance",
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.brailleEntrance,
+    onChange: function onChange(e) {
+      return sc("brailleEntrance")(e.target.value);
+    },
     opts: ["No", "Yes"]
   })));
   if (step === 5) return /*#__PURE__*/React.createElement(FeatStep, {
@@ -4161,39 +4350,57 @@ function CMEditor(_ref15) {
       fontSize: 13,
       fontWeight: 500
     }
-  }, "Main Equipment"), /*#__PURE__*/React.createElement("div", {
+  }, "\uD83D\uDD29 Main Equipment"), /*#__PURE__*/React.createElement("div", {
     style: {
       padding: "10px 14px",
       display: "grid",
       gridTemplateColumns: "1fr 1fr",
       gap: 8
     }
-  }, /*#__PURE__*/React.createElement(RR, {
+  }, /*#__PURE__*/React.createElement(CMrr, {
     label: "Machine Beam",
-    k: "machineBeam"
-  }), /*#__PURE__*/React.createElement(RR, {
+    k: "machineBeam",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMrr, {
     label: "Governor with cover",
-    k: "governorCover"
-  }), /*#__PURE__*/React.createElement(RR, {
+    k: "governorCover",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMrr, {
     label: "Load weighing device",
-    k: "loadWeighing"
-  }), /*#__PURE__*/React.createElement(RR, {
+    k: "loadWeighing",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMrr, {
     label: "Car and CWT Guide Shoes",
-    k: "guideShoes"
-  }), /*#__PURE__*/React.createElement(RR, {
+    k: "guideShoes",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMrr, {
     label: "Governor tension sheave",
-    k: "tensionSheave"
-  }), /*#__PURE__*/React.createElement(RR, {
+    k: "tensionSheave",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMrr, {
     label: "Hanger roller",
-    k: "hangerRollerEq"
-  }), /*#__PURE__*/React.createElement(RR, {
+    k: "hangerRollerEq",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMrr, {
     label: "Rope shackle wedge type",
-    k: "ropeShackle"
-  }), /*#__PURE__*/React.createElement(RR, {
+    k: "ropeShackle",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMrr, {
     label: "Rubber Door Shoes",
-    k: "rubberDoorShoes"
-  }), /*#__PURE__*/React.createElement(AddR, {
-    k: "mainEquipRemarks"
+    k: "rubberDoorShoes",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMaddR, {
+    k: "mainEquipRemarks",
+    cm: cm,
+    sc: sc
   })));
   if (step === 7) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -4211,26 +4418,36 @@ function CMEditor(_ref15) {
       fontSize: 13,
       fontWeight: 500
     }
-  }, "Local Part"), /*#__PURE__*/React.createElement("div", {
+  }, "\uD83D\uDD27 Local Part"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
       gridTemplateColumns: "1fr 1fr"
     }
-  }, /*#__PURE__*/React.createElement(YN, {
+  }, /*#__PURE__*/React.createElement(CMyn, {
     label: "Hanger roller",
-    k: "localHangerRoller"
-  }), /*#__PURE__*/React.createElement(YN, {
+    k: "localHangerRoller",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMyn, {
     label: "Rubber door shoe",
-    k: "localRubberDoorShoe"
-  }), /*#__PURE__*/React.createElement(YN, {
+    k: "localRubberDoorShoe",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMyn, {
     label: "Interphone",
-    k: "localInterphone"
-  }), /*#__PURE__*/React.createElement(YN, {
+    k: "localInterphone",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMyn, {
     label: "Car and CWT guide shoe",
-    k: "localGuideShoe"
-  }), /*#__PURE__*/React.createElement(YN, {
+    k: "localGuideShoe",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMyn, {
     label: "MELD Battery",
-    k: "localMELDBattery"
+    k: "localMELDBattery",
+    cm: cm,
+    sc: sc
   }), /*#__PURE__*/React.createElement("div", {
     style: {
       padding: "8px 10px",
@@ -4256,7 +4473,7 @@ function CMEditor(_ref15) {
       return sc("governorRopeM")(e.target.value);
     },
     placeholder: "m",
-    style: _objectSpread(_objectSpread({}, bI), {}, {
+    style: _objectSpread(_objectSpread({}, bICM), {}, {
       width: 55,
       fontSize: 12
     })
@@ -4265,12 +4482,16 @@ function CMEditor(_ref15) {
       fontSize: 11,
       color: "var(--color-text-muted)"
     }
-  }, "m"))), /*#__PURE__*/React.createElement(YN, {
+  }, "m"))), /*#__PURE__*/React.createElement(CMyn, {
     label: "Car ventilation",
-    k: "localCarVentilation"
-  }), /*#__PURE__*/React.createElement(YN, {
+    k: "localCarVentilation",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMyn, {
     label: "Installation material",
-    k: "localInstallMaterial"
+    k: "localInstallMaterial",
+    cm: cm,
+    sc: sc
   })), /*#__PURE__*/React.createElement("div", {
     style: {
       padding: "10px 14px",
@@ -4278,8 +4499,10 @@ function CMEditor(_ref15) {
       gridTemplateColumns: "1fr 1fr",
       gap: 8
     }
-  }, /*#__PURE__*/React.createElement(AddR, {
-    k: "localRemarks"
+  }, /*#__PURE__*/React.createElement(CMaddR, {
+    k: "localRemarks",
+    cm: cm,
+    sc: sc
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
       background: "var(--color-background-primary)",
@@ -4296,23 +4519,31 @@ function CMEditor(_ref15) {
       fontSize: 13,
       fontWeight: 500
     }
-  }, "Subcontract Labor"), /*#__PURE__*/React.createElement("div", {
+  }, "\uD83D\uDC77 Subcontract Labor"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
       gridTemplateColumns: "1fr 1fr"
     }
-  }, /*#__PURE__*/React.createElement(YN, {
+  }, /*#__PURE__*/React.createElement(CMyn, {
     label: "Installation",
-    k: "subInstallation"
-  }), /*#__PURE__*/React.createElement(YN, {
+    k: "subInstallation",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMyn, {
     label: "Lift up cost",
-    k: "subLiftUp"
-  }), /*#__PURE__*/React.createElement(YN, {
+    k: "subLiftUp",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMyn, {
     label: "Night time work",
-    k: "subNightWork"
-  }), /*#__PURE__*/React.createElement(YN, {
+    k: "subNightWork",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMyn, {
     label: "Protection sheet",
-    k: "subProtectionSheet"
+    k: "subProtectionSheet",
+    cm: cm,
+    sc: sc
   })), /*#__PURE__*/React.createElement("div", {
     style: {
       padding: "10px 14px",
@@ -4320,8 +4551,10 @@ function CMEditor(_ref15) {
       gridTemplateColumns: "1fr 1fr",
       gap: 8
     }
-  }, /*#__PURE__*/React.createElement(AddR, {
-    k: "subRemarks"
+  }, /*#__PURE__*/React.createElement(CMaddR, {
+    k: "subRemarks",
+    cm: cm,
+    sc: sc
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
       background: "var(--color-background-primary)",
@@ -4338,32 +4571,46 @@ function CMEditor(_ref15) {
       fontSize: 13,
       fontWeight: 500
     }
-  }, "Additional Work"), /*#__PURE__*/React.createElement("div", {
+  }, "\uD83C\uDFD7\uFE0F Additional Work"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
       gridTemplateColumns: "1fr 1fr"
     }
-  }, /*#__PURE__*/React.createElement(YN, {
+  }, /*#__PURE__*/React.createElement(CMyn, {
     label: "Opening structure for lift up",
-    k: "addOpeningStructure"
-  }), /*#__PURE__*/React.createElement(YN, {
+    k: "addOpeningStructure",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMyn, {
     label: "Removal Concrete",
-    k: "addRemovalConcrete"
-  }), /*#__PURE__*/React.createElement(YN, {
+    k: "addRemovalConcrete",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMyn, {
     label: "Brokerage fee",
-    k: "addBrokerageFee"
-  }), /*#__PURE__*/React.createElement(YN, {
+    k: "addBrokerageFee",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMyn, {
     label: "Protection Pine wood",
-    k: "addProtectionPine"
-  }), /*#__PURE__*/React.createElement(YN, {
+    k: "addProtectionPine",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMyn, {
     label: "Box FE FER",
-    k: "addBoxFEFER"
-  }), /*#__PURE__*/React.createElement(YN, {
+    k: "addBoxFEFER",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMyn, {
     label: "MELEYE Wiring",
-    k: "addMELEYEWiring"
-  }), /*#__PURE__*/React.createElement(YN, {
+    k: "addMELEYEWiring",
+    cm: cm,
+    sc: sc
+  }), /*#__PURE__*/React.createElement(CMyn, {
     label: "MELEYE Labor",
     k: "addMELEYELabor",
+    cm: cm,
+    sc: sc,
     full: true
   })), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -4372,8 +4619,10 @@ function CMEditor(_ref15) {
       gridTemplateColumns: "1fr 1fr",
       gap: 8
     }
-  }, /*#__PURE__*/React.createElement(AddR, {
-    k: "addRemarks"
+  }, /*#__PURE__*/React.createElement(CMaddR, {
+    k: "addRemarks",
+    cm: cm,
+    sc: sc
   }))));
   return null;
 }
