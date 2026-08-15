@@ -29,11 +29,6 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-var _React = React,
-  useState = _React.useState,
-  useRef = _React.useRef,
-  useEffect = _React.useEffect;
-
 // ── CATALOG (shared from New Sales) ──────────────────────────────────
 var SOURCE_PRODUCTS = {
   AMEC: ["NEXIEZ-MR", "NEXIEZ-MR BED", "NEXIEZ-MRL II", "NEXIEZ-FIT", "NEXIEZ-S", "NEXWAY-S-AP II", "NEXWAY Package R"],
@@ -1160,6 +1155,7 @@ var uid = function uid() {
   return Math.random().toString(36).slice(2, 8);
 };
 var STEPS = ["Project Info", "Lift Comparison", "Features", "Local Scope"];
+var CM_STEPS = ["Source & Product", "Performance", "Car Design", "Entrance", "Features", "Main Equipment", "Local Scope"];
 
 // ── UI COMPONENTS ─────────────────────────────────────────────────────
 var Inp = function Inp(_ref) {
@@ -1170,7 +1166,7 @@ var Inp = function Inp(_ref) {
     type = _ref$type === void 0 ? "text" : _ref$type;
   return /*#__PURE__*/React.createElement("input", {
     type: type,
-    value: v || "",
+    value: v !== null && v !== void 0 ? v : "",
     onChange: function onChange(e) {
       return on(e.target.value);
     },
@@ -1246,20 +1242,22 @@ var Sec = function Sec(_ref4) {
 };
 var WizBar = function WizBar(_ref5) {
   var step = _ref5.step,
-    onStep = _ref5.onStep;
+    onStep = _ref5.onStep,
+    steps = _ref5.steps;
+  var S = steps || STEPS;
   return /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       alignItems: "center",
       marginBottom: 16
     }
-  }, STEPS.map(function (l, i) {
+  }, S.map(function (l, i) {
     return /*#__PURE__*/React.createElement("div", {
       key: i,
       style: {
         display: "flex",
         alignItems: "center",
-        flex: i < STEPS.length - 1 ? 1 : "auto"
+        flex: i < S.length - 1 ? 1 : "auto"
       }
     }, /*#__PURE__*/React.createElement("div", {
       style: {
@@ -1293,7 +1291,7 @@ var WizBar = function WizBar(_ref5) {
         fontWeight: i + 1 === step ? 500 : 400,
         whiteSpace: "nowrap"
       }
-    }, l)), i < STEPS.length - 1 && /*#__PURE__*/React.createElement("div", {
+    }, l)), i < S.length - 1 && /*#__PURE__*/React.createElement("div", {
       style: {
         flex: 1,
         height: 2,
@@ -3462,22 +3460,16 @@ function LiftEditor(_ref12) {
 // ── MAIN APP ──────────────────────────────────────────────────────────
 // ── CM EDITOR ─────────────────────────────────────────────────────────
 function CMEditor(_ref15) {
+  var _cm$governorRopeM;
   var cm = _ref15.cm,
     setCM = _ref15.setCM,
     feats = _ref15.feats,
     setFeats = _ref15.setFeats,
-    step = _ref15.step,
-    setStep = _ref15.setStep,
-    fileUploadRef = _ref15.fileUploadRef,
-    uploading = _ref15.uploading,
-    handleJobSiteUpload = _ref15.handleJobSiteUpload,
-    autoFilled = _ref15.autoFilled,
-    autoFilledFields = _ref15.autoFilledFields,
-    onClearAutoFill = _ref15.onClearAutoFill;
+    step = _ref15.step;
   var sc = function sc(k) {
     return function (v) {
       return setCM(function (p) {
-        return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, k, v));
+        return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, k, v !== null && v !== void 0 ? v : ''));
       });
     };
   };
@@ -3490,39 +3482,42 @@ function CMEditor(_ref15) {
   };
   var bInp = {
     width: "100%",
-    padding: "5px 7px",
+    padding: "5px 8px",
     borderRadius: 6,
     border: "0.5px solid var(--color-border-secondary)",
     background: "var(--color-background-primary)",
     fontSize: 13,
     fontFamily: "inherit"
   };
+  var bSel = _objectSpread(_objectSpread({}, bInp), {}, {
+    cursor: "pointer"
+  });
   var Inp = function Inp(_ref16) {
-    var v = _ref16.v,
-      on = _ref16.on,
+    var _cm$k;
+    var k = _ref16.k,
       ph = _ref16.ph,
       _ref16$type = _ref16.type,
       type = _ref16$type === void 0 ? "text" : _ref16$type;
     return /*#__PURE__*/React.createElement("input", {
       type: type,
-      value: v || "",
+      value: (_cm$k = cm[k]) !== null && _cm$k !== void 0 ? _cm$k : "",
       onChange: function onChange(e) {
-        return on(e.target.value);
+        return sc(k)(e.target.value);
       },
       placeholder: ph || "",
       style: bInp
     });
   };
   var Sel = function Sel(_ref17) {
-    var v = _ref17.v,
-      on = _ref17.on,
+    var _cm$k2;
+    var k = _ref17.k,
       opts = _ref17.opts;
     return /*#__PURE__*/React.createElement("select", {
-      value: v || "",
+      value: (_cm$k2 = cm[k]) !== null && _cm$k2 !== void 0 ? _cm$k2 : "",
       onChange: function onChange(e) {
-        return on(e.target.value);
+        return sc(k)(e.target.value);
       },
-      style: bInp
+      style: bSel
     }, opts.map(function (o) {
       return /*#__PURE__*/React.createElement("option", {
         key: o,
@@ -3530,15 +3525,65 @@ function CMEditor(_ref15) {
       }, o);
     }));
   };
-  var RR = function RR(_ref18) {
+  var Row = function Row(_ref18) {
     var label = _ref18.label,
-      k = _ref18.k;
+      children = _ref18.children;
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        padding: "7px 14px",
+        borderBottom: "0.5px solid var(--color-border-tertiary)"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 200,
+        fontSize: 12.5,
+        color: "var(--color-text-secondary)",
+        flexShrink: 0
+      }
+    }, label), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, children));
+  };
+  var Sec = function Sec(_ref19) {
+    var icon = _ref19.icon,
+      title = _ref19.title,
+      children = _ref19.children;
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        background: "var(--color-background-primary)",
+        border: "0.5px solid var(--color-border-tertiary)",
+        borderRadius: 10,
+        overflow: "hidden",
+        marginBottom: 10
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "8px 14px",
+        background: AMBER,
+        color: "#fff",
+        fontSize: 13,
+        fontWeight: 500
+      }
+    }, icon, " ", title), children);
+  };
+  var FINISH = ["SUS-HL", "SUS-M", "SUS-E", "Painted local", "Painted factory", "PPS", "No", "By local", "remark"];
+  var TRANSOM = ["No", "SUS-HL", "SUS-M", "Painted local", "Painted factory", "PPS", "remark"];
+  var JAMB = ["Painted by factory", "Painted by local", "SUS-HL", "No", "remark"];
+  var CEIL_HL = ["2100", "2200", "2300", "2400", "2500", "remark"];
+  var OPS = ["1C-2BC", "2C-2BC", "2C-AI22", "3C-AI22", "4C-AI22", "3C-AI2200C", "4C-AI2200C", "5C-AI2200C", "6C-AI2200C", "7C-AI2200C", "8C-AI2200C", "remark"];
+  var RR = function RR(_ref20) {
+    var label = _ref20.label,
+      k = _ref20.k;
     return /*#__PURE__*/React.createElement("div", {
       style: {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "7px 10px",
+        padding: "7px 14px",
         borderBottom: "0.5px solid var(--color-border-tertiary)"
       }
     }, /*#__PURE__*/React.createElement("span", {
@@ -3548,9 +3593,10 @@ function CMEditor(_ref15) {
     }, label), /*#__PURE__*/React.createElement("div", {
       style: {
         display: "flex",
-        gap: 12
+        gap: 16
       }
     }, ["Replace", "Reuse"].map(function (o) {
+      var _cm$k3;
       return /*#__PURE__*/React.createElement("label", {
         key: o,
         style: {
@@ -3558,12 +3604,12 @@ function CMEditor(_ref15) {
           alignItems: "center",
           gap: 5,
           cursor: "pointer",
-          fontSize: 12
+          fontSize: 12.5
         }
       }, /*#__PURE__*/React.createElement("input", {
         type: "radio",
-        name: k,
-        checked: cm[k] === o,
+        name: "rr_".concat(k),
+        checked: ((_cm$k3 = cm[k]) !== null && _cm$k3 !== void 0 ? _cm$k3 : 'Replace') === o,
         onChange: function onChange() {
           return sc(k)(o);
         },
@@ -3573,18 +3619,20 @@ function CMEditor(_ref15) {
       }), o);
     })));
   };
-  var YN = function YN(_ref19) {
-    var label = _ref19.label,
-      k = _ref19.k;
+  var YN = function YN(_ref21) {
+    var label = _ref21.label,
+      k = _ref21.k,
+      full = _ref21.full;
     return /*#__PURE__*/React.createElement("div", {
       style: {
         padding: "8px 10px",
         borderBottom: "0.5px solid var(--color-border-tertiary)",
-        borderRight: "0.5px solid var(--color-border-tertiary)",
+        borderRight: full ? 'none' : "0.5px solid var(--color-border-tertiary)",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        gap: 8
+        gap: 6,
+        gridColumn: full ? "span 2" : undefined
       }
     }, /*#__PURE__*/React.createElement("span", {
       style: {
@@ -3593,9 +3641,10 @@ function CMEditor(_ref15) {
     }, label), /*#__PURE__*/React.createElement("div", {
       style: {
         display: "flex",
-        gap: 10
+        gap: 12
       }
     }, ["Yes", "No"].map(function (o) {
+      var _cm$k4;
       return /*#__PURE__*/React.createElement("label", {
         key: o,
         style: {
@@ -3607,8 +3656,8 @@ function CMEditor(_ref15) {
         }
       }, /*#__PURE__*/React.createElement("input", {
         type: "radio",
-        name: k,
-        checked: cm[k] === o,
+        name: "yn_".concat(k),
+        checked: ((_cm$k4 = cm[k]) !== null && _cm$k4 !== void 0 ? _cm$k4 : 'No') === o,
         onChange: function onChange() {
           return sc(k)(o);
         },
@@ -3618,8 +3667,8 @@ function CMEditor(_ref15) {
       }), o);
     })));
   };
-  var AddRemarks = function AddRemarks(_ref20) {
-    var k = _ref20.k;
+  var AddRemarks = function AddRemarks(_ref22) {
+    var k = _ref22.k;
     var items = cm[k] || [];
     return /*#__PURE__*/React.createElement("div", {
       style: {
@@ -3630,14 +3679,14 @@ function CMEditor(_ref15) {
       style: {
         fontSize: 11,
         color: "var(--color-text-muted)",
-        marginBottom: 6
+        marginBottom: 5
       }
     }, "Additional remark"), items.map(function (r, i) {
       return /*#__PURE__*/React.createElement("div", {
         key: i,
         style: {
           display: "flex",
-          gap: 6,
+          gap: 5,
           marginBottom: 4,
           alignItems: "center"
         }
@@ -3665,7 +3714,7 @@ function CMEditor(_ref15) {
           }));
         },
         style: {
-          padding: "3px 7px",
+          padding: "2px 7px",
           borderRadius: 4,
           border: "0.5px solid var(--color-border-secondary)",
           background: "transparent",
@@ -3689,61 +3738,11 @@ function CMEditor(_ref15) {
       }
     }, "+ Add remark"));
   };
-  var Sec = function Sec(_ref21) {
-    var title = _ref21.title,
-      children = _ref21.children;
-    return /*#__PURE__*/React.createElement("div", {
-      style: {
-        background: "var(--color-background-primary)",
-        border: "0.5px solid var(--color-border-tertiary)",
-        borderRadius: 10,
-        overflow: "hidden",
-        marginBottom: 10
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      style: {
-        padding: "8px 14px",
-        background: AMBER,
-        color: "#fff",
-        fontSize: 13,
-        fontWeight: 500
-      }
-    }, title), children);
-  };
-  var F = function F(_ref22) {
-    var label = _ref22.label,
-      children = _ref22.children,
-      half = _ref22.half;
-    return /*#__PURE__*/React.createElement("div", {
-      style: {
-        marginBottom: 8,
-        width: half ? "calc(50% - 4px)" : undefined
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      style: {
-        fontSize: 11,
-        color: "var(--color-text-secondary)",
-        marginBottom: 3
-      }
-    }, label), children);
-  };
-
-  // STEP 1 - Source & Product
-  if (step === 1) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Sec, {
+  if (step === 1) return /*#__PURE__*/React.createElement(Sec, {
+    icon: "\uD83D\uDCCB",
     title: "Source & Product"
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: 14
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      flexWrap: "wrap",
-      gap: 8
-    }
-  }, /*#__PURE__*/React.createElement(F, {
-    label: "Source",
-    half: true
+  }, /*#__PURE__*/React.createElement(Row, {
+    label: "Source"
   }, /*#__PURE__*/React.createElement("input", {
     value: "AMEC",
     readOnly: true,
@@ -3751,336 +3750,311 @@ function CMEditor(_ref15) {
       background: "var(--color-background-secondary)",
       color: "var(--color-text-muted)"
     })
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Product",
-    half: true
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Product"
   }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.product,
-    on: sc("product"),
+    k: "product",
     opts: ["GS51AA", "GW51AA"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Capacity (kg)",
-    half: true
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Capacity (kg)"
   }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.capacity,
-    on: sc("capacity"),
+    k: "capacity",
     ph: "e.g. 450"
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Technical level",
-    half: true
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Technical level"
   }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.techLevel,
-    on: sc("techLevel"),
+    k: "techLevel",
     opts: ["S", "A", "B", "C"]
-  })), /*#__PURE__*/React.createElement(F, {
+  })), /*#__PURE__*/React.createElement(Row, {
     label: "Technical Inquiry No."
   }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.techInquiryNo,
-    on: sc("techInquiryNo"),
+    k: "techInquiryNo",
     ph: "e.g. TI-2026-001"
-  })), /*#__PURE__*/React.createElement(F, {
+  })), /*#__PURE__*/React.createElement(Row, {
     label: "Traction machine"
   }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.tractionMachine,
-    on: sc("tractionMachine"),
+    k: "tractionMachine",
     ph: "e.g. VFGL"
-  }))))));
-
-  // STEP 2 - Performance
-  if (step === 2) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Sec, {
+  })));
+  if (step === 2) return /*#__PURE__*/React.createElement(Sec, {
+    icon: "\u26A1",
     title: "Performance Specification"
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: 14
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      flexWrap: "wrap",
-      gap: 8
-    }
-  }, /*#__PURE__*/React.createElement(F, {
-    label: "Speed (m/s)",
-    half: true
+  }, /*#__PURE__*/React.createElement(Row, {
+    label: "Speed (m/s)"
   }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.speed,
-    on: sc("speed"),
+    k: "speed",
     opts: ["0.75", "1.0", "1.5", "1.75", "2.0", "2.5"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Door Type",
-    half: true
-  }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.doorType,
-    on: sc("doorType"),
-    opts: ["CO", "2S"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "No. of Floor",
-    half: true
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "No. of Floor (stops)"
   }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.floor,
-    on: sc("floor"),
+    k: "floor",
     ph: "stops"
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Travel (m)",
-    half: true
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Travel (m)"
   }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.travel,
-    on: sc("travel"),
+    k: "travel",
     ph: "m"
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Car Door W\xD7H (mm)",
-    half: true
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 4
-    }
-  }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.carDoorWidth,
-    on: sc("carDoorWidth"),
-    ph: "W"
-  }), /*#__PURE__*/React.createElement("span", {
-    style: {
-      alignSelf: "center",
-      color: "var(--color-text-muted)"
-    }
-  }, "\xD7"), /*#__PURE__*/React.createElement(Inp, {
-    v: cm.carDoorHeight,
-    on: sc("carDoorHeight"),
-    ph: "H"
-  }))), /*#__PURE__*/React.createElement(F, {
-    label: "Operation",
-    half: true
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Door Type"
   }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.operation,
-    on: sc("operation"),
-    opts: ["1BC", "2BC", "3BC", "4BC", "GC", "CC"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Quantity",
-    half: true
+    k: "doorType",
+    opts: ["CO", "2S"]
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Car Door Width (mm)"
   }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.quantity,
-    on: sc("quantity"),
+    k: "carDoorWidth",
+    ph: "mm"
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Car Door Height (mm)"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "carDoorHeight",
+    ph: "mm"
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Operation"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "operation",
+    opts: OPS
+  })), cm.operation === "remark" && /*#__PURE__*/React.createElement(Row, {
+    label: "Operation (remark)"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "operationRemark",
+    ph: "specify..."
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Quantity"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "quantity",
     ph: "1"
-  }))))));
-
-  // STEP 3 - Car Design
-  if (step === 3) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Sec, {
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Group Operation"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "groupOp",
+    opts: ["No", "2 cars", "3 cars", "4 cars", "5 cars", "6 cars", "7 cars", "8 cars"]
+  })));
+  if (step === 3) return /*#__PURE__*/React.createElement(Sec, {
+    icon: "\uD83C\uDFA8",
     title: "Car Design & COP"
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: 14
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      flexWrap: "wrap",
-      gap: 8
-    }
-  }, /*#__PURE__*/React.createElement(F, {
-    label: "Car AA\xD7BB (mm)",
-    half: true
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 4
-    }
+  }, /*#__PURE__*/React.createElement(Row, {
+    label: "Car Width AA (mm)"
   }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.carWidth,
-    on: sc("carWidth"),
-    ph: "W"
-  }), /*#__PURE__*/React.createElement("span", {
-    style: {
-      alignSelf: "center"
-    }
-  }, "\xD7"), /*#__PURE__*/React.createElement(Inp, {
-    v: cm.carDepth,
-    on: sc("carDepth"),
-    ph: "D"
-  }))), /*#__PURE__*/React.createElement(F, {
-    label: "Ceiling HL (mm)",
-    half: true
-  }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.ceilingHeight,
-    on: sc("ceilingHeight"),
+    k: "carWidth",
     ph: "mm"
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Car Wall Finish",
-    half: true
-  }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.carWallFinish,
-    on: sc("carWallFinish"),
-    opts: ["SUS-HL", "SUS-M", "SUS-E", "Painted local", "Painted factory", "PPS"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Car Door Finish",
-    half: true
-  }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.carDoorFinish,
-    on: sc("carDoorFinish"),
-    opts: ["SUS-HL", "SUS-M", "SUS-E", "Painted local", "Painted factory", "PPS"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Flooring",
-    half: true
-  }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.flooring,
-    on: sc("flooring"),
-    opts: ["Vinyl tile", "Marble", "Granite", "Carpet", "Steel plate", "remark"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Kick Plate",
-    half: true
-  }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.kickPlate,
-    on: sc("kickPlate"),
-    opts: ["SUS-HL304", "SUS-HL316", "Painted", "No"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Ceiling",
-    half: true
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Car Depth BB (mm)"
   }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.ceilingType,
-    on: sc("ceilingType"),
-    ph: "Ceiling type"
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Main COP",
-    half: true
-  }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.mainCOP,
-    on: sc("mainCOP"),
-    ph: "COP model"
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Mirror",
-    half: true
-  }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.mirror,
-    on: sc("mirror"),
-    opts: ["No", "Half", "Full", "remark"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Handrail",
-    half: true
-  }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.handrail,
-    on: sc("handrail"),
-    opts: ["No", "Flat type", "Pipe type", "remark"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Recess Floor (mm)",
-    half: true
-  }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.recessFloor,
-    on: sc("recessFloor"),
+    k: "carDepth",
     ph: "mm"
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Decoration Weight (kg)",
-    half: true
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Ceiling HL (mm)"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "ceilingHL",
+    opts: CEIL_HL
+  })), cm.ceilingHL === "remark" && /*#__PURE__*/React.createElement(Row, {
+    label: "Ceiling HL (remark)"
   }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.decorationWeight,
-    on: sc("decorationWeight"),
+    k: "ceilingHLRemark",
+    ph: "specify mm"
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Ceiling Type"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "ceilingType",
+    ph: "e.g. CL1, CL2"
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Recess Floor (mm)"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "recessFloor",
+    ph: "mm"
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Decoration Weight (kg)"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "decorationWeight",
     ph: "kg"
-  }))))));
-
-  // STEP 4 - Entrance
-  if (step === 4) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Sec, {
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Car Wall Finish"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "carWallFinish",
+    opts: FINISH
+  })), cm.carWallFinish === "remark" && /*#__PURE__*/React.createElement(Row, {
+    label: "Car Wall (remark)"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "carWallRemark",
+    ph: "specify..."
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Car Door Finish"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "carDoorFinish",
+    opts: FINISH
+  })), cm.carDoorFinish === "remark" && /*#__PURE__*/React.createElement(Row, {
+    label: "Car Door (remark)"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "carDoorRemark",
+    ph: "specify..."
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Flooring"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "flooring",
+    opts: ["Vinyl tile", "Marble", "Granite", "Carpet", "Steel plate", "remark"]
+  })), cm.flooring === "remark" && /*#__PURE__*/React.createElement(Row, {
+    label: "Flooring (remark)"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "flooringRemark",
+    ph: "specify..."
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Kick Plate"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "kickPlate",
+    opts: ["SUS-HL304", "SUS-HL316", "Painted", "No", "remark"]
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Front Return Panel"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "frontReturnPanel",
+    opts: FINISH
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Transom Panel (Car)"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "transomPanel",
+    opts: TRANSOM
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Glass Window (Car)"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "glassWindowSize",
+    opts: ["No", "Small", "Large", "remark"]
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Mirror"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "mirror",
+    opts: ["No", "Half", "Full", "remark"]
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Handrail"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "handrail",
+    opts: ["No", "Flat type", "Pipe type", "remark"]
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Main COP"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "mainCOP",
+    ph: "COP model"
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Aux COP"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "auxCOP",
+    opts: ["No", "Yes"]
+  })));
+  if (step === 4) return /*#__PURE__*/React.createElement(Sec, {
+    icon: "\uD83D\uDEAA",
     title: "Entrance Design"
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: 14
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      flexWrap: "wrap",
-      gap: 8
-    }
-  }, /*#__PURE__*/React.createElement(F, {
-    label: "Landing Door (Main)",
-    half: true
+  }, /*#__PURE__*/React.createElement(Row, {
+    label: "Landing Door (Main)"
   }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.landingDoorMain,
-    on: sc("landingDoorMain"),
-    opts: ["SUS-HL", "SUS-M", "SUS-E", "Painted local", "Painted factory", "PPS"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Landing Door (Typical)",
-    half: true
+    k: "landingDoorMain",
+    opts: FINISH
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Landing Door (Typical)"
   }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.landingDoorTypical,
-    on: sc("landingDoorTypical"),
-    opts: ["SUS-HL", "SUS-M", "SUS-E", "Painted local", "Painted factory", "PPS"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Door Jamb (Main)",
-    half: true
+    k: "landingDoorTypical",
+    opts: FINISH
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Door Jamb (Main)"
   }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.jambMain,
-    on: sc("jambMain"),
-    opts: ["Painted by factory", "Painted by local", "SUS-HL", "No", "remark"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Door Jamb (Typical)",
-    half: true
+    k: "jambMain",
+    opts: JAMB
+  })), cm.jambMain === "remark" && /*#__PURE__*/React.createElement(Row, {
+    label: "Jamb Main (remark)"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "jambMainRemark",
+    ph: "specify..."
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Door Jamb (Typical)"
   }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.jambTypical,
-    on: sc("jambTypical"),
-    opts: ["Painted by factory", "Painted by local", "SUS-HL", "No", "remark"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Jamb Type (Main)",
-    half: true
+    k: "jambTypical",
+    opts: JAMB
+  })), cm.jambTypical === "remark" && /*#__PURE__*/React.createElement(Row, {
+    label: "Jamb Typical (remark)"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "jambTypicalRemark",
+    ph: "specify..."
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Jamb Type (Main)"
   }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.jambTypeMain,
-    on: sc("jambTypeMain"),
+    k: "jambTypeMain",
     opts: ["E102", "E202", "E302", "No", "By local", "remark"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Jamb Type (Typical)",
-    half: true
+  })), cm.jambTypeMain === "remark" && /*#__PURE__*/React.createElement(Row, {
+    label: "Jamb Type Main (remark)"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "jambTypeMainRemark",
+    ph: "specify..."
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Jamb Type (Typical)"
   }, /*#__PURE__*/React.createElement(Sel, {
-    v: cm.jambTypeTypical,
-    on: sc("jambTypeTypical"),
+    k: "jambTypeTypical",
     opts: ["E102", "E202", "E302", "No", "By local", "remark"]
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Hall Button",
-    half: true
+  })), cm.jambTypeTypical === "remark" && /*#__PURE__*/React.createElement(Row, {
+    label: "Jamb Type Typical (remark)"
   }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.hallBtn,
-    on: sc("hallBtn"),
-    ph: "model"
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Hall Lantern",
-    half: true
+    k: "jambTypeTypicalRemark",
+    ph: "specify..."
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Transom Panel (Main floor)"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "transomPanelMain",
+    opts: TRANSOM
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Transom Panel (Typical floor)"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "transomPanelTypical",
+    opts: TRANSOM
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Glass Window (Landing)"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "glassWindowLanding",
+    opts: ["No", "Small", "Large", "remark"]
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Hall Button (Main)"
   }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.hallLantern,
-    on: sc("hallLantern"),
+    k: "hallBtnMain",
     ph: "model"
-  })), /*#__PURE__*/React.createElement(F, {
-    label: "Hall Position Indicator",
-    half: true
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Hall Button (Typical)"
   }, /*#__PURE__*/React.createElement(Inp, {
-    v: cm.hallPIV,
-    on: sc("hallPIV"),
+    k: "hallBtnTypical",
     ph: "model"
-  }))))));
-
-  // STEP 5 - Features (reuse from FM)
-  if (step === 5) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: "9px 14px",
-      background: AMBER,
-      color: "#fff",
-      fontSize: 13,
-      fontWeight: 500,
-      borderRadius: "8px 8px 0 0"
-    }
-  }, "\u2B50 Features (Proposed)"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: "var(--color-background-primary)",
-      border: "0.5px solid var(--color-border-tertiary)",
-      borderTop: "none",
-      borderRadius: "0 0 8px 8px",
-      overflow: "hidden",
-      marginBottom: 10
-    }
-  }, /*#__PURE__*/React.createElement(FeatStep, {
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Hall Lantern (Main)"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "hallLanternMain",
+    ph: "model"
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Hall Lantern (Typical)"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "hallLanternTypical",
+    ph: "model"
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Hall Position Indicator (Main)"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "hallPIVMain",
+    ph: "model"
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Hall Position Indicator (Typical)"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    k: "hallPIVTypical",
+    ph: "model"
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Handicap Hall Button"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "handicapHallBtn",
+    opts: ["No", "Yes"]
+  })), /*#__PURE__*/React.createElement(Row, {
+    label: "Braille Entrance"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    k: "brailleEntrance",
+    opts: ["No", "Yes"]
+  })));
+  if (step === 5) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(FeatStep, {
     feats: feats,
     sf: sf
-  })));
-
-  // STEP 6 - Main Equipment
-  if (step === 6) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Sec, {
-    title: "\uD83D\uDD29 Main Equipment"
+  }));
+  if (step === 6) return /*#__PURE__*/React.createElement(Sec, {
+    icon: "\uD83D\uDD29",
+    title: "Main Equipment"
   }, /*#__PURE__*/React.createElement(RR, {
     label: "Machine Beam",
     k: "machineBeam"
@@ -4097,7 +4071,7 @@ function CMEditor(_ref15) {
     label: "Governor tension sheave",
     k: "tensionSheave"
   }), /*#__PURE__*/React.createElement(RR, {
-    label: "Hanger roller (Hall & Car door)",
+    label: "Hanger roller (Hall door & Car door)",
     k: "hangerRollerEq"
   }), /*#__PURE__*/React.createElement(RR, {
     label: "Rope shackle wedge type",
@@ -4107,12 +4081,12 @@ function CMEditor(_ref15) {
     k: "rubberDoorShoes"
   }), /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: "8px 12px"
+      padding: "8px 14px"
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: 11,
-      color: "var(--color-text-muted)",
+      fontSize: 11.5,
+      color: "var(--color-text-secondary)",
       marginBottom: 4
     }
   }, "Additional remark"), /*#__PURE__*/React.createElement("textarea", {
@@ -4125,11 +4099,10 @@ function CMEditor(_ref15) {
       resize: "vertical"
     }),
     placeholder: "Remark..."
-  }))));
-
-  // STEP 7 - Local Scope
+  })));
   if (step === 7) return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Sec, {
-    title: "\uD83D\uDD27 Local Part"
+    icon: "\uD83D\uDD27",
+    title: "Local Part"
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
@@ -4157,7 +4130,7 @@ function CMEditor(_ref15) {
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      gap: 8
+      gap: 6
     }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
@@ -4170,14 +4143,14 @@ function CMEditor(_ref15) {
       gap: 4
     }
   }, /*#__PURE__*/React.createElement("input", {
-    value: cm.governorRopeM || "",
+    value: (_cm$governorRopeM = cm.governorRopeM) !== null && _cm$governorRopeM !== void 0 ? _cm$governorRopeM : "",
     onChange: function onChange(e) {
       return sc("governorRopeM")(e.target.value);
     },
-    placeholder: "\u2014 m",
+    placeholder: "\u2014",
     style: _objectSpread(_objectSpread({}, bInp), {}, {
-      width: 60,
-      fontSize: 11.5
+      width: 55,
+      fontSize: 12
     })
   }), /*#__PURE__*/React.createElement("span", {
     style: {
@@ -4193,7 +4166,8 @@ function CMEditor(_ref15) {
   })), /*#__PURE__*/React.createElement(AddRemarks, {
     k: "localRemarks"
   })), /*#__PURE__*/React.createElement(Sec, {
-    title: "\uD83D\uDC77 Subcontract Labor"
+    icon: "\uD83D\uDC77",
+    title: "Subcontract Labor"
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
@@ -4214,7 +4188,8 @@ function CMEditor(_ref15) {
   })), /*#__PURE__*/React.createElement(AddRemarks, {
     k: "subRemarks"
   })), /*#__PURE__*/React.createElement(Sec, {
-    title: "\uD83C\uDFD7\uFE0F Additional Work"
+    icon: "\uD83C\uDFD7\uFE0F",
+    title: "Additional Work"
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
@@ -4238,67 +4213,215 @@ function CMEditor(_ref15) {
   }), /*#__PURE__*/React.createElement(YN, {
     label: "MELEYE Wiring",
     k: "addMELEYEWiring"
-  }), /*#__PURE__*/React.createElement("div", {
+  }), /*#__PURE__*/React.createElement(YN, {
+    label: "MELEYE Labor",
+    k: "addMELEYELabor",
+    full: true
+  })), /*#__PURE__*/React.createElement(AddRemarks, {
+    k: "addRemarks"
+  })));
+  return null;
+}
+function FeatStep(_ref23) {
+  var feats = _ref23.feats,
+    sf = _ref23.sf;
+  var setF = function setF(k) {
+    return function (v) {
+      return sf(k)(v);
+    };
+  };
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: "8px 10px",
-      borderBottom: "0.5px solid var(--color-border-tertiary)",
-      borderRight: "0.5px solid var(--color-border-tertiary)",
+      padding: "9px 14px",
+      background: AMBER,
+      color: "#fff",
+      fontSize: 13,
+      fontWeight: 500,
+      borderRadius: "8px 8px 0 0"
+    }
+  }, "\u2B50 Features (Proposed)"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--color-background-primary)",
+      border: "0.5px solid var(--color-border-tertiary)",
+      borderTop: "none",
+      borderRadius: "0 0 8px 8px",
+      overflow: "hidden",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement(FeatGroup, {
+    icon: "\uD83D\uDD12",
+    title: "Standard Features"
+  }, /*#__PURE__*/React.createElement(FeatItem, {
+    code: "ECL",
+    label: "Emergency Car Lighting",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "MELD",
+    label: "Emergency Lowering Device",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "RSRL",
+    label: "RSRL",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "EMB",
+    label: "Emergency Bell",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "EER-P",
+    label: "Earthquake Emergency Return",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "FER",
+    label: "Fire Emergency Return",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "FE + FELC",
+    label: "Firefighters' Emergency Operation",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "SDE",
+    label: "Safety Door Edge",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "MBS",
+    label: "Multi Beam Sensor",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "DKO-TB",
+    label: "Door Hold Open",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "ACB",
+    label: "Sonic Car Button",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "OLHL",
+    label: "Overload",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "FCC-P",
+    label: "Floor Call Cancel",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "CCTV",
+    label: "CCTV",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "AECC",
+    label: "Car Arrival Chime",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "MFP",
+    label: "Main Floor Parking",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "HOS",
+    label: "Out of Service by Hall Key Switch",
+    locked: true,
+    checked: true,
+    onChange: function onChange() {}
+  })), /*#__PURE__*/React.createElement(FeatGroup, {
+    icon: "\u2699\uFE0F",
+    title: "Optional Features"
+  }, /*#__PURE__*/React.createElement(FeatItem, {
+    code: "BMS_GW",
+    label: "BMS Gateway",
+    checked: feats.BMS_GW,
+    onChange: sf('BMS_GW')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "ABP",
+    label: "Auto By-pass",
+    checked: feats.ABP,
+    onChange: sf('ABP')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "AAN",
+    label: "Voice Announcement",
+    checked: feats.AAN,
+    onChange: sf('AAN')
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
       display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      gap: 8,
-      gridColumn: "span 1"
+      gap: 12
     }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 12
-    }
-  }, "MELEYE Labor"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 10
-    }
-  }, ["Yes", "No"].map(function (o) {
+  }, ["AAN-B", "AAN-G"].map(function (o) {
     return /*#__PURE__*/React.createElement("label", {
       key: o,
       style: {
         display: "flex",
         alignItems: "center",
-        gap: 4,
-        cursor: "pointer",
-        fontSize: 12
+        gap: 5,
+        cursor: "pointer"
       }
     }, /*#__PURE__*/React.createElement("input", {
       type: "radio",
-      name: "addMELEYELabor",
-      checked: cm.addMELEYELabor === o,
+      checked: feats.AAN_type === o,
       onChange: function onChange() {
-        return sc("addMELEYELabor")(o);
-      },
-      style: {
-        accentColor: AMBER
+        return sf('AAN_type')(o);
       }
-    }), o);
-  })))), /*#__PURE__*/React.createElement(AddRemarks, {
-    k: "addRemarks"
-  })));
-  return null;
-}
-
-// FeatStep extracted for reuse in CM
-function FeatStep(_ref23) {
-  var feats = _ref23.feats,
-    sf = _ref23.sf;
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: 10
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 12,
-      color: "var(--color-text-secondary)"
-    }
-  }, "Features same as FM \u2014 use checkboxes in FM step 5"));
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12
+      }
+    }, o));
+  }))), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "AS",
+    label: "Attendant Service",
+    checked: feats.AS,
+    onChange: sf('AS')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "FCC_A",
+    label: "False Call Cancel Auto",
+    checked: feats.FCC_A,
+    onChange: sf('FCC_A')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "cardreader",
+    label: "Interface Card Reader",
+    checked: feats.cardreader,
+    onChange: sf('cardreader')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "OEPS_SA",
+    label: "Operation by Emergency Power Source",
+    checked: feats.OEPS_SA,
+    onChange: sf('OEPS_SA')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "ITP",
+    label: "Intercom",
+    checked: feats.ITP,
+    onChange: sf('ITP')
+  }))));
 }
 function App() {
   var _useState3 = useState(_objectSpread({}, INIT_PROJ)),
@@ -4325,22 +4448,26 @@ function App() {
     _useState12 = _slicedToArray(_useState11, 2),
     showTypeModal = _useState12[0],
     setShowTypeModal = _useState12[1];
-  var _useState13 = useState(_objectSpread({}, INIT_CM)),
+  var _useState13 = useState('FM'),
     _useState14 = _slicedToArray(_useState13, 2),
-    editCM = _useState14[0],
-    setEditCM = _useState14[1];
-  var _useState15 = useState(false),
+    cmType = _useState14[0],
+    setCmType = _useState14[1];
+  var _useState15 = useState(_objectSpread({}, INIT_CM)),
     _useState16 = _slicedToArray(_useState15, 2),
-    autoFilled = _useState16[0],
-    setAutoFilled = _useState16[1];
-  var _useState17 = useState([]),
+    editCM = _useState16[0],
+    setEditCM = _useState16[1];
+  var _useState17 = useState(false),
     _useState18 = _slicedToArray(_useState17, 2),
-    autoFilledFields = _useState18[0],
-    setAutoFilledFields = _useState18[1];
-  var _useState19 = useState(false),
+    autoFilled = _useState18[0],
+    setAutoFilled = _useState18[1];
+  var _useState19 = useState([]),
     _useState20 = _slicedToArray(_useState19, 2),
-    uploading = _useState20[0],
-    setUploading = _useState20[1];
+    autoFilledFields = _useState20[0],
+    setAutoFilledFields = _useState20[1];
+  var _useState21 = useState(false),
+    _useState22 = _slicedToArray(_useState21, 2),
+    uploading = _useState22[0],
+    setUploading = _useState22[1];
   var fileUploadRef = useRef(null);
 
   // ── AUTO-SAVE to localStorage ──────────────────────────────────────
@@ -4375,34 +4502,34 @@ function App() {
       }
     } catch (e) {}
   }, []); // list | edit
-  var _useState21 = useState(null),
-    _useState22 = _slicedToArray(_useState21, 2),
-    editIdx = _useState22[0],
-    setEditIdx = _useState22[1];
-  var _useState23 = useState(_objectSpread({}, INIT_EXISTING)),
+  var _useState23 = useState(null),
     _useState24 = _slicedToArray(_useState23, 2),
-    editExisting = _useState24[0],
-    setEditExisting = _useState24[1];
-  var _useState25 = useState(_objectSpread({}, INIT_PROPOSED)),
+    editIdx = _useState24[0],
+    setEditIdx = _useState24[1];
+  var _useState25 = useState(_objectSpread({}, INIT_EXISTING)),
     _useState26 = _slicedToArray(_useState25, 2),
-    editProposed = _useState26[0],
-    setEditProposed = _useState26[1];
-  var _useState27 = useState(_objectSpread({}, INIT_FEATS)),
+    editExisting = _useState26[0],
+    setEditExisting = _useState26[1];
+  var _useState27 = useState(_objectSpread({}, INIT_PROPOSED)),
     _useState28 = _slicedToArray(_useState27, 2),
-    editFeats = _useState28[0],
-    setEditFeats = _useState28[1];
-  var _useState29 = useState(_objectSpread({}, INIT_LOCAL)),
+    editProposed = _useState28[0],
+    setEditProposed = _useState28[1];
+  var _useState29 = useState(_objectSpread({}, INIT_FEATS)),
     _useState30 = _slicedToArray(_useState29, 2),
-    editLocal = _useState30[0],
-    setEditLocal = _useState30[1];
-  var _useState31 = useState(1),
+    editFeats = _useState30[0],
+    setEditFeats = _useState30[1];
+  var _useState31 = useState(_objectSpread({}, INIT_LOCAL)),
     _useState32 = _slicedToArray(_useState31, 2),
-    wizStep = _useState32[0],
-    setWizStep = _useState32[1];
-  var _useState33 = useState(''),
+    editLocal = _useState32[0],
+    setEditLocal = _useState32[1];
+  var _useState33 = useState(1),
     _useState34 = _slicedToArray(_useState33, 2),
-    saveMsg = _useState34[0],
-    setSaveMsg = _useState34[1];
+    wizStep = _useState34[0],
+    setWizStep = _useState34[1];
+  var _useState35 = useState(''),
+    _useState36 = _slicedToArray(_useState35, 2),
+    saveMsg = _useState36[0],
+    setSaveMsg = _useState36[1];
   var importRef = useRef(null);
   var sp = function sp(v) {
     return setProj(function (p) {
@@ -5141,9 +5268,10 @@ function App() {
       cursor: "pointer",
       fontFamily: "inherit"
     }
-  }, "Preview Form"), view === 'edit' && /*#__PURE__*/React.createElement("button", {
+  }, "Preview Form"), (view === 'edit' || view === 'cm') && /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
-      return setView('list');
+      setView('list');
+      setWizStep(1);
     },
     style: {
       padding: "5px 12px",
@@ -5362,110 +5490,43 @@ function App() {
       });
     },
     ph: "Engineer name"
-  })))), showTypeModal && /*#__PURE__*/React.createElement("div", {
+  })))), /*#__PURE__*/React.createElement("div", {
     style: {
+      display: "flex",
+      gap: 0,
       border: "0.5px solid var(--color-border-secondary)",
-      borderRadius: 12,
+      borderRadius: 8,
       overflow: "hidden",
-      marginBottom: 10
+      marginBottom: 8
     }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: "12px 16px",
-      background: NAV,
-      color: "#fff",
-      fontSize: 14,
-      fontWeight: 500,
-      textAlign: "center"
-    }
-  }, "Select Modernization Type"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gap: 0
-    }
-  }, /*#__PURE__*/React.createElement("div", {
+  }, [["FM", "🔄 FM — Full Replacement"], ["CM", "⚙️ CM — Control Modernization"]].map(function (_ref33) {
+    var _ref34 = _slicedToArray(_ref33, 2),
+      t = _ref34[0],
+      l = _ref34[1];
+    return /*#__PURE__*/React.createElement("button", {
+      key: t,
+      onClick: function onClick() {
+        return setCmType(t);
+      },
+      style: {
+        flex: 1,
+        padding: "8px",
+        border: "none",
+        background: cmType === t ? AMBER : "var(--color-background-primary)",
+        color: cmType === t ? NAV : "var(--color-text-secondary)",
+        fontWeight: cmType === t ? 500 : 400,
+        fontSize: 12.5,
+        cursor: "pointer",
+        fontFamily: "inherit"
+      }
+    }, l);
+  })), /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
-      setShowTypeModal(false);
-      openNew();
+      return cmType === 'CM' ? openCM() : openNew();
     },
-    style: {
-      padding: "28px 20px",
-      textAlign: "center",
-      cursor: "pointer",
-      borderRight: "0.5px solid var(--color-border-secondary)",
-      background: "var(--color-background-primary)"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 30,
-      marginBottom: 10
-    }
-  }, "\uD83D\uDD04"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 13,
-      fontWeight: 600,
-      color: NAV,
-      marginBottom: 4
-    }
-  }, "FM"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 14,
-      fontWeight: 600,
-      color: "var(--color-text-primary)"
-    }
-  }, "Full Replacement")), /*#__PURE__*/React.createElement("div", {
-    onClick: function onClick() {
-      return openCM();
-    },
-    style: {
-      padding: "28px 20px",
-      textAlign: "center",
-      cursor: "pointer",
-      background: "var(--color-background-primary)"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 30,
-      marginBottom: 10
-    }
-  }, "\u2699\uFE0F"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 13,
-      fontWeight: 600,
-      color: AMBER,
-      marginBottom: 4
-    }
-  }, "CM"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 14,
-      fontWeight: 600,
-      color: "var(--color-text-primary)"
-    }
-  }, "Control Modernization"))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: "8px",
-      borderTop: "0.5px solid var(--color-border-secondary)",
-      textAlign: "center"
-    }
-  }, /*#__PURE__*/React.createElement("button", {
-    onClick: function onClick() {
-      return setShowTypeModal(false);
-    },
-    style: {
-      padding: "5px 16px",
-      borderRadius: 6,
-      border: "0.5px solid var(--color-border-secondary)",
-      background: "transparent",
-      cursor: "pointer",
-      fontSize: 12,
-      fontFamily: "inherit"
-    }
-  }, "Cancel"))), /*#__PURE__*/React.createElement("button", {
-    onClick: openNewGroup,
     style: {
       width: "100%",
-      padding: "10px",
+      padding: "9px",
       borderRadius: 8,
       border: "1.5px dashed ".concat(NAV),
       background: "transparent",
@@ -5476,7 +5537,7 @@ function App() {
       fontFamily: "inherit",
       marginBottom: 10
     }
-  }, "+ Add Lift (MOD)"), groups.length === 0 && /*#__PURE__*/React.createElement("div", {
+  }, "+ Add ", cmType, " Lift"), groups.length === 0 && /*#__PURE__*/React.createElement("div", {
     style: {
       textAlign: "center",
       padding: "40px 20px",
@@ -5563,10 +5624,10 @@ function App() {
         gridTemplateColumns: "repeat(3,1fr)",
         gap: 8
       }
-    }, [["Existing speed", e.speed ? e.speed + " m/s" : "—"], ["Proposed speed", p.speed ? p.speed + " m/s" : "—"], ["Capacity", p.kg ? p.kg + " kg" : "—"], ["No. of Stop", e.noOfStop || "—"], ["Travel", e.travel ? e.travel + " m" : "—"], ["Machine Room", p.machineRoom || "—"]].map(function (_ref33) {
-      var _ref34 = _slicedToArray(_ref33, 2),
-        l = _ref34[0],
-        v = _ref34[1];
+    }, [["Existing speed", e.speed ? e.speed + " m/s" : "—"], ["Proposed speed", p.speed ? p.speed + " m/s" : "—"], ["Capacity", p.kg ? p.kg + " kg" : "—"], ["No. of Stop", e.noOfStop || "—"], ["Travel", e.travel ? e.travel + " m" : "—"], ["Machine Room", p.machineRoom || "—"]].map(function (_ref35) {
+      var _ref36 = _slicedToArray(_ref35, 2),
+        l = _ref36[0],
+        v = _ref36[1];
       return /*#__PURE__*/React.createElement("div", {
         key: l,
         style: {
@@ -5768,7 +5829,8 @@ function App() {
     }
   }, "CM \u2014 Control Modernization")), /*#__PURE__*/React.createElement(WizBar, {
     step: wizStep,
-    onStep: setWizStep
+    onStep: setWizStep,
+    steps: CM_STEPS
   }), /*#__PURE__*/React.createElement(CMEditor, {
     cm: editCM,
     setCM: setEditCM,
@@ -5918,10 +5980,10 @@ function App() {
       display: "flex",
       gap: 20
     }
-  }, [["Lifts", groups.length], ["Date", proj.date || "—"], ["Revision", proj.rev]].map(function (_ref35) {
-    var _ref36 = _slicedToArray(_ref35, 2),
-      l = _ref36[0],
-      v = _ref36[1];
+  }, [["Lifts", groups.length], ["Date", proj.date || "—"], ["Revision", proj.rev]].map(function (_ref37) {
+    var _ref38 = _slicedToArray(_ref37, 2),
+      l = _ref38[0],
+      v = _ref38[1];
     return /*#__PURE__*/React.createElement("div", {
       key: l
     }, /*#__PURE__*/React.createElement("div", {
@@ -6118,14 +6180,14 @@ function App() {
       MFP: 'MFP',
       VIP_S: 'VIP-S'
     });
-    var optFeats = optList.filter(function (_ref37) {
-      var _ref38 = _slicedToArray(_ref37, 1),
-        k = _ref38[0];
+    var optFeats = optList.filter(function (_ref39) {
+      var _ref40 = _slicedToArray(_ref39, 1),
+        k = _ref40[0];
       return f[k];
-    }).map(function (_ref39) {
-      var _ref40 = _slicedToArray(_ref39, 2),
-        k = _ref40[0],
-        v = _ref40[1];
+    }).map(function (_ref41) {
+      var _ref42 = _slicedToArray(_ref41, 2),
+        k = _ref42[0],
+        v = _ref42[1];
       return v;
     });
     var scopeColor = function scopeColor(v) {
@@ -6140,9 +6202,9 @@ function App() {
       };
     };
     var rows = [['General Info', null, null, true], ['Elevator No.', e.elevNo, e.elevNo, false], ['Usage', e.usage, p.usage || e.usage, false], ['Brand / Product', e.brand, [p.source, p.product, p.code].filter(Boolean).join(' / '), false], ['Capacity', e.capacity ? e.capacity + ' kg' : '—', p.kg ? p.kg + ' kg (' + p.persons + 'P)' : '—', false], ['Door Type', e.doorType, p.doorType, false], ['Speed', e.speed ? e.speed + ' m/s' : '—', p.speed ? p.speed + ' m/s' : '—', false], ['Operation', e.operation, p.operation, false], ['Travel', e.travel ? e.travel + ' m' : '—', p.travel ? p.travel + ' m' : '—', false], ['No. of Stop', e.noOfStop, p.noOfStop || e.noOfStop, false], ['Machine Room', e.machineRoom, p.machineRoom, false], ['Shaft & Civil', null, null, true], ['Car AA×BB', e.carW && e.carD ? e.carW + '×' + e.carD + ' mm' : '—', p.carWidth && p.carDepth ? p.carWidth + '×' + p.carDepth + ' mm' : '—', false], ['Ceiling HL', e.ceilingHL ? e.ceilingHL + ' mm' : '—', p.ceilingHeight ? p.ceilingHeight + ' mm' : '—', false], ['Entrance JJ×HH', e.entranceJJ && e.entranceHH ? e.entranceJJ + '×' + e.entranceHH + ' mm' : '—', p.carDoorWidth && p.carDoorHeight ? p.carDoorWidth + '×' + p.carDoorHeight + ' mm' : '—', false], ['CWT Location', e.cwtLocation, p.cwtLocation, false], ['Shaft AH×BH', e.shaftAH && e.shaftBH ? e.shaftAH + '×' + e.shaftBH + ' mm' : '—', p.shaftAH && p.shaftBH ? p.shaftAH + '×' + p.shaftBH + ' mm' : '—', false], ['LE Wall', e.leWall ? e.leWall + ' mm' : '—', p.leWall ? p.leWall + ' mm' : '—', false], ['RE Wall', e.reWall ? e.reWall + ' mm' : '—', p.reWall ? p.reWall + ' mm' : '—', false], ['Overhead OH', e.overhead ? e.overhead + ' mm' : '—', p.overhead ? p.overhead + ' mm' : '—', false, 'OH'], ['Pit Depth PD', e.pitDepth ? e.pitDepth + ' mm' : '—', p.pitDepth ? p.pitDepth + ' mm' : '—', false, 'PIT'], ['Hoistway', e.hoistway, p.hoistway, false], ['Car Design', null, null, true], ['COP Main', e.cop, p.mainCOP + (p.mainCOPRemark ? ' (' + p.mainCOPRemark + ')' : ''), false], ['Ceiling', e.ceiling, p.ceilingType + (p.ceilingTypeRemark ? ' (' + p.ceilingTypeRemark + ')' : ''), false], ['Car Wall', e.carWall, p.carWallFinish, false], ['Car Door', e.carDoor, p.carDoorFinish, false], ['Flooring', e.flooring, p.flooring, false], ['Entrance Design', null, null, true], ['Landing door (main)', e.landingDoorMain, p.landingDoorMain, false], ['Landing door (typical)', e.landingDoorTypical, p.landingDoorTypical, false], ['Jamb (main)', e.jambMain, p.jambMain, false], ['Jamb (typical)', e.jambTypical, p.jambTypical, false], ['Jamb type (main)', e.jambTypeMain, p.jambTypeMain + (p.jambTypeMainRemark ? ' (' + p.jambTypeMainRemark + ')' : ''), false], ['Jamb type (typical)', e.jambTypeTypical, p.jambTypeTypical + (p.jambTypeTypicalRemark ? ' (' + p.jambTypeTypicalRemark + ')' : ''), false], e.hallBtnMain || p.hallBtnMain ? ['Hall button (main)', e.hallBtnMain, p.hallBtnMain + (p.hallBtnMainRemark ? ' (' + p.hallBtnMainRemark + ')' : ''), false] : null, e.hallBtnTypical || p.hallBtnTypical ? ['Hall button (typical)', e.hallBtnTypical, p.hallBtnTypical + (p.hallBtnTypicalRemark ? ' (' + p.hallBtnTypicalRemark + ')' : ''), false] : null, e.hallLanternMain || p.hallLanternMain ? ['Hall lantern (main)', e.hallLanternMain, p.hallLanternMain + (p.hallLanternMainRemark ? ' (' + p.hallLanternMainRemark + ')' : ''), false] : null, e.hallPIVMain || p.hallPIVMain ? ['Hall pos. ind. (main)', e.hallPIVMain, p.hallPIVMain + (p.hallPIVMainRemark ? ' (' + p.hallPIVMainRemark + ')' : ''), false] : null].filter(Boolean);
-    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance]].filter(function (_ref41) {
-      var _ref42 = _slicedToArray(_ref41, 2),
-        v = _ref42[1];
+    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance]].filter(function (_ref43) {
+      var _ref44 = _slicedToArray(_ref43, 2),
+        v = _ref44[1];
       return v && v !== 'No';
     });
     return /*#__PURE__*/React.createElement("div", {
@@ -6441,10 +6503,10 @@ function App() {
         borderBottom: "0.5px solid #e2e8f0",
         letterSpacing: ".02em"
       }
-    }, "Local Scope (MOD)")), localScope.map(function (_ref43) {
-      var _ref44 = _slicedToArray(_ref43, 2),
-        label = _ref44[0],
-        val = _ref44[1];
+    }, "Local Scope (MOD)")), localScope.map(function (_ref45) {
+      var _ref46 = _slicedToArray(_ref45, 2),
+        label = _ref46[0],
+        val = _ref46[1];
       return /*#__PURE__*/React.createElement("tr", {
         key: label
       }, /*#__PURE__*/React.createElement("td", {
@@ -6633,19 +6695,19 @@ function App() {
       ACB: 'ACB',
       AHC: 'AHC'
     });
-    var optFeats = optList.filter(function (_ref45) {
-      var _ref46 = _slicedToArray(_ref45, 1),
-        k = _ref46[0];
+    var optFeats = optList.filter(function (_ref47) {
+      var _ref48 = _slicedToArray(_ref47, 1),
+        k = _ref48[0];
       return f[k];
-    }).map(function (_ref47) {
-      var _ref48 = _slicedToArray(_ref47, 2),
-        k = _ref48[0],
-        v = _ref48[1];
+    }).map(function (_ref49) {
+      var _ref50 = _slicedToArray(_ref49, 2),
+        k = _ref50[0],
+        v = _ref50[1];
       return v;
     });
-    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(function (_ref49) {
-      var _ref50 = _slicedToArray(_ref49, 2),
-        v = _ref50[1];
+    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(function (_ref51) {
+      var _ref52 = _slicedToArray(_ref51, 2),
+        v = _ref52[1];
       return v && v !== 'No';
     });
     var scopeColor = function scopeColor(v) {
@@ -6659,8 +6721,8 @@ function App() {
         color: "#64748b"
       };
     };
-    var TblHdr = function TblHdr(_ref51) {
-      var title = _ref51.title;
+    var TblHdr = function TblHdr(_ref53) {
+      var title = _ref53.title;
       return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
         colSpan: 3,
         style: {
@@ -6674,12 +6736,12 @@ function App() {
         }
       }, title));
     };
-    var Row = function Row(_ref52) {
-      var n = _ref52.n,
-        ex = _ref52.ex,
-        pr = _ref52.pr,
-        OH = _ref52.OH,
-        PIT = _ref52.PIT;
+    var Row = function Row(_ref54) {
+      var n = _ref54.n,
+        ex = _ref54.ex,
+        pr = _ref54.pr,
+        OH = _ref54.OH,
+        PIT = _ref54.PIT;
       return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
         style: {
           padding: "6px 10px",
@@ -6961,10 +7023,10 @@ function App() {
       }, ft.isStd ? "Standard" : "Optional")));
     }), localScope.length > 0 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(TblHdr, {
       title: "Local Scope (MOD)"
-    }), localScope.map(function (_ref53) {
-      var _ref54 = _slicedToArray(_ref53, 2),
-        label = _ref54[0],
-        val = _ref54[1];
+    }), localScope.map(function (_ref55) {
+      var _ref56 = _slicedToArray(_ref55, 2),
+        label = _ref56[0],
+        val = _ref56[1];
       return /*#__PURE__*/React.createElement("tr", {
         key: label
       }, /*#__PURE__*/React.createElement("td", {
