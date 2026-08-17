@@ -3900,22 +3900,46 @@ function CMEditor(_ref22) {
   })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Car Door Width (mm)",
     half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
+  }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.carDoorWidth,
     onChange: function onChange(e) {
       return sc("carDoorWidth")(e.target.value);
     },
-    ph: "mm"
-  })), /*#__PURE__*/React.createElement(CMfield, {
+    opts: ["700", "800", "900", "1000", "1100", "1200", "1300", "remark"]
+  }), cm.carDoorWidth === "remark" && /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.carDoorWidthR,
+    onChange: function onChange(e) {
+      return sc("carDoorWidthR")(e.target.value);
+    },
+    ph: "specify mm"
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Car Door Height (mm)",
     half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
+  }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.carDoorHeight,
     onChange: function onChange(e) {
       return sc("carDoorHeight")(e.target.value);
     },
-    ph: "mm"
-  })), /*#__PURE__*/React.createElement(CMfield, {
+    opts: ["1900", "2000", "2100", "2200", "2300", "2400", "remark"]
+  }), cm.carDoorHeight === "remark" && /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.carDoorHeightR,
+    onChange: function onChange(e) {
+      return sc("carDoorHeightR")(e.target.value);
+    },
+    ph: "specify mm"
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Ceiling HL (mm)",
     half: true
   }, /*#__PURE__*/React.createElement(CMsel, {
@@ -4026,13 +4050,25 @@ function CMEditor(_ref22) {
   }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Glass Window (Car)",
     half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
   }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.glassWindowSize,
     onChange: function onChange(e) {
       return sc("glassWindowSize")(e.target.value);
     },
-    opts: ["No", "Small", "Large", "remark"]
-  })), cm.glassWindowSize === "remark" && /*#__PURE__*/React.createElement(CMfield, {
+    opts: ["No", "1300×200 mm", "1300×300 mm", "800×200 mm 1 side", "800×200 mm 2 side", "remark"]
+  }), cm.glassWindowSize === "remark" && /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.glassWindowSizeR,
+    onChange: function onChange(e) {
+      return sc("glassWindowSizeR")(e.target.value);
+    },
+    ph: "specify..."
+  }))), cm.glassWindowSize === "remark" && /*#__PURE__*/React.createElement(CMfield, {
     label: "Glass Window (specify)",
     half: true
   }, /*#__PURE__*/React.createElement(CMinp, {
@@ -4125,22 +4161,37 @@ function CMEditor(_ref22) {
   })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Handrail",
     half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
   }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.handrail,
     onChange: function onChange(e) {
       return sc("handrail")(e.target.value);
     },
     opts: ["No", "Flat type", "Pipe type", "remark"]
-  })), cm.handrail === "remark" && /*#__PURE__*/React.createElement(CMfield, {
-    label: "Handrail (specify)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
+  }), cm.handrail !== "No" && /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.handrailSide,
+    onChange: function onChange(e) {
+      return sc("handrailSide")(e.target.value);
+    },
+    opts: ["Rear only", "3 side", "remark"]
+  }), cm.handrailSide === "remark" && cm.handrail !== "No" && /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.handrailSideR,
+    onChange: function onChange(e) {
+      return sc("handrailSideR")(e.target.value);
+    },
+    ph: "specify..."
+  }), cm.handrail === "remark" && /*#__PURE__*/React.createElement(CMinp, {
     val: cm.handrailR,
     onChange: function onChange(e) {
       return sc("handrailR")(e.target.value);
     },
-    ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CMfield, {
+    ph: "specify type..."
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Main COP",
     half: true
   }, /*#__PURE__*/React.createElement(CMinp, {
@@ -4149,6 +4200,15 @@ function CMEditor(_ref22) {
       return sc("mainCOP")(e.target.value);
     },
     ph: "COP model"
+  })), /*#__PURE__*/React.createElement(CMfield, {
+    label: "Braille plate at COP",
+    half: true
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.brailleCOP,
+    onChange: function onChange(e) {
+      return sc("brailleCOP")(e.target.value);
+    },
+    opts: ["No", "Yes"]
   })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Aux COP",
     half: true
@@ -4344,7 +4404,7 @@ function CMEditor(_ref22) {
     onChange: function onChange(e) {
       return sc("glassWindowLanding")(e.target.value);
     },
-    opts: ["No", "Small", "Large", "remark"]
+    opts: ["No", "1300×200 mm", "1300×300 mm", "800×200 mm 1 side", "800×200 mm 2 side", "remark"]
   }), cm.glassWindowLanding === "remark" && /*#__PURE__*/React.createElement(CMinp, {
     val: cm.glassWindowLandingR,
     onChange: function onChange(e) {
@@ -4414,8 +4474,17 @@ function CMEditor(_ref22) {
       return sc("handicapHallBtn")(e.target.value);
     },
     opts: ["No", "Yes"]
+  })), cm.handicapHallBtn === "Yes" && /*#__PURE__*/React.createElement(CMfield, {
+    label: "Handicap Hall Button Type",
+    half: true
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.handicapHallBtnType,
+    onChange: function onChange(e) {
+      return sc("handicapHallBtnType")(e.target.value);
+    },
+    ph: "e.g. model number"
   })), /*#__PURE__*/React.createElement(CMfield, {
-    label: "Braille Entrance",
+    label: "Braille plate at hall button",
     half: true
   }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.brailleEntrance,
