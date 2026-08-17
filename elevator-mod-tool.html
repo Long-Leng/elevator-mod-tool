@@ -1512,7 +1512,6 @@ var feasBadge = function feasBadge(ex, pr) {
 var FeatItem = function FeatItem(_ref0) {
   var code = _ref0.code,
     label = _ref0.label,
-    locked = _ref0.locked,
     checked = _ref0.checked,
     onChange = _ref0.onChange,
     children = _ref0.children;
@@ -1529,18 +1528,18 @@ var FeatItem = function FeatItem(_ref0) {
     }
   }, /*#__PURE__*/React.createElement("div", {
     onClick: function onClick() {
-      return !locked && onChange(!checked);
+      return onChange(!checked);
     },
     style: {
       width: 22,
       height: 22,
       borderRadius: 4,
-      border: "2px solid ".concat(checked ? locked ? "#94A3B8" : AMBER : "#94A3B8"),
-      background: checked ? locked ? "#94A3B8" : AMBER : "#fff",
+      border: "2px solid ".concat(checked ? AMBER : "#94A3B8"),
+      background: checked ? AMBER : "#fff",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      cursor: locked ? "not-allowed" : "pointer",
+      cursor: "pointer",
       flexShrink: 0
     }
   }, checked && /*#__PURE__*/React.createElement("span", {
@@ -1558,15 +1557,7 @@ var FeatItem = function FeatItem(_ref0) {
     style: {
       fontWeight: 500
     }
-  }, code), " \u2014 ", label), locked && /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 10,
-      background: "#f1f5f9",
-      color: "#64748b",
-      padding: "1px 6px",
-      borderRadius: 3
-    }
-  }, "standard")), checked && children && /*#__PURE__*/React.createElement("div", {
+  }, code), " \u2014 ", label)), checked && children && /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 6,
       marginLeft: 30
@@ -3009,9 +3000,10 @@ function LiftEditor(_ref12) {
   }))), /*#__PURE__*/React.createElement(FeatItem, {
     code: "FER",
     label: "Fire Emergency Return",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.FER !== false,
+    onChange: function onChange(v) {
+      return sf('FER')(v);
+    }
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "FE",
     label: "Firefighters' Emergency Operation",
@@ -3141,9 +3133,10 @@ function LiftEditor(_ref12) {
   }))), /*#__PURE__*/React.createElement(FeatItem, {
     code: "MBS",
     label: "Multi Beam Sensor",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.MBS !== false,
+    onChange: function onChange(v) {
+      return sf('MBS')(v);
+    }
   })), /*#__PURE__*/React.createElement(FeatGroup, {
     icon: "\u2699\uFE0F",
     title: "Operation & Service"
@@ -4996,33 +4989,38 @@ function FeatStep(_ref23) {
   }, /*#__PURE__*/React.createElement(FeatItem, {
     code: "ECL",
     label: "Emergency Car Lighting",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.ECL !== false,
+    onChange: function onChange(v) {
+      return sf('ECL')(v);
+    }
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "MELD",
     label: "Emergency Lowering Device",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.MELD !== false,
+    onChange: function onChange(v) {
+      return sf('MELD')(v);
+    }
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "RSRL",
     label: "RSRL",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.RSRL !== false,
+    onChange: function onChange(v) {
+      return sf('RSRL')(v);
+    }
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "EMB",
     label: "Emergency Bell",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.EMB !== false,
+    onChange: function onChange(v) {
+      return sf('EMB')(v);
+    }
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "EER",
     label: "Earthquake Emergency Return",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.EER !== false,
+    onChange: function onChange(v) {
+      return sf('EER')(v);
+    }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
@@ -5051,9 +5049,10 @@ function FeatStep(_ref23) {
   }))), /*#__PURE__*/React.createElement(FeatItem, {
     code: "FER",
     label: "Fire Emergency Return",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.FER !== false,
+    onChange: function onChange(v) {
+      return sf('FER')(v);
+    }
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "FE + FELC",
     label: "Firefighters' Emergency Operation",
@@ -5063,9 +5062,10 @@ function FeatStep(_ref23) {
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "SDE",
     label: "Safety Door Edge",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.SDE !== false,
+    onChange: function onChange(v) {
+      return sf('SDE')(v);
+    }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
@@ -5094,9 +5094,10 @@ function FeatStep(_ref23) {
   }))), /*#__PURE__*/React.createElement(FeatItem, {
     code: "MBS",
     label: "Multi Beam Sensor",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.MBS !== false,
+    onChange: function onChange(v) {
+      return sf('MBS')(v);
+    }
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "DKO-TB",
     label: "Door Hold Open",
@@ -5106,15 +5107,17 @@ function FeatStep(_ref23) {
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "ACB",
     label: "Sonic Car Button",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.ACB !== false,
+    onChange: function onChange(v) {
+      return sf('ACB')(v);
+    }
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "OLHL",
     label: "Overload",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.OLHL !== false,
+    onChange: function onChange(v) {
+      return sf('OLHL')(v);
+    }
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "FCC-P",
     label: "Floor Call Cancel",
@@ -5124,15 +5127,17 @@ function FeatStep(_ref23) {
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "CCTV",
     label: "CCTV",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.CCTV !== false,
+    onChange: function onChange(v) {
+      return sf('CCTV')(v);
+    }
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "AECC",
     label: "Car Arrival Chime",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.AECC !== false,
+    onChange: function onChange(v) {
+      return sf('AECC')(v);
+    }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
@@ -5161,15 +5166,17 @@ function FeatStep(_ref23) {
   }))), /*#__PURE__*/React.createElement(FeatItem, {
     code: "MFP",
     label: "Main Floor Parking",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.MFP !== false,
+    onChange: function onChange(v) {
+      return sf('MFP')(v);
+    }
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "HOS",
     label: "Out of Service by Hall Key Switch",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.HOS !== false,
+    onChange: function onChange(v) {
+      return sf('HOS')(v);
+    }
   })), /*#__PURE__*/React.createElement(FeatGroup, {
     icon: "\u2699\uFE0F",
     title: "Optional Features"
@@ -5400,8 +5407,237 @@ function buildCMRows(g) {
   });
   return rows;
 }
+
+// ── BUILD FM ROWS (shared for Preview modal, Preview Form, Excel) ─────
+function buildFMRows(g) {
+  var e = g.existing || {},
+    p = g.proposed || {},
+    f = g.feats || {},
+    l = g.local || {};
+  var val = function val(v, r) {
+    return v === 'remark' ? (r || 'remark') + ' (remark)' : v;
+  };
+  var rows = [];
+  var sec = function sec(t) {
+    return rows.push({
+      type: 'sec',
+      title: t
+    });
+  };
+  var row = function row(field, ex, pr) {
+    return rows.push({
+      type: 'row',
+      field: field,
+      ex: ex || '—',
+      pr: pr || '—'
+    });
+  };
+  sec('General Info');
+  row('Elevator No.', e.elevNo, p.elevNo || '—');
+  row('Usage', e.usage, p.usage);
+  row('Brand / Model', e.brand, [p.source, p.product, p.code].filter(Boolean).join(' / '));
+  row('Capacity', e.capacity ? e.capacity + ' kg' : '—', p.kg ? p.kg + ' kg (' + p.persons + 'P)' : '—');
+  row('Door Type', e.doorType, p.doorType);
+  row('Speed', e.speed ? e.speed + ' m/s' : '—', p.speed ? p.speed + ' m/s' : '—');
+  row('No. of Stop', e.noOfStop ? e.noOfStop + ' stops' : '—', p.noOfStop ? p.noOfStop + ' stops' : '—');
+  row('Travel', e.travel ? e.travel + ' m' : '—', p.travel ? p.travel + ' m' : '—');
+  row('Machine Room', e.machineRoom, p.machineRoom);
+  row('CWT Location', e.cwtLocation, p.cwtLocation);
+  row('Hoistway', val(e.hoistway, e.hoistwayremark), val(p.hoistway, p.hoistwayremark));
+  row('Operation', e.operation, p.operation);
+  row('Quantity', '—', p.quantity || '1');
+  sec('Shaft & Civil Dimensions');
+  row('Car AA×BB', e.carW && e.carD ? e.carW + '×' + e.carD + ' mm' : '—', p.carWidth && p.carDepth ? p.carWidth + '×' + p.carDepth + ' mm' : '—');
+  row('Shaft AH×BH', e.shaftAH && e.shaftBH ? e.shaftAH + '×' + e.shaftBH + ' mm' : '—', p.shaftAH && p.shaftBH ? p.shaftAH + '×' + p.shaftBH + ' mm' : '—');
+  row('Entrance JJ×HH', e.entranceJJ && e.entranceHH ? e.entranceJJ + '×' + e.entranceHH + ' mm' : '—', p.carDoorWidth && p.carDoorHeight ? p.carDoorWidth + '×' + p.carDoorHeight + ' mm' : '—');
+  row('LE Wall', e.leWall ? e.leWall + ' mm' : '—', p.leWall ? p.leWall + ' mm' : '—');
+  row('RE Wall', e.reWall ? e.reWall + ' mm' : '—', p.reWall ? p.reWall + ' mm' : '—');
+  row('Overhead OH', e.overhead ? e.overhead + ' mm' : '—', p.overhead ? p.overhead + ' mm' : '—');
+  row('Pit Depth PD', e.pitDepth ? e.pitDepth + ' mm' : '—', p.pitDepth ? p.pitDepth + ' mm' : '—');
+  sec('Car Design');
+  row('COP Main', e.cop || '—', p.mainCOP === 'remark' ? (p.mainCOPRemark || 'remark') + ' (remark)' : p.mainCOP);
+  row('Ceiling', e.ceiling || '—', p.ceilingType === 'remark' ? (p.ceilingTypeRemark || 'remark') + ' (remark)' : p.ceilingType);
+  row('Car Wall', e.carWall || '—', val(p.carWallFinish, p.carWallFinishRemark));
+  row('Car Door', e.carDoor || '—', val(p.carDoorFinish, p.carDoorFinishRemark));
+  row('Flooring', e.flooring || '—', val(p.flooring, p.flooringRemark));
+  row('Kick Plate', e.kickPlate || '—', val(p.kickPlate, p.kickPlateRemark));
+  row('Recess Floor', e.recessFloor || '—', p.recessFloor || '—');
+  row('Front Return Panel', '—', p.frontReturnPanel || '—');
+  row('Transom Panel (Car)', '—', p.transomPanel || '—');
+  row('Glass Window (Car)', '—', p.glassWindowSize || 'No');
+  row('Mirror', e.mirror || '—', p.mirror || '—');
+  row('Handrail', e.handrail || '—', p.handrail || '—');
+  row('No. of Fan', '—', p.noOfFan || '—');
+  sec('Entrance Design');
+  row('Landing Door (Main)', e.landingDoorMain || '—', val(p.landingDoorMain, p.landingDoorMainRemark));
+  row('Landing Door (Typical)', e.landingDoorTypical || '—', val(p.landingDoorTypical, p.landingDoorTypicalRemark));
+  row('Jamb (Main)', e.jambMain || '—', val(p.jambMain, p.jambMainRemark));
+  row('Jamb (Typical)', e.jambTypical || '—', val(p.jambTypical, p.jambTypicalRemark));
+  row('Jamb Type (Main)', e.jambTypeMain || '—', p.jambTypeMain === 'remark' ? (p.jambTypeMainRemark || 'remark') + ' (remark)' : p.jambTypeMain || '—');
+  row('Jamb Type (Typical)', e.jambTypeTypical || '—', p.jambTypeTypical === 'remark' ? (p.jambTypeTypicalRemark || 'remark') + ' (remark)' : p.jambTypeTypical || '—');
+  row('Transom Panel (Main)', '—', p.transomPanelMain || 'No');
+  row('Transom Panel (Typical)', '—', p.transomPanelTypical || 'No');
+  row('Glass Window (Landing)', '—', p.landingGlassWindow || 'No');
+  row('Hall Button (Main)', e.hallBtnMain || '—', p.hallBtnMain === 'remark' ? (p.hallBtnMainRemark || 'remark') + ' (remark)' : p.hallBtnMain || '—');
+  row('Hall Button (Typical)', e.hallBtnTypical || '—', p.hallBtnTypical === 'remark' ? (p.hallBtnTypicalRemark || 'remark') + ' (remark)' : p.hallBtnTypical || '—');
+  row('Hall Lantern (Main)', e.hallLanternMain || '—', p.hallLanternMain === 'remark' ? (p.hallLanternMainRemark || 'remark') + ' (remark)' : p.hallLanternMain || '—');
+  row('Hall Lantern (Typical)', e.hallLanternTypical || '—', p.hallLanternTypical === 'remark' ? (p.hallLanternTypicalRemark || 'remark') + ' (remark)' : p.hallLanternTypical || '—');
+  row('Hall PIV (Main)', e.hallPIVMain || '—', p.hallPIVMain === 'remark' ? (p.hallPIVMainRemark || 'remark') + ' (remark)' : p.hallPIVMain || '—');
+  row('Hall PIV (Typical)', e.hallPIVTypical || '—', p.hallPIVTypical === 'remark' ? (p.hallPIVTypicalRemark || 'remark') + ' (remark)' : p.hallPIVTypical || '—');
+  row('Handicap Hall Button', '—', p.handicapCOP || 'No');
+  row('Braille COP', '—', p.brailleCOP || 'No');
+  sec('Features (Proposed)');
+  var featMap = [{
+    code: 'ECL',
+    label: 'Emergency Car Lighting',
+    std: true
+  }, {
+    code: 'MELD',
+    label: 'Emergency Lowering Device',
+    std: true
+  }, {
+    code: 'RSRL',
+    label: 'RSRL',
+    std: true
+  }, {
+    code: 'EMB',
+    label: 'Emergency Bell',
+    std: true
+  }, {
+    code: 'EER',
+    label: 'Earthquake Emergency Return',
+    std: true,
+    sub: f.EER_type || 'EER-P'
+  }, {
+    code: 'FER',
+    label: 'Fire Emergency Return',
+    std: true
+  }, {
+    code: 'FE',
+    label: "Firefighters' Emergency Operation",
+    std: true,
+    sub: 'FE + FELC'
+  }, {
+    code: 'SDE',
+    label: 'Safety Door Edge',
+    std: true,
+    sub: f.SDE_side || 'one side'
+  }, {
+    code: 'MBS',
+    label: 'Multi Beam Sensor',
+    std: true
+  }, {
+    code: 'DKO_TB',
+    label: 'Door Hold Open',
+    std: true
+  }, {
+    code: 'ACB',
+    label: 'Sonic Car Button',
+    std: true
+  }, {
+    code: 'OLHL',
+    label: 'Overload',
+    std: true
+  }, {
+    code: 'FCC_P',
+    label: 'Floor Call Cancel',
+    std: true
+  }, {
+    code: 'CCTV',
+    label: 'CCTV',
+    std: true
+  }, {
+    code: 'AECC',
+    label: 'Car Arrival Chime',
+    std: true,
+    sub: f.AECC_type || 'AECC'
+  }, {
+    code: 'MFP',
+    label: 'Main Floor Parking',
+    std: true
+  }, {
+    code: 'HOS',
+    label: 'Out of Service by Hall Key Switch',
+    std: true
+  }, {
+    code: 'BMS_GW',
+    label: 'BMS Gateway',
+    std: false
+  }, {
+    code: 'EER_S',
+    label: 'EER-S',
+    std: false,
+    show: f.EER && f.EER_type === 'EER-S'
+  }, {
+    code: 'ABP',
+    label: 'Auto By-pass',
+    std: false
+  }, {
+    code: 'AAN',
+    label: 'Voice Announcement',
+    std: false,
+    sub: f.AAN_type || 'AAN-B'
+  }, {
+    code: 'AS',
+    label: 'Attendant Service',
+    std: false
+  }, {
+    code: 'FCC_A',
+    label: 'False Call Cancel Auto',
+    std: false
+  }, {
+    code: 'cardreader',
+    label: 'Interface Card Reader',
+    std: false
+  }, {
+    code: 'OEPS_SA',
+    label: 'Operation by Emergency Power Source',
+    std: false
+  }, {
+    code: 'ITP',
+    label: 'Intercom',
+    std: false,
+    sub: f.ITP_volt || '6V'
+  }];
+  featMap.forEach(function (ft, i) {
+    var checked = ft.std ? f[ft.code] !== false : !!f[ft.code];
+    if (!checked && !ft.std) return;
+    var label = ft.sub ? "".concat(ft.code.replace('_', '-'), " (").concat(ft.sub, ") \u2014 ").concat(ft.label) : "".concat(ft.code.replace('_', '-'), " \u2014 ").concat(ft.label);
+    rows.push({
+      type: 'feat',
+      field: label,
+      std: ft.std,
+      no: i + 1
+    });
+  });
+  sec('Local Scope');
+  var localItems = [['New Jamb', l.newJamb], ['Motor Relocation', l.motorRelocation], ['Demolish Beam Motor', l.demolishBeamMotor], ['Demolish Buffer', l.demolishBuffer], ['Expand Entrance', l.expandEntrance], ['Close Entrance', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul], ['Rental', l.rental], ['Local Wiring ITP', l.localWiringITP], ['Floor to Floor', l.localFloorToFloor], ['EER Equipment', l.localEEREq], ['LCD Screen', l.localLCD]];
+  localItems.forEach(function (_ref24) {
+    var _ref25 = _slicedToArray(_ref24, 2),
+      label = _ref25[0],
+      val = _ref25[1];
+    if (val && val !== 'No') rows.push({
+      type: 'local',
+      field: label,
+      val: val
+    });
+  });
+  if ((l.localItems || []).length > 0) l.localItems.forEach(function (item) {
+    if (item) rows.push({
+      type: 'local',
+      field: 'Additional',
+      val: item
+    });
+  });
+  if (l.tseRemarks) rows.push({
+    type: 'local',
+    field: 'Remark',
+    val: l.tseRemarks
+  });
+  return rows;
+}
 function App() {
-  var _previewGroup$cm, _previewGroup$cm2;
+  var _previewGroup$cm, _previewGroup$cm2, _previewGroup$existin, _previewGroup$existin2, _previewGroup$propose, _previewGroup$propose2, _previewGroup$propose3;
   var _useState3 = useState(_objectSpread({}, INIT_PROJ)),
     _useState4 = _slicedToArray(_useState3, 2),
     proj = _useState4[0],
@@ -5911,14 +6147,14 @@ function App() {
                 AIL: 'AIL',
                 ITP: 'ITP'
               });
-              var optFeats = optList.filter(function (_ref24) {
-                var _ref25 = _slicedToArray(_ref24, 1),
-                  k = _ref25[0];
+              var optFeats = optList.filter(function (_ref26) {
+                var _ref27 = _slicedToArray(_ref26, 1),
+                  k = _ref27[0];
                 return f[k];
-              }).map(function (_ref26) {
-                var _ref27 = _slicedToArray(_ref26, 2),
-                  k = _ref27[0],
-                  v = _ref27[1];
+              }).map(function (_ref28) {
+                var _ref29 = _slicedToArray(_ref28, 2),
+                  k = _ref29[0],
+                  v = _ref29[1];
                 return v;
               }).join(' · ');
               secHdr('Features (Proposed)');
@@ -5934,9 +6170,9 @@ function App() {
                   v: v,
                   std: false
                 };
-              }))).forEach(function (_ref28, fi) {
-                var v = _ref28.v,
-                  std = _ref28.std;
+              }))).forEach(function (_ref30, fi) {
+                var v = _ref30.v,
+                  std = _ref30.std;
                 var r2 = ws.addRow([fi + 1, v, std ? 'Standard' : 'Optional', '']);
                 ws.mergeCells("C".concat(r2.number, ":D").concat(r2.number));
                 r2.height = 16;
@@ -5960,17 +6196,17 @@ function App() {
                 };
                 bd(vb);
               });
-              var localItems = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(function (_ref29) {
-                var _ref30 = _slicedToArray(_ref29, 2),
-                  v = _ref30[1];
+              var localItems = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(function (_ref31) {
+                var _ref32 = _slicedToArray(_ref31, 2),
+                  v = _ref32[1];
                 return v && v !== 'No';
               });
               if (localItems.length > 0) {
                 secHdr('Local Scope (MOD)');
-                localItems.forEach(function (_ref31) {
-                  var _ref32 = _slicedToArray(_ref31, 2),
-                    label = _ref32[0],
-                    val = _ref32[1];
+                localItems.forEach(function (_ref33) {
+                  var _ref34 = _slicedToArray(_ref33, 2),
+                    label = _ref34[0],
+                    val = _ref34[1];
                   return locRow(label, val);
                 });
               }
@@ -6481,10 +6717,10 @@ function App() {
       overflow: "hidden",
       marginBottom: 8
     }
-  }, [["FM", "🔄 FM — Full Replacement"], ["CM", "⚙️ CM — Control Modernization"]].map(function (_ref33) {
-    var _ref34 = _slicedToArray(_ref33, 2),
-      t = _ref34[0],
-      l = _ref34[1];
+  }, [["FM", "🔄 FM — Full Replacement"], ["CM", "⚙️ CM — Control Modernization"]].map(function (_ref35) {
+    var _ref36 = _slicedToArray(_ref35, 2),
+      t = _ref36[0],
+      l = _ref36[1];
     return /*#__PURE__*/React.createElement("button", {
       key: t,
       onClick: function onClick() {
@@ -6620,10 +6856,10 @@ function App() {
         gridTemplateColumns: "repeat(3,1fr)",
         gap: 8
       }
-    }, isCM ? [["Product", cm.product || "—"], ["Capacity", cm.capacity ? cm.capacity + " kg" : "—"], ["Speed", cm.speed ? cm.speed + " m/s" : "—"], ["Tech Level", cm.techLevel || "—"], ["Tech Inquiry No.", cm.techInquiryNo || "—"], ["Traction", cm.tractionMachine || "—"]].map(function (_ref35) {
-      var _ref36 = _slicedToArray(_ref35, 2),
-        l = _ref36[0],
-        v = _ref36[1];
+    }, isCM ? [["Product", cm.product || "—"], ["Capacity", cm.capacity ? cm.capacity + " kg" : "—"], ["Speed", cm.speed ? cm.speed + " m/s" : "—"], ["Tech Level", cm.techLevel || "—"], ["Tech Inquiry No.", cm.techInquiryNo || "—"], ["Traction", cm.tractionMachine || "—"]].map(function (_ref37) {
+      var _ref38 = _slicedToArray(_ref37, 2),
+        l = _ref38[0],
+        v = _ref38[1];
       return /*#__PURE__*/React.createElement("div", {
         key: l,
         style: {
@@ -6643,10 +6879,10 @@ function App() {
           fontWeight: 500
         }
       }, v));
-    }) : [[" Existing speed", e.speed ? e.speed + " m/s" : "—"], ["Proposed speed", p.speed ? p.speed + " m/s" : "—"], ["Capacity", p.kg ? p.kg + " kg" : "—"], ["No. of Stop", e.noOfStop || "—"], ["Travel", e.travel ? e.travel + " m" : "—"], ["Machine Room", p.machineRoom || "—"]].map(function (_ref37) {
-      var _ref38 = _slicedToArray(_ref37, 2),
-        l = _ref38[0],
-        v = _ref38[1];
+    }) : [[" Existing speed", e.speed ? e.speed + " m/s" : "—"], ["Proposed speed", p.speed ? p.speed + " m/s" : "—"], ["Capacity", p.kg ? p.kg + " kg" : "—"], ["No. of Stop", e.noOfStop || "—"], ["Travel", e.travel ? e.travel + " m" : "—"], ["Machine Room", p.machineRoom || "—"]].map(function (_ref39) {
+      var _ref40 = _slicedToArray(_ref39, 2),
+        l = _ref40[0],
+        v = _ref40[1];
       return /*#__PURE__*/React.createElement("div", {
         key: l,
         style: {
@@ -6999,10 +7235,10 @@ function App() {
       display: "flex",
       gap: 20
     }
-  }, [["Lifts", groups.length], ["Date", proj.date || "—"], ["Revision", proj.rev]].map(function (_ref39) {
-    var _ref40 = _slicedToArray(_ref39, 2),
-      l = _ref40[0],
-      v = _ref40[1];
+  }, [["Lifts", groups.length], ["Date", proj.date || "—"], ["Revision", proj.rev]].map(function (_ref41) {
+    var _ref42 = _slicedToArray(_ref41, 2),
+      l = _ref42[0],
+      v = _ref42[1];
     return /*#__PURE__*/React.createElement("div", {
       key: l
     }, /*#__PURE__*/React.createElement("div", {
@@ -7200,14 +7436,14 @@ function App() {
       MFP: 'MFP',
       VIP_S: 'VIP-S'
     });
-    var optFeats = optList.filter(function (_ref41) {
-      var _ref42 = _slicedToArray(_ref41, 1),
-        k = _ref42[0];
+    var optFeats = optList.filter(function (_ref43) {
+      var _ref44 = _slicedToArray(_ref43, 1),
+        k = _ref44[0];
       return f[k];
-    }).map(function (_ref43) {
-      var _ref44 = _slicedToArray(_ref43, 2),
-        k = _ref44[0],
-        v = _ref44[1];
+    }).map(function (_ref45) {
+      var _ref46 = _slicedToArray(_ref45, 2),
+        k = _ref46[0],
+        v = _ref46[1];
       return v;
     });
     var scopeColor = function scopeColor(v) {
@@ -7222,9 +7458,9 @@ function App() {
       };
     };
     var rows = [['General Info', null, null, true], ['Elevator No.', e.elevNo, e.elevNo, false], ['Usage', e.usage, p.usage || e.usage, false], ['Brand / Product', e.brand, [p.source, p.product, p.code].filter(Boolean).join(' / '), false], ['Capacity', e.capacity ? e.capacity + ' kg' : '—', p.kg ? p.kg + ' kg (' + p.persons + 'P)' : '—', false], ['Door Type', e.doorType, p.doorType, false], ['Speed', e.speed ? e.speed + ' m/s' : '—', p.speed ? p.speed + ' m/s' : '—', false], ['Operation', e.operation, p.operation, false], ['Travel', e.travel ? e.travel + ' m' : '—', p.travel ? p.travel + ' m' : '—', false], ['No. of Stop', e.noOfStop, p.noOfStop || e.noOfStop, false], ['Machine Room', e.machineRoom, p.machineRoom, false], ['Shaft & Civil', null, null, true], ['Car AA×BB', e.carW && e.carD ? e.carW + '×' + e.carD + ' mm' : '—', p.carWidth && p.carDepth ? p.carWidth + '×' + p.carDepth + ' mm' : '—', false], ['Ceiling HL', e.ceilingHL ? e.ceilingHL + ' mm' : '—', p.ceilingHeight ? p.ceilingHeight + ' mm' : '—', false], ['Entrance JJ×HH', e.entranceJJ && e.entranceHH ? e.entranceJJ + '×' + e.entranceHH + ' mm' : '—', p.carDoorWidth && p.carDoorHeight ? p.carDoorWidth + '×' + p.carDoorHeight + ' mm' : '—', false], ['CWT Location', e.cwtLocation, p.cwtLocation, false], ['Shaft AH×BH', e.shaftAH && e.shaftBH ? e.shaftAH + '×' + e.shaftBH + ' mm' : '—', p.shaftAH && p.shaftBH ? p.shaftAH + '×' + p.shaftBH + ' mm' : '—', false], ['LE Wall', e.leWall ? e.leWall + ' mm' : '—', p.leWall ? p.leWall + ' mm' : '—', false], ['RE Wall', e.reWall ? e.reWall + ' mm' : '—', p.reWall ? p.reWall + ' mm' : '—', false], ['Overhead OH', e.overhead ? e.overhead + ' mm' : '—', p.overhead ? p.overhead + ' mm' : '—', false, 'OH'], ['Pit Depth PD', e.pitDepth ? e.pitDepth + ' mm' : '—', p.pitDepth ? p.pitDepth + ' mm' : '—', false, 'PIT'], ['Hoistway', e.hoistway === 'remark' ? (e.hoistwayremark || 'remark') + ' (remark)' : e.hoistway, p.hoistway === 'remark' ? (p.hoistwayremark || 'remark') + ' (remark)' : p.hoistway, false], ['Car Design', null, null, true], ['COP Main', e.cop, p.mainCOP + (p.mainCOPRemark ? ' (' + p.mainCOPRemark + ')' : ''), false], ['Ceiling', e.ceiling, p.ceilingType + (p.ceilingTypeRemark ? ' (' + p.ceilingTypeRemark + ')' : ''), false], ['Car Wall', e.carWall, p.carWallFinish === 'remark' ? (p.carWallFinishRemark || 'remark') + ' (remark)' : p.carWallFinish, false], ['Car Door', e.carDoor, p.carDoorFinish === 'remark' ? (p.carDoorFinishRemark || 'remark') + ' (remark)' : p.carDoorFinish, false], ['Flooring', e.flooring, p.flooring === 'remark' ? (p.flooringRemark || 'remark') + ' (remark)' : p.flooring, false], ['Entrance Design', null, null, true], ['Landing door (main)', e.landingDoorMain, p.landingDoorMain === 'remark' ? (p.landingDoorMainRemark || 'remark') + ' (remark)' : p.landingDoorMain, false], ['Landing door (typical)', e.landingDoorTypical, p.landingDoorTypical === 'remark' ? (p.landingDoorTypicalRemark || 'remark') + ' (remark)' : p.landingDoorTypical, false], ['Jamb (main)', e.jambMain, p.jambMain === 'remark' ? (p.jambMainRemark || 'remark') + ' (remark)' : p.jambMain, false], ['Jamb (typical)', e.jambTypical, p.jambTypical === 'remark' ? (p.jambTypicalRemark || 'remark') + ' (remark)' : p.jambTypical, false], ['Kick Plate', e.kickPlate, p.kickPlate === 'remark' ? (p.kickPlateRemark || 'remark') + ' (remark)' : p.kickPlate, false], ['Jamb (main)', e.jambMain, p.jambMain === 'remark' ? (p.jambMainRemark || 'remark') + ' (remark)' : p.jambMain, false], ['Jamb (typical)', e.jambTypical, p.jambTypical, false], ['Jamb type (main)', e.jambTypeMain, p.jambTypeMain + (p.jambTypeMainRemark ? ' (' + p.jambTypeMainRemark + ')' : ''), false], ['Jamb type (typical)', e.jambTypeTypical, p.jambTypeTypical + (p.jambTypeTypicalRemark ? ' (' + p.jambTypeTypicalRemark + ')' : ''), false], e.hallBtnMain || p.hallBtnMain ? ['Hall button (main)', e.hallBtnMain, p.hallBtnMain + (p.hallBtnMainRemark ? ' (' + p.hallBtnMainRemark + ')' : ''), false] : null, e.hallBtnTypical || p.hallBtnTypical ? ['Hall button (typical)', e.hallBtnTypical, p.hallBtnTypical + (p.hallBtnTypicalRemark ? ' (' + p.hallBtnTypicalRemark + ')' : ''), false] : null, e.hallLanternMain || p.hallLanternMain ? ['Hall lantern (main)', e.hallLanternMain, p.hallLanternMain + (p.hallLanternMainRemark ? ' (' + p.hallLanternMainRemark + ')' : ''), false] : null, e.hallPIVMain || p.hallPIVMain ? ['Hall pos. ind. (main)', e.hallPIVMain, p.hallPIVMain + (p.hallPIVMainRemark ? ' (' + p.hallPIVMainRemark + ')' : ''), false] : null].filter(Boolean);
-    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance]].filter(function (_ref45) {
-      var _ref46 = _slicedToArray(_ref45, 2),
-        v = _ref46[1];
+    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance]].filter(function (_ref47) {
+      var _ref48 = _slicedToArray(_ref47, 2),
+        v = _ref48[1];
       return v && v !== 'No';
     });
     return /*#__PURE__*/React.createElement("div", {
@@ -7333,261 +7569,173 @@ function App() {
     }, /*#__PURE__*/React.createElement("th", {
       style: {
         padding: "5px 8px",
-        fontSize: 11,
+        width: 28,
+        fontSize: 10,
         fontWeight: 500,
         color: "#94a3b8",
+        textAlign: "center",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "#"), /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        width: 150,
+        fontSize: 10.5,
+        fontWeight: 500,
+        color: "#64748b",
         textAlign: "left",
         borderRight: "0.5px solid #e2e8f0",
-        width: 140,
         borderBottom: "0.5px solid #e2e8f0"
       }
     }, "Field"), /*#__PURE__*/React.createElement("th", {
       style: {
         padding: "5px 8px",
-        fontSize: 11,
+        fontSize: 10.5,
         fontWeight: 500,
         color: "#475569",
         textAlign: "center",
         borderRight: "0.5px solid #e2e8f0",
-        borderBottom: "0.5px solid #e2e8f0",
-        width: "47%"
+        borderBottom: "0.5px solid #e2e8f0"
       }
     }, "Existing lift"), /*#__PURE__*/React.createElement("th", {
       style: {
         padding: "5px 8px",
-        fontSize: 11,
+        fontSize: 10.5,
         fontWeight: 500,
-        color: "#1e3a5f",
+        color: NAV,
         textAlign: "center",
         background: "#fef3c7",
         borderBottom: "0.5px solid #e2e8f0"
       }
-    }, "\uD83C\uDFE2 Modernization Full Replacement"))), /*#__PURE__*/React.createElement("tbody", null, rows.map(function (row, ri) {
-      if (!row) return null;
-      var _row = _slicedToArray(row, 5),
-        label = _row[0],
-        ex = _row[1],
-        pr = _row[2],
-        isHdr = _row[3],
-        badge = _row[4];
-      if (isHdr) return /*#__PURE__*/React.createElement("tr", {
+    }, "\uD83C\uDFE2 Modernization"))), /*#__PURE__*/React.createElement("tbody", null, buildFMRows(g).map(function (r, ri) {
+      if (r.type === 'sec') return /*#__PURE__*/React.createElement("tr", {
         key: ri
       }, /*#__PURE__*/React.createElement("td", {
-        colSpan: 3,
+        colSpan: 4,
+        style: {
+          padding: "5px 8px",
+          background: AMBER,
+          color: "#fff",
+          fontSize: 11,
+          fontWeight: 600
+        }
+      }, r.title));
+      if (r.type === 'feat') return /*#__PURE__*/React.createElement("tr", {
+        key: ri,
+        style: {
+          background: ri % 2 === 0 ? "#fff" : "#fafafa"
+        }
+      }, /*#__PURE__*/React.createElement("td", {
         style: {
           padding: "5px 8px",
           fontSize: 11,
-          fontWeight: 600,
-          color: "#1e3a5f",
-          background: "#eef2f7",
-          borderBottom: "0.5px solid #e2e8f0",
-          letterSpacing: ".02em"
-        }
-      }, label));
-      var badgeEl = badge === 'OH' ? diffBadge(e.overhead, p.overhead) : badge === 'PIT' ? diffBadge(e.pitDepth, p.pitDepth) : null;
-      return /*#__PURE__*/React.createElement("tr", {
-        key: ri
-      }, /*#__PURE__*/React.createElement("td", {
-        style: {
-          padding: "5px 8px",
-          fontSize: 11.5,
-          color: "#64748b",
-          fontWeight: 500,
-          background: "#f8fafc",
+          color: "#94a3b8",
+          textAlign: "center",
           borderRight: "0.5px solid #e2e8f0",
           borderBottom: "0.5px solid #f1f5f9"
         }
-      }, label), /*#__PURE__*/React.createElement("td", {
+      }, r.no), /*#__PURE__*/React.createElement("td", {
+        colSpan: 2,
         style: {
           padding: "5px 8px",
-          fontSize: 11.5,
+          fontSize: 12,
           color: "#475569",
           borderRight: "0.5px solid #e2e8f0",
           borderBottom: "0.5px solid #f1f5f9"
         }
-      }, ex || "—"), /*#__PURE__*/React.createElement("td", {
+      }, r.field), /*#__PURE__*/React.createElement("td", {
         style: {
           padding: "5px 8px",
-          fontSize: 11.5,
-          color: "#1e3a5f",
+          textAlign: "center",
+          background: "#fff7ed",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          padding: "1px 7px",
+          borderRadius: 3,
+          fontSize: 10,
+          fontWeight: 500,
+          background: r.std ? "#eef2f7" : "#fde68a",
+          color: r.std ? NAV : AMBERD
+        }
+      }, r.std ? "Standard" : "Optional")));
+      if (r.type === 'local') return /*#__PURE__*/React.createElement("tr", {
+        key: ri,
+        style: {
+          background: ri % 2 === 0 ? "#fff" : "#fafafa"
+        }
+      }, /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 12,
+          color: "#64748b",
+          fontWeight: 500,
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, r.field), /*#__PURE__*/React.createElement("td", {
+        colSpan: 2,
+        style: {
+          padding: "5px 8px",
+          fontSize: 12,
+          color: NAV,
           fontWeight: 500,
           background: "#fff7ed",
           borderBottom: "0.5px solid #f1f5f9"
         }
-      }, pr || "—", badgeEl));
-    }), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
-      colSpan: 3,
-      style: {
-        padding: "5px 8px",
-        fontSize: 11,
-        fontWeight: 500,
-        color: "#1e3a5f",
-        background: "#eef2f7",
-        borderBottom: "0.5px solid #e2e8f0",
-        letterSpacing: ".02em"
-      }
-    }, "Features (Proposed)")), function () {
-      var pf = g.feats || {};
-      var pfStd = [{
-        code: 'ITP',
-        label: 'Intercom',
-        isStd: true
-      }, {
-        code: 'DKO-TB',
-        label: 'Door Hold',
-        isStd: true
-      }, {
-        code: 'OLHL',
-        label: 'Overload',
-        isStd: true
-      }, {
-        code: 'ECL',
-        label: 'Emergency Car Lighting',
-        isStd: true
-      }, {
-        code: 'MELD',
-        label: 'Emergency Lowering Device',
-        isStd: true
-      }, {
-        code: 'SDE',
-        label: 'Safety Door Edge',
-        isStd: true
-      }, {
-        code: 'ACB',
-        label: 'Sonic Car Button Click',
-        isStd: true
-      }, {
-        code: 'FCC-P',
-        label: 'Floor Call Cancel',
-        isStd: true
-      }, {
-        code: 'CCTV',
-        label: 'CCTV',
-        isStd: true
-      }, {
-        code: 'RSRL',
-        label: 'RSRL',
-        isStd: true
-      }, {
-        code: 'EMB',
-        label: 'Emergency Bell',
-        isStd: true
-      }, {
-        code: "AECC (".concat(pf.AECC_type || 'AECC', ")"),
-        label: 'Car Arrival Chime',
-        isStd: true
-      }, {
-        code: 'MFP',
-        label: 'Main Floor Parking',
-        isStd: true
-      }, {
-        code: 'HOS',
-        label: 'Out of Service by Hall Key Switch',
-        isStd: true
-      }];
-      var pfOpt = [].concat(_toConsumableArray(pf.ABP ? [{
-        code: 'ABP',
-        label: 'Auto By-pass',
-        isStd: false
-      }] : []), _toConsumableArray(pf.AAN ? [{
-        code: "AAN (".concat(pf.AAN_type, ")"),
-        label: 'Voice Announcement',
-        isStd: false
-      }] : []), _toConsumableArray(pf.AS ? [{
-        code: 'AS',
-        label: 'Attendant Service',
-        isStd: false
-      }] : []), _toConsumableArray(pf.FCC_A ? [{
-        code: 'FCC-A',
-        label: 'False Call Cancel Auto',
-        isStd: false
-      }] : []), _toConsumableArray(pf.cardreader ? [{
-        code: 'Cardreader',
-        label: 'Interface Card Reader',
-        isStd: false
-      }] : []), _toConsumableArray(pf.OEPS_SA ? [{
-        code: 'OEPS-SA',
-        label: 'Operation by Emergency Power Source',
-        isStd: false
-      }] : []));
-      return [].concat(pfStd, _toConsumableArray(pfOpt)).map(function (ft, fi) {
-        return /*#__PURE__*/React.createElement("tr", {
-          key: ft.code + fi
-        }, /*#__PURE__*/React.createElement("td", {
-          style: {
-            padding: "5px 8px",
-            fontSize: 11,
-            color: "#94a3b8",
-            background: "#f8fafc",
-            borderRight: "0.5px solid #e2e8f0",
-            borderBottom: "0.5px solid #f1f5f9",
-            textAlign: "center",
-            width: 40
-          }
-        }, fi + 1), /*#__PURE__*/React.createElement("td", {
-          style: {
-            padding: "5px 8px",
-            fontSize: 12,
-            color: "#475569",
-            borderRight: "0.5px solid #e2e8f0",
-            borderBottom: "0.5px solid #f1f5f9"
-          }
-        }, ft.code, " \u2014 ", ft.label), /*#__PURE__*/React.createElement("td", {
-          style: {
-            padding: "4px 8px",
-            fontSize: 11,
-            background: "#fff7ed",
-            borderBottom: "0.5px solid #f1f5f9",
-            textAlign: "center"
-          }
-        }, /*#__PURE__*/React.createElement("span", {
-          style: {
-            padding: "2px 7px",
-            borderRadius: 3,
-            fontSize: 10,
-            fontWeight: 500,
-            background: ft.isStd ? "#eef2f7" : "#fff7ed",
-            color: ft.isStd ? "#1e3a5f" : "#c2410c"
-          }
-        }, ft.isStd ? "Standard" : "Optional")));
-      });
-    }(), localScope.length > 0 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
-      colSpan: 3,
-      style: {
-        padding: "5px 8px",
-        fontSize: 11,
-        fontWeight: 500,
-        color: "#166534",
-        background: "#f0fdf4",
-        borderBottom: "0.5px solid #e2e8f0",
-        letterSpacing: ".02em"
-      }
-    }, "Local Scope (MOD)")), localScope.map(function (_ref47) {
-      var _ref48 = _slicedToArray(_ref47, 2),
-        label = _ref48[0],
-        val = _ref48[1];
+      }, r.val));
       return /*#__PURE__*/React.createElement("tr", {
-        key: label
+        key: ri,
+        style: {
+          background: ri % 2 === 0 ? "#fff" : "#fafafa"
+        }
       }, /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 11,
+          color: "#94a3b8",
+          textAlign: "center",
+          background: "#f8fafc",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, ri + 1), /*#__PURE__*/React.createElement("td", {
         style: {
           padding: "5px 8px",
           fontSize: 11.5,
           color: "#64748b",
           background: "#f8fafc",
+          fontWeight: 500,
           borderRight: "0.5px solid #e2e8f0",
           borderBottom: "0.5px solid #f1f5f9"
         }
-      }, label), /*#__PURE__*/React.createElement("td", {
-        colSpan: 2,
-        style: _objectSpread(_objectSpread({
+      }, r.field), /*#__PURE__*/React.createElement("td", {
+        style: {
           padding: "5px 8px",
-          fontSize: 11.5
-        }, scopeColor(val)), {}, {
-          background: "#f0fdf4",
+          fontSize: 12.5,
+          color: "#475569",
+          borderRight: "0.5px solid #e2e8f0",
           borderBottom: "0.5px solid #f1f5f9"
-        })
-      }, val));
-    })))));
+        }
+      }, r.ex), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 12.5,
+          color: NAV,
+          fontWeight: 500,
+          background: "#fff7ed",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, r.pr));
+    }))));
   }))), previewGroup && previewGroup.type === 'CM' && /*#__PURE__*/React.createElement("div", {
     style: {
       position: "fixed",
@@ -7696,579 +7844,256 @@ function App() {
       fontSize: 13,
       fontFamily: "inherit"
     }
-  }, "\u2190 Close")))), previewGroup && previewGroup.type !== 'CM' && function () {
-    var g = previewGroup;
-    var e = g.existing || {},
-      p = g.proposed || {},
-      f = g.feats || {},
-      l = g.local || {};
-    var diffBadge = function diffBadge(ex, pr) {
-      var ev = Number(ex),
-        pv = Number(pr);
-      if (!ex || !pr) return null;
-      if (pv <= ev) return /*#__PURE__*/React.createElement("span", {
-        style: {
-          fontSize: 10,
-          background: "#dcf5e8",
-          color: "#166534",
-          padding: "1px 5px",
-          borderRadius: 3,
-          marginLeft: 4,
-          fontWeight: 500
-        }
-      }, "OK");
-      return /*#__PURE__*/React.createElement("span", {
-        style: {
-          fontSize: 10,
-          background: "#fef2f2",
-          color: "#dc2626",
-          padding: "1px 5px",
-          borderRadius: 3,
-          marginLeft: 4,
-          fontWeight: 600
-        }
-      }, "+", pv - ev, "mm");
-    };
-    var stdFeatList = [{
-      code: 'ITP',
-      label: 'Intercom',
-      val: f.ITP ? "ITP (".concat(f.ITP_volt, ")") : null,
-      std: false
-    }, {
-      code: 'DKO-TB',
-      label: 'Door Hold',
-      val: 'DKO-TB',
-      std: true
-    }, {
-      code: 'OLHL',
-      label: 'Overload',
-      val: 'OLHL',
-      std: true
-    }, {
-      code: 'ECL',
-      label: 'Emergency Car Lighting',
-      val: 'ECL',
-      std: true
-    }, {
-      code: 'MELD',
-      label: 'Emergency Lowering Device',
-      val: 'MELD',
-      std: true
-    }, {
-      code: 'SDE',
-      label: 'Safety Door Edge',
-      val: 'SDE',
-      std: true
-    }, {
-      code: 'ACB',
-      label: 'Sonic Car Button Click',
-      val: 'ACB',
-      std: true
-    }, {
-      code: 'FCC-P',
-      label: 'Floor Call Cancel',
-      val: 'FCC-P',
-      std: true
-    }, {
-      code: 'CCTV',
-      label: 'CCTV',
-      val: 'CCTV',
-      std: true
-    }, {
-      code: 'RSRL',
-      label: 'RSRL',
-      val: 'RSRL',
-      std: true
-    }, {
-      code: 'EMB',
-      label: 'Emergency Bell',
-      val: 'EMB',
-      std: true
-    }];
-    var optFeatList = [{
-      code: 'AECC',
-      label: 'Car Arrival Chime',
-      val: f.AECC ? "AECC (".concat(f.AECC_type, ")") : null
-    }, {
-      code: 'MFP',
-      label: 'Main Floor Parking',
-      val: f.MFP ? 'MFP' : null
-    }, {
-      code: 'EER',
-      label: 'Earthquake Emergency Return',
-      val: f.EER ? "EER (".concat(f.EER_type, ")") : null
-    }, {
-      code: 'HOS',
-      label: 'Out of Service by Hall Key Switch',
-      val: f.HOS ? 'HOS' : null
-    }, {
-      code: 'ABP',
-      label: 'Auto By-pass',
-      val: f.ABP ? 'ABP' : null
-    }, {
-      code: 'FE',
-      label: 'Firefighters Emergency Operation',
-      val: f.FE ? f.FE_FELC === 'Yes' ? 'FE + FELC' : 'FE' : null
-    }, {
-      code: 'AAN',
-      label: 'Voice Announcement',
-      val: f.AAN ? "AAN (".concat(f.AAN_type, ")") : null
-    }, {
-      code: 'AS',
-      label: 'Attendant Service',
-      val: f.AS ? 'AS' : null
-    }, {
-      code: 'FCC-A',
-      label: 'False Call Cancel Auto',
-      val: f.FCC_A ? 'FCC-A' : null
-    }, {
-      code: 'Cardreader',
-      label: 'Interface Card Reader',
-      val: f.cardreader ? 'Cardreader' : null
-    }, {
-      code: 'OEPS-SA',
-      label: 'Operation by Emergency Power Source',
-      val: f.OEPS_SA ? 'OEPS-SA' : null
-    }].filter(function (x) {
-      return x.val;
-    });
-    var allFeats = [].concat(_toConsumableArray(stdFeatList.map(function (x) {
-      return _objectSpread(_objectSpread({}, x), {}, {
-        isStd: true
-      });
-    })), _toConsumableArray(optFeatList.map(function (x) {
-      return _objectSpread(_objectSpread({}, x), {}, {
-        isStd: false
-      });
-    })));
-    var stdFeats = ['ECL', 'MELD', 'DKO-TB', 'FCC-P', 'OLHL', 'CCTV'];
-    var optList = Object.entries({
-      BMS_GW: 'BMS-GW',
-      EER: 'EER',
-      FER: 'FER',
-      FE: 'FE',
-      WP_W: 'WP-W',
-      OEPS_SA: 'OEPS-SA',
-      WP_S: 'WP-S',
-      Niagara: 'Niagara',
-      AS: 'AS',
-      cardreader: 'Cardreader',
-      PCNV: 'PCNV',
-      BSO: 'BSO',
-      AAN: 'AAN',
-      AECC: 'AECC',
-      AIL: 'AIL',
-      ITP: 'ITP',
-      ACB: 'ACB',
-      AHC: 'AHC'
-    });
-    var optFeats = optList.filter(function (_ref49) {
-      var _ref50 = _slicedToArray(_ref49, 1),
-        k = _ref50[0];
-      return f[k];
-    }).map(function (_ref51) {
-      var _ref52 = _slicedToArray(_ref51, 2),
-        k = _ref52[0],
-        v = _ref52[1];
-      return v;
-    });
-    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(function (_ref53) {
-      var _ref54 = _slicedToArray(_ref53, 2),
-        v = _ref54[1];
-      return v && v !== 'No';
-    });
-    var scopeColor = function scopeColor(v) {
-      return v === 'By MET' ? {
-        color: "#166534",
-        fontWeight: 500
-      } : v === 'By owner' ? {
-        color: "#92400e",
-        fontWeight: 500
-      } : {
-        color: "#64748b"
-      };
-    };
-    var TblHdr = function TblHdr(_ref55) {
-      var title = _ref55.title;
-      return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
-        colSpan: 3,
-        style: {
-          padding: "6px 10px",
-          fontSize: 12,
-          fontWeight: 600,
-          color: "#fff",
-          background: "#d97706",
-          borderBottom: "0.5px solid #e2e8f0",
-          letterSpacing: ".02em"
-        }
-      }, title));
-    };
-    var Row = function Row(_ref56) {
-      var n = _ref56.n,
-        label = _ref56.label,
-        ex = _ref56.ex,
-        pr = _ref56.pr,
-        OH = _ref56.OH,
-        PIT = _ref56.PIT;
-      return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
-        style: {
-          padding: "6px 10px",
-          fontSize: 12,
-          color: "#94a3b8",
-          background: "#f8fafc",
-          borderRight: "0.5px solid #e2e8f0",
-          borderBottom: "0.5px solid #f1f5f9",
-          textAlign: "center",
-          width: 32
-        }
-      }, n), /*#__PURE__*/React.createElement("td", {
-        style: {
-          padding: "6px 10px",
-          fontSize: 11.5,
-          color: "#64748b",
-          background: "#f8fafc",
-          borderRight: "0.5px solid #e2e8f0",
-          borderBottom: "0.5px solid #f1f5f9",
-          width: 130,
-          fontWeight: 500
-        }
-      }, label || ""), /*#__PURE__*/React.createElement("td", {
-        style: {
-          padding: "6px 10px",
-          fontSize: 13,
-          color: "#475569",
-          borderRight: "0.5px solid #e2e8f0",
-          borderBottom: "0.5px solid #f1f5f9"
-        }
-      }, ex || "—"), /*#__PURE__*/React.createElement("td", {
-        style: {
-          padding: "6px 10px",
-          fontSize: 13,
-          color: NAV,
-          fontWeight: 500,
-          background: "#fff7ed",
-          borderBottom: "0.5px solid #f1f5f9"
-        }
-      }, pr || "—", OH ? diffBadge(e.overhead, p.overhead) : null, PIT ? diffBadge(e.pitDepth, p.pitDepth) : null));
-    };
-    return /*#__PURE__*/React.createElement("div", {
+  }, "\u2190 Close")))), previewGroup && previewGroup.type !== 'CM' && /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.5)",
+      zIndex: 200,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fff",
+      borderRadius: 12,
+      width: "100%",
+      maxWidth: 680,
+      maxHeight: "90vh",
+      overflow: "auto"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "12px 16px",
+      background: NAV,
+      color: "#fff",
+      borderRadius: "12px 12px 0 0",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between"
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      fontWeight: 500
+    }
+  }, "Lift ", ((_previewGroup$existin = previewGroup.existing) === null || _previewGroup$existin === void 0 ? void 0 : _previewGroup$existin.elevNo) || "—", " \u2014 Modernization Full Replacement"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "rgba(255,255,255,0.7)"
+    }
+  }, ((_previewGroup$existin2 = previewGroup.existing) === null || _previewGroup$existin2 === void 0 ? void 0 : _previewGroup$existin2.brand) || "—", " \u2192 ", [(_previewGroup$propose = previewGroup.proposed) === null || _previewGroup$propose === void 0 ? void 0 : _previewGroup$propose.source, (_previewGroup$propose2 = previewGroup.proposed) === null || _previewGroup$propose2 === void 0 ? void 0 : _previewGroup$propose2.product, (_previewGroup$propose3 = previewGroup.proposed) === null || _previewGroup$propose3 === void 0 ? void 0 : _previewGroup$propose3.code].filter(Boolean).join(' / ') || "—")), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setPreviewGroup(null);
+    },
+    style: {
+      background: "transparent",
+      border: "none",
+      color: "#fff",
+      fontSize: 18,
+      cursor: "pointer",
+      fontWeight: 500
+    }
+  }, "\u2715")), /*#__PURE__*/React.createElement("table", {
+    style: {
+      width: "100%",
+      borderCollapse: "collapse"
+    }
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
+    style: {
+      background: "#f8fafc"
+    }
+  }, /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: "5px 8px",
+      width: 28,
+      fontSize: 10,
+      fontWeight: 500,
+      color: "#94a3b8",
+      textAlign: "center",
+      borderRight: "0.5px solid #e2e8f0",
+      borderBottom: "0.5px solid #e2e8f0"
+    }
+  }, "#"), /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: "5px 8px",
+      width: 150,
+      fontSize: 10.5,
+      fontWeight: 500,
+      color: "#64748b",
+      textAlign: "left",
+      borderRight: "0.5px solid #e2e8f0",
+      borderBottom: "0.5px solid #e2e8f0"
+    }
+  }, "Field"), /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: "5px 8px",
+      fontSize: 10.5,
+      fontWeight: 500,
+      color: "#475569",
+      textAlign: "center",
+      borderRight: "0.5px solid #e2e8f0",
+      borderBottom: "0.5px solid #e2e8f0"
+    }
+  }, "Existing lift"), /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: "5px 8px",
+      fontSize: 10.5,
+      fontWeight: 500,
+      color: NAV,
+      textAlign: "center",
+      background: "#fef3c7",
+      borderBottom: "0.5px solid #e2e8f0"
+    }
+  }, "\uD83C\uDFE2 Modernization"))), /*#__PURE__*/React.createElement("tbody", null, buildFMRows(previewGroup).map(function (r, ri) {
+    if (r.type === 'sec') return /*#__PURE__*/React.createElement("tr", {
+      key: ri
+    }, /*#__PURE__*/React.createElement("td", {
+      colSpan: 4,
       style: {
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,0.5)",
-        zIndex: 1000,
-        overflowY: "auto",
-        padding: "20px 12px"
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      style: {
-        maxWidth: 700,
-        margin: "0 auto",
-        background: "#fff",
-        borderRadius: 12,
-        overflow: "hidden",
-        boxShadow: "0 20px 60px rgba(0,0,0,0.3)"
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      style: {
-        background: "#d97706",
-        padding: "12px 16px",
-        display: "flex",
-        alignItems: "center",
-        gap: 12
-      }
-    }, /*#__PURE__*/React.createElement("button", {
-      onClick: function onClick() {
-        return setPreviewGroup(null);
-      },
-      style: {
-        padding: "6px 12px",
-        borderRadius: 6,
-        border: "0.5px solid rgba(255,255,255,0.4)",
-        background: "transparent",
+        padding: "5px 8px",
+        background: AMBER,
         color: "#fff",
-        fontSize: 12,
-        cursor: "pointer",
-        fontFamily: "inherit"
+        fontSize: 11,
+        fontWeight: 600
       }
-    }, "\u2190 Back"), /*#__PURE__*/React.createElement("div", {
+    }, r.title));
+    if (r.type === 'feat') return /*#__PURE__*/React.createElement("tr", {
+      key: ri,
       style: {
-        flex: 1
+        background: ri % 2 === 0 ? "#fff" : "#fafafa"
       }
-    }, /*#__PURE__*/React.createElement("div", {
-      style: {
-        color: "#fff",
-        fontSize: 14,
-        fontWeight: 500
-      }
-    }, e.elevNo || "Lift", " \u2014 Modernization Full Replacement"), /*#__PURE__*/React.createElement("div", {
-      style: {
-        color: "rgba(255,255,255,0.7)",
-        fontSize: 11
-      }
-    }, e.brand || "—", " \u2192 ", [p.source, p.product, p.code].filter(Boolean).join(' ') || "—")), /*#__PURE__*/React.createElement("button", {
-      onClick: function onClick() {
-        return setPreviewGroup(null);
-      },
-      style: {
-        width: 28,
-        height: 28,
-        borderRadius: 6,
-        border: "0.5px solid rgba(255,255,255,0.4)",
-        background: "transparent",
-        color: "#fff",
-        fontSize: 16,
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
-      }
-    }, "\xD7")), /*#__PURE__*/React.createElement("div", {
-      style: {
-        padding: "0"
-      }
-    }, /*#__PURE__*/React.createElement("table", {
-      style: {
-        width: "100%",
-        borderCollapse: "collapse"
-      }
-    }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
-      style: {
-        background: "#f8fafc"
-      }
-    }, /*#__PURE__*/React.createElement("th", {
+    }, /*#__PURE__*/React.createElement("td", {
       style: {
         padding: "5px 8px",
         fontSize: 11,
-        fontWeight: 500,
         color: "#94a3b8",
         textAlign: "center",
         borderRight: "0.5px solid #e2e8f0",
-        width: 36,
-        borderBottom: "0.5px solid #e2e8f0"
+        borderBottom: "0.5px solid #f1f5f9"
       }
-    }, "#"), /*#__PURE__*/React.createElement("th", {
+    }, r.no), /*#__PURE__*/React.createElement("td", {
+      colSpan: 2,
       style: {
         padding: "5px 8px",
-        fontSize: 11,
-        fontWeight: 500,
+        fontSize: 12,
         color: "#475569",
-        textAlign: "center",
         borderRight: "0.5px solid #e2e8f0",
-        borderBottom: "0.5px solid #e2e8f0",
-        width: "47%"
+        borderBottom: "0.5px solid #f1f5f9"
       }
-    }, "Existing lift"), /*#__PURE__*/React.createElement("th", {
+    }, r.field), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        textAlign: "center",
+        background: "#fff7ed",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        padding: "1px 7px",
+        borderRadius: 3,
+        fontSize: 10,
+        fontWeight: 500,
+        background: r.std ? "#eef2f7" : "#fde68a",
+        color: r.std ? NAV : AMBERD
+      }
+    }, r.std ? "Standard" : "Optional")));
+    if (r.type === 'local') return /*#__PURE__*/React.createElement("tr", {
+      key: ri,
+      style: {
+        background: ri % 2 === 0 ? "#fff" : "#fafafa"
+      }
+    }, /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 12,
+        color: "#64748b",
+        fontWeight: 500,
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.field), /*#__PURE__*/React.createElement("td", {
+      colSpan: 2,
+      style: {
+        padding: "5px 8px",
+        fontSize: 12,
+        color: NAV,
+        fontWeight: 500,
+        background: "#fff7ed",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.val));
+    return /*#__PURE__*/React.createElement("tr", {
+      key: ri,
+      style: {
+        background: ri % 2 === 0 ? "#fff" : "#fafafa"
+      }
+    }, /*#__PURE__*/React.createElement("td", {
       style: {
         padding: "5px 8px",
         fontSize: 11,
-        fontWeight: 500,
-        color: NAV,
+        color: "#94a3b8",
         textAlign: "center",
-        background: "#fef3c7",
-        borderBottom: "0.5px solid #e2e8f0",
-        width: "47%"
+        background: "#f8fafc",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
       }
-    }, "\uD83C\uDFE2 Modernization"))), /*#__PURE__*/React.createElement("tbody", null, /*#__PURE__*/React.createElement(TblHdr, {
-      title: "General Info"
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 1,
-      label: "Brand",
-      ex: e.brand,
-      pr: [p.source, p.product, p.code].filter(Boolean).join(' / ')
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 2,
-      label: "Capacity",
-      ex: e.capacity ? e.capacity + ' kg' : '—',
-      pr: p.kg ? p.kg + ' kg (' + p.persons + 'P)' : '—'
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 3,
-      label: "Door Type",
-      ex: e.doorType,
-      pr: p.doorType
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 4,
-      label: "Speed",
-      ex: e.speed ? e.speed + ' m/s' : '—',
-      pr: p.speed ? p.speed + ' m/s' : '—'
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 5,
-      label: "No. of Stop",
-      ex: e.noOfStop ? e.noOfStop + ' stops' : '—',
-      pr: p.noOfStop ? p.noOfStop + ' stops' : '—'
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 6,
-      label: "Travel",
-      ex: e.travel ? e.travel + ' m' : '—',
-      pr: p.travel ? p.travel + ' m' : '—'
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 7,
-      label: "Machine Room",
-      ex: e.machineRoom,
-      pr: p.machineRoom
-    }), /*#__PURE__*/React.createElement(TblHdr, {
-      title: "Shaft & Civil Dimensions"
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 1,
-      label: "Car AA\xD7BB",
-      ex: e.carW && e.carD ? e.carW + '×' + e.carD + ' mm' : '—',
-      pr: p.carWidth && p.carDepth ? p.carWidth + '×' + p.carDepth + ' mm' : '—'
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 2,
-      label: "Shaft AH\xD7BH",
-      ex: e.shaftAH && e.shaftBH ? e.shaftAH + '×' + e.shaftBH + ' mm' : '—',
-      pr: p.shaftAH && p.shaftBH ? p.shaftAH + '×' + p.shaftBH + ' mm' : '—'
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 3,
-      label: "Overhead OH",
-      ex: e.overhead ? e.overhead + ' mm' : '—',
-      pr: p.overhead ? p.overhead + ' mm' : '—',
-      OH: true
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 4,
-      label: "Pit Depth PD",
-      ex: e.pitDepth ? e.pitDepth + ' mm' : '—',
-      pr: p.pitDepth ? p.pitDepth + ' mm' : '—',
-      PIT: true
-    }), e.hoistway && /*#__PURE__*/React.createElement(Row, {
-      n: 5,
-      label: "Hoistway",
-      ex: e.hoistway === 'remark' ? (e.hoistwayremark || 'remark') + ' (remark)' : e.hoistway,
-      pr: p.hoistway === 'remark' ? (p.hoistwayremark || 'remark') + ' (remark)' : p.hoistway || '—'
-    }), /*#__PURE__*/React.createElement(TblHdr, {
-      title: "Car Design"
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 1,
-      ex: e.cop || '—',
-      pr: p.mainCOP || '—'
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 2,
-      ex: e.carWall,
-      pr: p.carWallFinish
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 3,
-      ex: e.flooring,
-      pr: p.flooring
-    }), /*#__PURE__*/React.createElement(TblHdr, {
-      title: "Entrance Design"
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 1,
-      ex: e.landingDoorMain,
-      pr: p.landingDoorMain
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 2,
-      ex: e.jambMain,
-      pr: p.jambMain
-    }), /*#__PURE__*/React.createElement(Row, {
-      n: 3,
-      ex: e.jambTypeMain,
-      pr: p.jambTypeMain
-    }), (e.hallBtnMain || p.hallBtnMain) && /*#__PURE__*/React.createElement(Row, {
-      n: 4,
-      ex: e.hallBtnMain,
-      pr: p.hallBtnMain
-    }), (e.hallPIVMain || p.hallPIVMain) && /*#__PURE__*/React.createElement(Row, {
-      n: 5,
-      ex: e.hallPIVMain,
-      pr: p.hallPIVMain
-    }), /*#__PURE__*/React.createElement(TblHdr, {
-      title: "Features (Proposed)"
-    }), allFeats.map(function (ft, fi) {
-      return /*#__PURE__*/React.createElement("tr", {
-        key: ft.code
-      }, /*#__PURE__*/React.createElement("td", {
-        style: {
-          padding: "5px 8px",
-          fontSize: 11,
-          color: "#94a3b8",
-          background: "#f8fafc",
-          borderRight: "0.5px solid #e2e8f0",
-          borderBottom: "0.5px solid #f1f5f9",
-          textAlign: "center"
-        }
-      }, fi + 1), /*#__PURE__*/React.createElement("td", {
-        style: {
-          padding: "5px 8px",
-          fontSize: 13,
-          color: "#475569",
-          borderRight: "0.5px solid #e2e8f0",
-          borderBottom: "0.5px solid #f1f5f9"
-        }
-      }, ft.code, " \u2014 ", ft.label), /*#__PURE__*/React.createElement("td", {
-        style: {
-          padding: "4px 8px",
-          fontSize: 11,
-          background: "#fff7ed",
-          borderBottom: "0.5px solid #f1f5f9",
-          textAlign: "center",
-          width: 80
-        }
-      }, /*#__PURE__*/React.createElement("span", {
-        style: {
-          padding: "2px 7px",
-          borderRadius: 3,
-          fontSize: 10,
-          fontWeight: 500,
-          background: ft.isStd ? "#eef2f7" : "#fff7ed",
-          color: ft.isStd ? "#1e3a5f" : "#c2410c"
-        }
-      }, ft.isStd ? "Standard" : "Optional")));
-    }), localScope.length > 0 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(TblHdr, {
-      title: "Local Scope (MOD)"
-    }), localScope.map(function (_ref57) {
-      var _ref58 = _slicedToArray(_ref57, 2),
-        label = _ref58[0],
-        val = _ref58[1];
-      return /*#__PURE__*/React.createElement("tr", {
-        key: label
-      }, /*#__PURE__*/React.createElement("td", {
-        style: {
-          padding: "5px 8px",
-          fontSize: 11,
-          color: "#94a3b8",
-          background: "#f8fafc",
-          borderRight: "0.5px solid #e2e8f0",
-          borderBottom: "0.5px solid #f1f5f9",
-          textAlign: "center"
-        }
-      }, "\u2014"), /*#__PURE__*/React.createElement("td", {
-        style: {
-          padding: "5px 8px",
-          fontSize: 12,
-          color: "#64748b",
-          borderRight: "0.5px solid #e2e8f0",
-          borderBottom: "0.5px solid #f1f5f9"
-        }
-      }, label), /*#__PURE__*/React.createElement("td", {
-        style: _objectSpread(_objectSpread({
-          padding: "5px 8px",
-          fontSize: 12
-        }, scopeColor(val)), {}, {
-          background: "#f0fdf4",
-          borderBottom: "0.5px solid #f1f5f9"
-        })
-      }, val));
-    }))))), /*#__PURE__*/React.createElement("div", {
+    }, ri + 1), /*#__PURE__*/React.createElement("td", {
       style: {
-        padding: "12px 16px",
-        borderTop: "0.5px solid #e2e8f0",
-        textAlign: "center"
+        padding: "5px 8px",
+        fontSize: 11.5,
+        color: "#64748b",
+        background: "#f8fafc",
+        fontWeight: 500,
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
       }
-    }, /*#__PURE__*/React.createElement("button", {
-      onClick: function onClick() {
-        return setPreviewGroup(null);
-      },
+    }, r.field), /*#__PURE__*/React.createElement("td", {
       style: {
-        padding: "8px 24px",
-        borderRadius: 7,
-        border: "0.5px solid #cbd5e1",
-        background: "#fff",
-        cursor: "pointer",
-        fontSize: 13,
-        fontFamily: "inherit"
+        padding: "5px 8px",
+        fontSize: 12.5,
+        color: "#475569",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
       }
-    }, "\u2190 Back to List"))));
-  }()));
+    }, r.ex), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 12.5,
+        color: NAV,
+        fontWeight: 500,
+        background: "#fff7ed",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.pr));
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "10px 16px",
+      textAlign: "center",
+      borderTop: "0.5px solid #e2e8f0"
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setPreviewGroup(null);
+    },
+    style: {
+      padding: "7px 24px",
+      borderRadius: 7,
+      border: "0.5px solid #cbd5e1",
+      background: "#fff",
+      cursor: "pointer",
+      fontSize: 13,
+      fontFamily: "inherit"
+    }
+  }, "\u2190 Close"))))));
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App,null));
