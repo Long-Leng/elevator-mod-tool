@@ -2509,11 +2509,47 @@ function LiftEditor(_ref12) {
   }), /*#__PURE__*/React.createElement(Row, {
     label: "Car Wall",
     ex: selE('carWall', FINISH),
-    pr: selP('carWallFinish', FINISH)
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, selP('carWallFinish', FINISH), proposed.carWallFinish === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.carWallFinishRemark || '',
+      onChange: function onChange(e) {
+        return spr('carWallFinishRemark')(e.target.value);
+      },
+      placeholder: "Specify...",
+      style: _objectSpread(_objectSpread({}, bInp), {}, {
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      })
+    }))
   }), /*#__PURE__*/React.createElement(Row, {
     label: "Car Door",
     ex: selE('carDoor', FINISH),
-    pr: selP('carDoorFinish', FINISH)
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, selP('carDoorFinish', FINISH), proposed.carDoorFinish === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.carDoorFinishRemark || '',
+      onChange: function onChange(e) {
+        return spr('carDoorFinishRemark')(e.target.value);
+      },
+      placeholder: "Specify...",
+      style: _objectSpread(_objectSpread({}, bInp), {}, {
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      })
+    }))
   }), /*#__PURE__*/React.createElement(Row, {
     label: "Kick Plate",
     ex: selE('kickPlate', KICK),
@@ -2521,7 +2557,25 @@ function LiftEditor(_ref12) {
   }), /*#__PURE__*/React.createElement(Row, {
     label: "Flooring",
     ex: selE('flooring', FLOORING),
-    pr: selP('flooring', FLOORING)
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, selP('flooring', FLOORING), proposed.flooring === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.flooringRemark || '',
+      onChange: function onChange(e) {
+        return spr('flooringRemark')(e.target.value);
+      },
+      placeholder: "Specify...",
+      style: _objectSpread(_objectSpread({}, bInp), {}, {
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      })
+    }))
   }), /*#__PURE__*/React.createElement(Row, {
     label: "Recess Floor (mm)",
     ex: inpE('recessFloor'),
@@ -2556,15 +2610,51 @@ function LiftEditor(_ref12) {
   })), /*#__PURE__*/React.createElement(Row, {
     label: "Main floor",
     ex: selE('landingDoorMain', FINISH),
-    pr: selP('landingDoorMain', [].concat(_toConsumableArray(FINISH.filter(function (x) {
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, selP('landingDoorMain', [].concat(_toConsumableArray(FINISH.filter(function (x) {
       return x !== 'remark';
-    })), ['No', 'By local', 'remark']))
+    })), ['No', 'By local', 'remark'])), proposed.landingDoorMain === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.landingDoorMainRemark || '',
+      onChange: function onChange(e) {
+        return spr('landingDoorMainRemark')(e.target.value);
+      },
+      placeholder: "Specify...",
+      style: _objectSpread(_objectSpread({}, bInp), {}, {
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      })
+    }))
   }), /*#__PURE__*/React.createElement(Row, {
     label: "Typical floor",
     ex: selE('landingDoorTypical', FINISH),
-    pr: selP('landingDoorTypical', [].concat(_toConsumableArray(FINISH.filter(function (x) {
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, selP('landingDoorTypical', [].concat(_toConsumableArray(FINISH.filter(function (x) {
       return x !== 'remark';
-    })), ['No', 'By local', 'remark']))
+    })), ['No', 'By local', 'remark'])), proposed.landingDoorTypical === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.landingDoorTypicalRemark || '',
+      onChange: function onChange(e) {
+        return spr('landingDoorTypicalRemark')(e.target.value);
+      },
+      placeholder: "Specify...",
+      style: _objectSpread(_objectSpread({}, bInp), {}, {
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      })
+    }))
   }), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
@@ -2575,15 +2665,51 @@ function LiftEditor(_ref12) {
   })), /*#__PURE__*/React.createElement(Row, {
     label: "Jamb \u2014 Main",
     ex: selE('jambMain', JAMB),
-    pr: selP('jambMain', [].concat(_toConsumableArray(JAMB.filter(function (x) {
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, selP('jambMain', [].concat(_toConsumableArray(JAMB.filter(function (x) {
       return x !== 'remark';
-    })), ['No', 'By local', 'remark']))
+    })), ['No', 'By local', 'remark'])), proposed.jambMain === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.jambMainRemark || '',
+      onChange: function onChange(e) {
+        return spr('jambMainRemark')(e.target.value);
+      },
+      placeholder: "Specify...",
+      style: _objectSpread(_objectSpread({}, bInp), {}, {
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      })
+    }))
   }), /*#__PURE__*/React.createElement(Row, {
     label: "Jamb \u2014 Typical",
     ex: selE('jambTypical', JAMB),
-    pr: selP('jambTypical', [].concat(_toConsumableArray(JAMB.filter(function (x) {
+    pr: /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }
+    }, selP('jambTypical', [].concat(_toConsumableArray(JAMB.filter(function (x) {
       return x !== 'remark';
-    })), ['No', 'By local', 'remark']))
+    })), ['No', 'By local', 'remark'])), proposed.jambTypical === 'remark' && /*#__PURE__*/React.createElement("input", {
+      value: proposed.jambTypicalRemark || '',
+      onChange: function onChange(e) {
+        return spr('jambTypicalRemark')(e.target.value);
+      },
+      placeholder: "Specify...",
+      style: _objectSpread(_objectSpread({}, bInp), {}, {
+        fontSize: 11,
+        padding: '4px 6px',
+        border: '0.5px solid #b5d4f4',
+        color: NAV
+      })
+    }))
   }), /*#__PURE__*/React.createElement(Row, {
     label: "Jamb type \u2014 Main",
     ex: selE('jambTypeMain', JAMB_TYPE_OPTS),
@@ -5712,6 +5838,7 @@ function App() {
               row('Landing door (main)', e.landingDoorMain, p.landingDoorMain === 'remark' ? (p.landingDoorMainRemark || 'remark') + ' (remark)' : p.landingDoorMain);
               row('Landing door (typical)', e.landingDoorTypical, p.landingDoorTypical === 'remark' ? (p.landingDoorTypicalRemark || 'remark') + ' (remark)' : p.landingDoorTypical);
               row('Jamb (main)', e.jambMain, p.jambMain === 'remark' ? (p.jambMainRemark || 'remark') + ' (remark)' : p.jambMain);
+              if (e.jambTypical || p.jambTypical) row('Jamb (typical)', e.jambTypical, p.jambTypical === 'remark' ? (p.jambTypicalRemark || 'remark') + ' (remark)' : p.jambTypical);
               row('Jamb type (main)', e.jambTypeMain, p.jambTypeMain + (p.jambTypeMainRemark ? ' (' + p.jambTypeMainRemark + ')' : ''));
               if (e.hallBtnMain || p.hallBtnMain) row('Hall button (main)', e.hallBtnMain, p.hallBtnMain + (p.hallBtnMainRemark ? ' (' + p.hallBtnMainRemark + ')' : ''));
               if (e.hallLanternMain || p.hallLanternMain) row('Hall lantern (main)', e.hallLanternMain, p.hallLanternMain + (p.hallLanternMainRemark ? ' (' + p.hallLanternMainRemark + ')' : ''));
