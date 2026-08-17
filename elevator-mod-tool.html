@@ -7905,6 +7905,7 @@ function App() {
     };
     var Row = function Row(_ref56) {
       var n = _ref56.n,
+        label = _ref56.label,
         ex = _ref56.ex,
         pr = _ref56.pr,
         OH = _ref56.OH,
@@ -7917,12 +7918,24 @@ function App() {
           background: "#f8fafc",
           borderRight: "0.5px solid #e2e8f0",
           borderBottom: "0.5px solid #f1f5f9",
-          textAlign: "center"
+          textAlign: "center",
+          width: 32
         }
       }, n), /*#__PURE__*/React.createElement("td", {
         style: {
           padding: "6px 10px",
-          fontSize: 13.5,
+          fontSize: 11.5,
+          color: "#64748b",
+          background: "#f8fafc",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9",
+          width: 130,
+          fontWeight: 500
+        }
+      }, label || ""), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "6px 10px",
+          fontSize: 13,
           color: "#475569",
           borderRight: "0.5px solid #e2e8f0",
           borderBottom: "0.5px solid #f1f5f9"
@@ -7930,7 +7943,7 @@ function App() {
       }, ex || "—"), /*#__PURE__*/React.createElement("td", {
         style: {
           padding: "6px 10px",
-          fontSize: 13.5,
+          fontSize: 13,
           color: NAV,
           fontWeight: 500,
           background: "#fff7ed",
@@ -8060,54 +8073,66 @@ function App() {
       title: "General Info"
     }), /*#__PURE__*/React.createElement(Row, {
       n: 1,
+      label: "Brand",
       ex: e.brand,
       pr: [p.source, p.product, p.code].filter(Boolean).join(' / ')
     }), /*#__PURE__*/React.createElement(Row, {
       n: 2,
+      label: "Capacity",
       ex: e.capacity ? e.capacity + ' kg' : '—',
       pr: p.kg ? p.kg + ' kg (' + p.persons + 'P)' : '—'
     }), /*#__PURE__*/React.createElement(Row, {
       n: 3,
+      label: "Door Type",
       ex: e.doorType,
       pr: p.doorType
     }), /*#__PURE__*/React.createElement(Row, {
       n: 4,
+      label: "Speed",
       ex: e.speed ? e.speed + ' m/s' : '—',
       pr: p.speed ? p.speed + ' m/s' : '—'
     }), /*#__PURE__*/React.createElement(Row, {
       n: 5,
+      label: "No. of Stop",
       ex: e.noOfStop ? e.noOfStop + ' stops' : '—',
       pr: p.noOfStop ? p.noOfStop + ' stops' : '—'
     }), /*#__PURE__*/React.createElement(Row, {
       n: 6,
+      label: "Travel",
       ex: e.travel ? e.travel + ' m' : '—',
       pr: p.travel ? p.travel + ' m' : '—'
     }), /*#__PURE__*/React.createElement(Row, {
       n: 7,
+      label: "Machine Room",
       ex: e.machineRoom,
       pr: p.machineRoom
     }), /*#__PURE__*/React.createElement(TblHdr, {
       title: "Shaft & Civil Dimensions"
     }), /*#__PURE__*/React.createElement(Row, {
       n: 1,
+      label: "Car AA\xD7BB",
       ex: e.carW && e.carD ? e.carW + '×' + e.carD + ' mm' : '—',
       pr: p.carWidth && p.carDepth ? p.carWidth + '×' + p.carDepth + ' mm' : '—'
     }), /*#__PURE__*/React.createElement(Row, {
       n: 2,
+      label: "Shaft AH\xD7BH",
       ex: e.shaftAH && e.shaftBH ? e.shaftAH + '×' + e.shaftBH + ' mm' : '—',
       pr: p.shaftAH && p.shaftBH ? p.shaftAH + '×' + p.shaftBH + ' mm' : '—'
     }), /*#__PURE__*/React.createElement(Row, {
       n: 3,
+      label: "Overhead OH",
       ex: e.overhead ? e.overhead + ' mm' : '—',
       pr: p.overhead ? p.overhead + ' mm' : '—',
       OH: true
     }), /*#__PURE__*/React.createElement(Row, {
       n: 4,
+      label: "Pit Depth PD",
       ex: e.pitDepth ? e.pitDepth + ' mm' : '—',
       pr: p.pitDepth ? p.pitDepth + ' mm' : '—',
       PIT: true
     }), e.hoistway && /*#__PURE__*/React.createElement(Row, {
       n: 5,
+      label: "Hoistway",
       ex: e.hoistway === 'remark' ? (e.hoistwayremark || 'remark') + ' (remark)' : e.hoistway,
       pr: p.hoistway === 'remark' ? (p.hoistwayremark || 'remark') + ' (remark)' : p.hoistway || '—'
     }), /*#__PURE__*/React.createElement(TblHdr, {
