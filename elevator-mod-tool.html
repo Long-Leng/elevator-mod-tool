@@ -5275,140 +5275,308 @@ function FeatStep(_ref23) {
 function buildCMRows(g) {
   var cm = g.cm || {},
     f = g.feats || {};
+  var val = function val(v, r) {
+    return v === 'remark' ? (r || 'remark') + ' (remark)' : v || '—';
+  };
   var rows = [];
-  var n = 1;
-  var hdr = function hdr(t) {
+  var sec = function sec(t) {
     return rows.push({
-      type: 'hdr',
+      type: 'sec',
       title: t
     });
   };
-  var item = function item(desc) {
-    var qty = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  var row = function row(field, pr) {
     return rows.push({
-      type: 'item',
-      no: n++,
-      desc: desc,
-      qty: qty
+      type: 'row',
+      field: field,
+      pr: pr || '—'
     });
   };
-  hdr('Product & Performance');
-  item("AMEC / ".concat(cm.product || '—', " | ").concat(cm.techLevel || '—', " | Qty: ").concat(cm.quantity || 1), Number(cm.quantity) || 1);
-  if (cm.techInquiryNo) item("Tech Inquiry No.: ".concat(cm.techInquiryNo));
-  if (cm.tractionMachine) item("Traction machine: ".concat(cm.tractionMachine));
-  if (cm.capacity) item("Capacity: ".concat(cm.capacity, " kg"));
-  if (cm.speed) item("Speed: ".concat(cm.speed, " m/s"));
-  if (cm.floor) item("No. of Floor: ".concat(cm.floor, " stops"));
-  if (cm.travel) item("Travel: ".concat(cm.travel, " m"));
-  if (cm.doorType) item("Door type: ".concat(cm.doorType));
-  if (cm.operation) item("Operation: ".concat(cm.operation === 'remark' ? cm.operationRemark || '—' : cm.operation));
-  hdr('Car Dimension and Design');
-  if (cm.carWidth || cm.carDepth) item("Car dimension AA\xD7BB: ".concat(cm.carWidth || '—', " \xD7 ").concat(cm.carDepth || '—', " mm"));
-  if (cm.carDoorWidth) item("Car door width: ".concat(cm.carDoorWidth, " mm"));
-  if (cm.carDoorHeight) item("Car door height: ".concat(cm.carDoorHeight, " mm"));
-  if (cm.ceilingHL) item("Ceiling HL: ".concat(cm.ceilingHL === 'remark' ? cm.ceilingHLRemark || '—' : cm.ceilingHL, " mm"));
-  if (cm.ceilingType) item("Ceiling type: ".concat(cm.ceilingType));
-  if (cm.recessFloor) item("Recess floor: ".concat(cm.recessFloor, " mm"));
-  if (cm.decorationWeight) item("Decoration weight: ".concat(cm.decorationWeight, " kg"));
-  if (cm.carWallFinish) item("Car wall finish: ".concat(cm.carWallFinish === 'remark' ? cm.carWallRemark || '—' : cm.carWallFinish));
-  if (cm.carDoorFinish) item("Car door finish: ".concat(cm.carDoorFinish === 'remark' ? cm.carDoorRemark || '—' : cm.carDoorFinish));
-  if (cm.flooring) item("Flooring: ".concat(cm.flooring === 'remark' ? cm.flooringRemark || '—' : cm.flooring));
-  if (cm.kickPlate && cm.kickPlate !== 'No') item("Kick plate: ".concat(cm.kickPlate === 'remark' ? cm.kickPlateR || '—' : cm.kickPlate));
-  if (cm.frontReturnPanel && cm.frontReturnPanel !== 'No') item("Front return panel: ".concat(cm.frontReturnPanel === 'remark' ? cm.frontReturnPanelR || '—' : cm.frontReturnPanel));
-  if (cm.transomPanel && cm.transomPanel !== 'No') item("Transom panel: ".concat(cm.transomPanel === 'remark' ? cm.transomPanelR || '—' : cm.transomPanel));
-  if (cm.glassWindowSize && cm.glassWindowSize !== 'No') item("Glass window: ".concat(cm.glassWindowSize));
-  if (cm.mirror && cm.mirror !== 'No') item("Mirror: ".concat(cm.mirror));
-  if (cm.handrail && cm.handrail !== 'No') item("Handrail: ".concat(cm.handrail));
-  if (cm.mainCOP) item("Main COP: ".concat(cm.mainCOP));
-  if (cm.auxCOP) item("Aux COP: ".concat(cm.auxCOP));
-  hdr('Entrance Design');
-  if (cm.landingDoorMain) item("Landing door (Main): ".concat(cm.landingDoorMain === 'remark' ? cm.ldMainR || '—' : cm.landingDoorMain));
-  if (cm.landingDoorTypical) item("Landing door (Typical): ".concat(cm.landingDoorTypical === 'remark' ? cm.ldTypicalR || '—' : cm.landingDoorTypical));
-  if (cm.jambMain) item("Door jamb (Main): ".concat(cm.jambMain === 'remark' ? cm.jambMainR || '—' : cm.jambMain));
-  if (cm.jambTypical) item("Door jamb (Typical): ".concat(cm.jambTypical === 'remark' ? cm.jambTypicalR || '—' : cm.jambTypical));
-  if (cm.jambTypeMain) item("Jamb type (Main): ".concat(cm.jambTypeMain));
-  if (cm.jambTypeTypical) item("Jamb type (Typical): ".concat(cm.jambTypeTypical));
-  if (cm.hallBtnMain) item("Hall button (Main): ".concat(cm.hallBtnMain));
-  if (cm.hallBtnTypical) item("Hall button (Typical): ".concat(cm.hallBtnTypical));
-  if (cm.hallLanternMain) item("Hall lantern (Main): ".concat(cm.hallLanternMain));
-  if (cm.hallPIVMain) item("Hall PIV (Main): ".concat(cm.hallPIVMain));
-  if (cm.handicapHallBtn === 'Yes') item('Handicap hall button');
-  if (cm.brailleEntrance === 'Yes') item('Braille entrance');
-  hdr('Main Equipment');
-  ['machineBeam', 'governorCover', 'loadWeighing', 'guideShoes', 'tensionSheave', 'hangerRollerEq', 'ropeShackle', 'rubberDoorShoes'].forEach(function (k) {
-    var labels = {
-      machineBeam: 'Machine Beam',
-      governorCover: 'Governor with cover',
-      loadWeighing: 'Load weighing device',
-      guideShoes: 'Car & CWT Guide Shoes',
-      tensionSheave: 'Governor tension sheave',
-      hangerRollerEq: 'Hanger roller',
-      ropeShackle: 'Rope shackle wedge type',
-      rubberDoorShoes: 'Rubber Door Shoes'
-    };
-    item("".concat(labels[k], ": ").concat(cm[k] || 'Replace'));
+  var feat = function feat(code, label, checked) {
+    var std = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+    return rows.push({
+      type: 'feat',
+      field: "".concat(code, " \u2014 ").concat(label),
+      checked: checked,
+      std: std
+    });
+  };
+  sec('Source & Product');
+  row('Source', 'AMEC');
+  row('Product', cm.product || '—');
+  row('Capacity', cm.capacity ? cm.capacity + ' kg' : '—');
+  row('Technical Level', cm.techLevel || '—');
+  row('Technical Inquiry No.', cm.techInquiryNo || '—');
+  row('Traction Machine', cm.tractionMachine || '—');
+  row('Quantity', cm.quantity || '1');
+  sec('Performance');
+  row('Speed', cm.speed ? cm.speed + ' m/s' : '—');
+  row('Door Type', cm.doorType || '—');
+  row('No. of Floor', cm.floor ? cm.floor + ' stops' : '—');
+  row('Travel', cm.travel ? cm.travel + ' m' : '—');
+  row('Operation', cm.operation === 'remark' ? (cm.operationRemark || 'remark') + ' (remark)' : cm.operation || '—');
+  sec('Car Dimension and Design');
+  row('Car Width AA', cm.carWidth ? cm.carWidth + ' mm' : '—');
+  row('Car Depth BB', cm.carDepth ? cm.carDepth + ' mm' : '—');
+  row('Car Door Width', cm.carDoorWidth === 'remark' ? (cm.carDoorWidthR || 'remark') + ' (remark)' : cm.carDoorWidth ? cm.carDoorWidth + ' mm' : '—');
+  row('Car Door Height', cm.carDoorHeight === 'remark' ? (cm.carDoorHeightR || 'remark') + ' (remark)' : cm.carDoorHeight ? cm.carDoorHeight + ' mm' : '—');
+  row('Ceiling HL', cm.ceilingHL === 'remark' ? (cm.ceilingHLRemark || 'remark') + ' (remark)' : cm.ceilingHL ? cm.ceilingHL + ' mm' : '—');
+  row('Ceiling Type', cm.ceilingType || '—');
+  row('Flooring', val(cm.flooring, cm.flooringRemark));
+  row('Recess Floor', cm.recessFloor ? cm.recessFloor + ' mm' : '—');
+  row('Decoration Weight', cm.decorationWeight ? cm.decorationWeight + ' kg' : '—');
+  row('Car Wall Finish', val(cm.carWallFinish, cm.carWallRemark));
+  row('Car Door Finish', val(cm.carDoorFinish, cm.carDoorRemark));
+  row('Kick Plate', cm.kickPlate === 'remark' ? (cm.kickPlateR || 'remark') + ' (remark)' : cm.kickPlate || '—');
+  row('Front Return Panel', cm.frontReturnPanel === 'remark' ? (cm.frontReturnPanelR || 'remark') + ' (remark)' : cm.frontReturnPanel || '—');
+  row('Transom Panel (Car)', cm.transomPanel === 'remark' ? (cm.transomPanelR || 'remark') + ' (remark)' : cm.transomPanel || '—');
+  row('Glass Window (Car)', cm.glassWindowSize === 'remark' ? (cm.glassWindowSizeR || 'remark') + ' (remark)' : cm.glassWindowSize || 'No');
+  row('Mirror', cm.mirror || 'No');
+  row('Handrail', cm.handrail === 'remark' ? (cm.handrailR || 'remark') + ' (remark)' : cm.handrail || 'No');
+  if (cm.handrail && cm.handrail !== 'No') row('Handrail Side', cm.handrailSide === 'remark' ? (cm.handrailSideR || 'remark') + ' (remark)' : cm.handrailSide || '—');
+  row('Main COP', cm.mainCOP || '—');
+  row('Braille plate at COP', cm.brailleCOP || 'No');
+  row('Aux COP', cm.auxCOP || '—');
+  sec('Entrance Design');
+  row('Landing Door (Main)', val(cm.landingDoorMain, cm.ldMainR));
+  row('Landing Door (Typical)', val(cm.landingDoorTypical, cm.ldTypicalR));
+  row('Door Jamb (Main)', val(cm.jambMain, cm.jambMainR));
+  row('Door Jamb (Typical)', val(cm.jambTypical, cm.jambTypicalR));
+  row('Jamb Type (Main)', cm.jambTypeMain === 'remark' ? (cm.jambTypeMainR || 'remark') + ' (remark)' : cm.jambTypeMain || '—');
+  row('Jamb Type (Typical)', cm.jambTypeTypical === 'remark' ? (cm.jambTypeTypicalR || 'remark') + ' (remark)' : cm.jambTypeTypical || '—');
+  row('Transom Panel (Main)', cm.transomPanelMain === 'remark' ? (cm.transomMainR || 'remark') + ' (remark)' : cm.transomPanelMain || 'No');
+  row('Transom Panel (Typical)', cm.transomPanelTypical === 'remark' ? (cm.transomTypicalR || 'remark') + ' (remark)' : cm.transomPanelTypical || 'No');
+  row('Glass Window (Landing)', cm.glassWindowLanding === 'remark' ? (cm.glassWindowLandingR || 'remark') + ' (remark)' : cm.glassWindowLanding || 'No');
+  row('Hall Button (Main)', cm.hallBtnMain || '—');
+  row('Hall Button (Typical)', cm.hallBtnTypical || '—');
+  row('Hall Lantern (Main)', cm.hallLanternMain || '—');
+  row('Hall Lantern (Typical)', cm.hallLanternTypical || '—');
+  row('Hall PIV (Main)', cm.hallPIVMain || '—');
+  row('Hall PIV (Typical)', cm.hallPIVTypical || '—');
+  row('Handicap Hall Button', cm.handicapHallBtn || 'No');
+  if (cm.handicapHallBtn === 'Yes') row('Handicap Hall Button Type', cm.handicapHallBtnType || '—');
+  row('Braille plate at hall button', cm.brailleEntrance || 'No');
+  sec('Features');
+  [{
+    code: 'ECL',
+    label: 'Emergency Car Lighting',
+    std: true,
+    k: 'ECL'
+  }, {
+    code: 'MELD',
+    label: 'Emergency Lowering Device',
+    std: true,
+    k: 'MELD'
+  }, {
+    code: 'RSRL',
+    label: 'RSRL',
+    std: true,
+    k: 'RSRL'
+  }, {
+    code: 'EMB',
+    label: 'Emergency Bell',
+    std: true,
+    k: 'EMB'
+  }, {
+    code: 'EER',
+    label: "EER (".concat(f.EER_type || 'EER-P', ") \u2014 Earthquake Emergency Return"),
+    std: true,
+    k: 'EER'
+  }, {
+    code: 'FER',
+    label: 'Fire Emergency Return',
+    std: true,
+    k: 'FER'
+  }, {
+    code: 'FE',
+    label: 'FE + FELC',
+    std: true,
+    k: 'FE'
+  }, {
+    code: 'SDE',
+    label: "SDE (".concat(f.SDE_side || 'one side', ") \u2014 Safety Door Edge"),
+    std: true,
+    k: 'SDE'
+  }, {
+    code: 'MBS',
+    label: 'Multi Beam Sensor',
+    std: true,
+    k: 'MBS'
+  }, {
+    code: 'DKO-TB',
+    label: 'Door Hold Open',
+    std: true,
+    k: 'DKO_TB'
+  }, {
+    code: 'ACB',
+    label: 'Sonic Car Button',
+    std: true,
+    k: 'ACB'
+  }, {
+    code: 'OLHL',
+    label: 'Overload',
+    std: true,
+    k: 'OLHL'
+  }, {
+    code: 'FCC-P',
+    label: 'Floor Call Cancel',
+    std: true,
+    k: 'FCC_P'
+  }, {
+    code: 'CCTV',
+    label: 'CCTV',
+    std: true,
+    k: 'CCTV'
+  }, {
+    code: 'AECC',
+    label: "AECC (".concat(f.AECC_type || 'AECC', ") \u2014 Car Arrival Chime"),
+    std: true,
+    k: 'AECC'
+  }, {
+    code: 'MFP',
+    label: 'Main Floor Parking',
+    std: true,
+    k: 'MFP'
+  }, {
+    code: 'HOS',
+    label: 'Out of Service by Hall Key Switch',
+    std: true,
+    k: 'HOS'
+  }, {
+    code: 'ITP',
+    label: "ITP (".concat(f.ITP_volt || '6V', ") \u2014 Intercom"),
+    std: false,
+    k: 'ITP'
+  }, {
+    code: 'BMS-GW',
+    label: 'Building Management System Gateway',
+    std: false,
+    k: 'BMS_GW'
+  }, {
+    code: 'ABP',
+    label: 'Auto By-pass',
+    std: false,
+    k: 'ABP'
+  }, {
+    code: 'AAN',
+    label: "AAN (".concat(f.AAN_type || 'AAN-B', ") \u2014 Voice Announcement"),
+    std: false,
+    k: 'AAN'
+  }, {
+    code: 'AS',
+    label: 'Attendant Service',
+    std: false,
+    k: 'AS'
+  }, {
+    code: 'FCC-A',
+    label: 'False Call Cancel Auto',
+    std: false,
+    k: 'FCC_A'
+  }, {
+    code: 'cardreader',
+    label: 'Interface Card Reader',
+    std: false,
+    k: 'cardreader'
+  }, {
+    code: 'OEPS-SA',
+    label: 'Operation by Emergency Power Source',
+    std: false,
+    k: 'OEPS_SA'
+  }, {
+    code: 'WP-W (MELEYE)',
+    label: 'MelEye Monitoring and Control',
+    std: false,
+    k: 'WP_W'
+  }, {
+    code: 'Niagara',
+    label: 'Niagara IoT Platform',
+    std: false,
+    k: 'Niagara'
+  }].forEach(function (ft) {
+    var checked = ft.std ? f[ft.k] !== false : !!f[ft.k];
+    if (!checked && !ft.std) return;
+    rows.push({
+      type: 'feat',
+      field: "".concat(ft.code, " \u2014 ").concat(ft.label),
+      std: ft.std,
+      checked: checked
+    });
+  });
+  sec('Main Equipment');
+  [{
+    k: 'machineBeam',
+    l: 'Machine Beam'
+  }, {
+    k: 'governorCover',
+    l: 'Governor with cover'
+  }, {
+    k: 'loadWeighing',
+    l: 'Load weighing device'
+  }, {
+    k: 'guideShoes',
+    l: 'Car & CWT Guide Shoes'
+  }, {
+    k: 'tensionSheave',
+    l: 'Governor tension sheave'
+  }, {
+    k: 'hangerRollerEq',
+    l: 'Hanger roller'
+  }, {
+    k: 'ropeShackle',
+    l: 'Rope shackle wedge type'
+  }, {
+    k: 'rubberDoorShoes',
+    l: 'Rubber Door Shoes'
+  }].forEach(function (_ref24) {
+    var k = _ref24.k,
+      l = _ref24.l;
+    return row(l, cm[k] || 'Replace');
   });
   (cm.mainEquipRemarks || []).forEach(function (r) {
-    if (r) item("Remark: ".concat(r));
+    if (r) row('Remark', r);
   });
-  hdr('Standard Features');
-  item('ECL — Emergency Car Lighting');
-  item('MELD — Emergency Lowering Device');
-  item('RSRL');
-  item('EMB — Emergency Bell');
-  item("EER \u2014 Earthquake Emergency Return (".concat(f.EER_type || 'EER-P', ")"));
-  item('FER — Fire Emergency Return');
-  item('FE + FELC');
-  item("SDE \u2014 Safety Door Edge (".concat(f.SDE_side || 'one side', ")"));
-  item('MBS — Multi Beam Sensor');
-  item('DKO-TB — Door Hold');
-  item('ACB — Sonic Car Button');
-  item('OLHL — Overload');
-  item('FCC-P — Floor Call Cancel');
-  item('CCTV');
-  item("AECC \u2014 Car Arrival Chime (".concat(f.AECC_type || 'AECC', ")"));
-  item('MFP — Main Floor Parking');
-  item('HOS');
-  var opts = [f.BMS_GW && 'BMS-GW', f.ABP && 'ABP', f.AAN && "AAN (".concat(f.AAN_type || 'AAN-B', ")"), f.AS && 'AS', f.FCC_A && 'FCC-A', f.cardreader && 'Cardreader', f.OEPS_SA && 'OEPS-SA', f.ITP && "ITP (".concat(f.ITP_volt || '6V', ")")].filter(Boolean);
-  if (opts.length) {
-    hdr('Optional Features');
-    opts.forEach(function (o) {
-      return item(o);
-    });
-  }
-  hdr('Local Scope');
-  if (cm.localHangerRoller === 'Yes') item('Local: Hanger roller');
-  if (cm.localRubberDoorShoe === 'Yes') item('Local: Rubber door shoe');
-  if (cm.localInterphone === 'Yes') item('Local: Interphone');
-  if (cm.localGuideShoe === 'Yes') item('Local: Car and CWT guide shoe');
-  if (cm.localMELDBattery === 'Yes') item('Local: MELD Battery');
-  if (cm.governorRopeM) item("Governor rope: ".concat(cm.governorRopeM, " m"));
-  if (cm.localCarVentilation === 'Yes') item('Local: Car ventilation');
-  if (cm.localInstallMaterial === 'Yes') item('Local: Installation material');
+  rows.push({
+    type: 'sec',
+    title: 'Local Scope — Local Part'
+  });
+  row('Hanger roller', cm.localHangerRoller || 'No');
+  row('Rubber door shoe', cm.localRubberDoorShoe || 'No');
+  row('Interphone', cm.localInterphone || 'No');
+  row('Car & CWT guide shoe', cm.localGuideShoe || 'No');
+  row('MELD Battery', cm.localMELDBattery || 'No');
+  row('Governor rope', cm.governorRopeM ? cm.governorRopeM + ' m' : '—');
+  row('Car ventilation', cm.localCarVentilation || 'No');
+  row('Installation material', cm.localInstallMaterial || 'No');
   (cm.localRemarks || []).forEach(function (r) {
-    if (r) item(r);
+    if (r) row('Remark', r);
   });
-  if (cm.subInstallation === 'Yes') item('Sub: Installation');
-  if (cm.subLiftUp === 'Yes') item('Sub: Lift up cost');
-  if (cm.subNightWork === 'Yes') item('Sub: Night time work');
-  if (cm.subProtectionSheet === 'Yes') item('Sub: Protection sheet');
+  rows.push({
+    type: 'sec',
+    title: 'Local Scope — Subcontract Labor'
+  });
+  row('Installation', cm.subInstallation || 'No');
+  row('Lift up cost', cm.subLiftUp || 'No');
+  row('Night time work', cm.subNightWork || 'No');
+  row('Protection sheet', cm.subProtectionSheet || 'No');
   (cm.subRemarks || []).forEach(function (r) {
-    if (r) item(r);
+    if (r) row('Remark', r);
   });
-  if (cm.addOpeningStructure === 'Yes') item('Add: Opening structure for lift up');
-  if (cm.addRemovalConcrete === 'Yes') item('Add: Removal Concrete');
-  if (cm.addBrokerageFee === 'Yes') item('Add: Brokerage fee');
-  if (cm.addProtectionPine === 'Yes') item('Add: Protection Pine wood');
-  if (cm.addBoxFEFER === 'Yes') item('Add: Box FE FER');
-  if (cm.addMELEYEWiring === 'Yes') item('Add: MELEYE Wiring');
-  if (cm.addMELEYELabor === 'Yes') item('Add: MELEYE Labor');
+  rows.push({
+    type: 'sec',
+    title: 'Local Scope — Additional Work'
+  });
+  row('Opening structure for lift up', cm.addOpeningStructure || 'No');
+  row('Removal Concrete', cm.addRemovalConcrete || 'No');
+  row('Brokerage fee', cm.addBrokerageFee || 'No');
+  row('Protection Pine wood', cm.addProtectionPine || 'No');
+  row('Box FE FER', cm.addBoxFEFER || 'No');
+  row('MELEYE Wiring', cm.addMELEYEWiring || 'No');
+  row('MELEYE Labor', cm.addMELEYELabor || 'No');
   (cm.addRemarks || []).forEach(function (r) {
-    if (r) item(r);
+    if (r) row('Remark', r);
   });
   return rows;
 }
-
-// ── BUILD FM ROWS (shared for Preview modal, Preview Form, Excel) ─────
 function buildFMRows(g) {
   var e = g.existing || {},
     p = g.proposed || {},
@@ -5612,10 +5780,10 @@ function buildFMRows(g) {
   });
   sec('Local Scope');
   var localItems = [['New Jamb', l.newJamb], ['Motor Relocation', l.motorRelocation], ['Demolish Beam Motor', l.demolishBeamMotor], ['Demolish Buffer', l.demolishBuffer], ['Expand Entrance', l.expandEntrance], ['Close Entrance', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul], ['Rental', l.rental], ['Local Wiring ITP', l.localWiringITP], ['Floor to Floor', l.localFloorToFloor], ['EER Equipment', l.localEEREq], ['LCD Screen', l.localLCD]];
-  localItems.forEach(function (_ref24) {
-    var _ref25 = _slicedToArray(_ref24, 2),
-      label = _ref25[0],
-      val = _ref25[1];
+  localItems.forEach(function (_ref25) {
+    var _ref26 = _slicedToArray(_ref25, 2),
+      label = _ref26[0],
+      val = _ref26[1];
     if (val && val !== 'No') rows.push({
       type: 'local',
       field: label,
@@ -5963,6 +6131,7 @@ function App() {
 
             // ── PER-LIFT SHEETS ─────────────────────────────────────────────
             groups.forEach(function (g, gi) {
+              if (g.type === 'CM') return; // CM handled above
               var e = g.existing || {},
                 p = g.proposed || {},
                 f = g.feats || {},
@@ -6147,14 +6316,14 @@ function App() {
                 AIL: 'AIL',
                 ITP: 'ITP'
               });
-              var optFeats = optList.filter(function (_ref26) {
-                var _ref27 = _slicedToArray(_ref26, 1),
-                  k = _ref27[0];
+              var optFeats = optList.filter(function (_ref27) {
+                var _ref28 = _slicedToArray(_ref27, 1),
+                  k = _ref28[0];
                 return f[k];
-              }).map(function (_ref28) {
-                var _ref29 = _slicedToArray(_ref28, 2),
-                  k = _ref29[0],
-                  v = _ref29[1];
+              }).map(function (_ref29) {
+                var _ref30 = _slicedToArray(_ref29, 2),
+                  k = _ref30[0],
+                  v = _ref30[1];
                 return v;
               }).join(' · ');
               secHdr('Features (Proposed)');
@@ -6170,9 +6339,9 @@ function App() {
                   v: v,
                   std: false
                 };
-              }))).forEach(function (_ref30, fi) {
-                var v = _ref30.v,
-                  std = _ref30.std;
+              }))).forEach(function (_ref31, fi) {
+                var v = _ref31.v,
+                  std = _ref31.std;
                 var r2 = ws.addRow([fi + 1, v, std ? 'Standard' : 'Optional', '']);
                 ws.mergeCells("C".concat(r2.number, ":D").concat(r2.number));
                 r2.height = 16;
@@ -6196,17 +6365,17 @@ function App() {
                 };
                 bd(vb);
               });
-              var localItems = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(function (_ref31) {
-                var _ref32 = _slicedToArray(_ref31, 2),
-                  v = _ref32[1];
+              var localItems = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(function (_ref32) {
+                var _ref33 = _slicedToArray(_ref32, 2),
+                  v = _ref33[1];
                 return v && v !== 'No';
               });
               if (localItems.length > 0) {
                 secHdr('Local Scope (MOD)');
-                localItems.forEach(function (_ref33) {
-                  var _ref34 = _slicedToArray(_ref33, 2),
-                    label = _ref34[0],
-                    val = _ref34[1];
+                localItems.forEach(function (_ref34) {
+                  var _ref35 = _slicedToArray(_ref34, 2),
+                    label = _ref35[0],
+                    val = _ref35[1];
                   return locRow(label, val);
                 });
               }
@@ -6717,10 +6886,10 @@ function App() {
       overflow: "hidden",
       marginBottom: 8
     }
-  }, [["FM", "🔄 FM — Full Replacement"], ["CM", "⚙️ CM — Control Modernization"]].map(function (_ref35) {
-    var _ref36 = _slicedToArray(_ref35, 2),
-      t = _ref36[0],
-      l = _ref36[1];
+  }, [["FM", "🔄 FM — Full Replacement"], ["CM", "⚙️ CM — Control Modernization"]].map(function (_ref36) {
+    var _ref37 = _slicedToArray(_ref36, 2),
+      t = _ref37[0],
+      l = _ref37[1];
     return /*#__PURE__*/React.createElement("button", {
       key: t,
       onClick: function onClick() {
@@ -6856,10 +7025,10 @@ function App() {
         gridTemplateColumns: "repeat(3,1fr)",
         gap: 8
       }
-    }, isCM ? [["Product", cm.product || "—"], ["Capacity", cm.capacity ? cm.capacity + " kg" : "—"], ["Speed", cm.speed ? cm.speed + " m/s" : "—"], ["Tech Level", cm.techLevel || "—"], ["Tech Inquiry No.", cm.techInquiryNo || "—"], ["Traction", cm.tractionMachine || "—"]].map(function (_ref37) {
-      var _ref38 = _slicedToArray(_ref37, 2),
-        l = _ref38[0],
-        v = _ref38[1];
+    }, isCM ? [["Product", cm.product || "—"], ["Capacity", cm.capacity ? cm.capacity + " kg" : "—"], ["Speed", cm.speed ? cm.speed + " m/s" : "—"], ["Tech Level", cm.techLevel || "—"], ["Tech Inquiry No.", cm.techInquiryNo || "—"], ["Traction", cm.tractionMachine || "—"]].map(function (_ref38) {
+      var _ref39 = _slicedToArray(_ref38, 2),
+        l = _ref39[0],
+        v = _ref39[1];
       return /*#__PURE__*/React.createElement("div", {
         key: l,
         style: {
@@ -6879,10 +7048,10 @@ function App() {
           fontWeight: 500
         }
       }, v));
-    }) : [[" Existing speed", e.speed ? e.speed + " m/s" : "—"], ["Proposed speed", p.speed ? p.speed + " m/s" : "—"], ["Capacity", p.kg ? p.kg + " kg" : "—"], ["No. of Stop", e.noOfStop || "—"], ["Travel", e.travel ? e.travel + " m" : "—"], ["Machine Room", p.machineRoom || "—"]].map(function (_ref39) {
-      var _ref40 = _slicedToArray(_ref39, 2),
-        l = _ref40[0],
-        v = _ref40[1];
+    }) : [[" Existing speed", e.speed ? e.speed + " m/s" : "—"], ["Proposed speed", p.speed ? p.speed + " m/s" : "—"], ["Capacity", p.kg ? p.kg + " kg" : "—"], ["No. of Stop", e.noOfStop || "—"], ["Travel", e.travel ? e.travel + " m" : "—"], ["Machine Room", p.machineRoom || "—"]].map(function (_ref40) {
+      var _ref41 = _slicedToArray(_ref40, 2),
+        l = _ref41[0],
+        v = _ref41[1];
       return /*#__PURE__*/React.createElement("div", {
         key: l,
         style: {
@@ -7235,10 +7404,10 @@ function App() {
       display: "flex",
       gap: 20
     }
-  }, [["Lifts", groups.length], ["Date", proj.date || "—"], ["Revision", proj.rev]].map(function (_ref41) {
-    var _ref42 = _slicedToArray(_ref41, 2),
-      l = _ref42[0],
-      v = _ref42[1];
+  }, [["Lifts", groups.length], ["Date", proj.date || "—"], ["Revision", proj.rev]].map(function (_ref42) {
+    var _ref43 = _slicedToArray(_ref42, 2),
+      l = _ref43[0],
+      v = _ref43[1];
     return /*#__PURE__*/React.createElement("div", {
       key: l
     }, /*#__PURE__*/React.createElement("div", {
@@ -7436,14 +7605,14 @@ function App() {
       MFP: 'MFP',
       VIP_S: 'VIP-S'
     });
-    var optFeats = optList.filter(function (_ref43) {
-      var _ref44 = _slicedToArray(_ref43, 1),
-        k = _ref44[0];
+    var optFeats = optList.filter(function (_ref44) {
+      var _ref45 = _slicedToArray(_ref44, 1),
+        k = _ref45[0];
       return f[k];
-    }).map(function (_ref45) {
-      var _ref46 = _slicedToArray(_ref45, 2),
-        k = _ref46[0],
-        v = _ref46[1];
+    }).map(function (_ref46) {
+      var _ref47 = _slicedToArray(_ref46, 2),
+        k = _ref47[0],
+        v = _ref47[1];
       return v;
     });
     var scopeColor = function scopeColor(v) {
@@ -7458,9 +7627,9 @@ function App() {
       };
     };
     var rows = [['General Info', null, null, true], ['Elevator No.', e.elevNo, e.elevNo, false], ['Usage', e.usage, p.usage || e.usage, false], ['Brand / Product', e.brand, [p.source, p.product, p.code].filter(Boolean).join(' / '), false], ['Capacity', e.capacity ? e.capacity + ' kg' : '—', p.kg ? p.kg + ' kg (' + p.persons + 'P)' : '—', false], ['Door Type', e.doorType, p.doorType, false], ['Speed', e.speed ? e.speed + ' m/s' : '—', p.speed ? p.speed + ' m/s' : '—', false], ['Operation', e.operation, p.operation, false], ['Travel', e.travel ? e.travel + ' m' : '—', p.travel ? p.travel + ' m' : '—', false], ['No. of Stop', e.noOfStop, p.noOfStop || e.noOfStop, false], ['Machine Room', e.machineRoom, p.machineRoom, false], ['Shaft & Civil', null, null, true], ['Car AA×BB', e.carW && e.carD ? e.carW + '×' + e.carD + ' mm' : '—', p.carWidth && p.carDepth ? p.carWidth + '×' + p.carDepth + ' mm' : '—', false], ['Ceiling HL', e.ceilingHL ? e.ceilingHL + ' mm' : '—', p.ceilingHeight ? p.ceilingHeight + ' mm' : '—', false], ['Entrance JJ×HH', e.entranceJJ && e.entranceHH ? e.entranceJJ + '×' + e.entranceHH + ' mm' : '—', p.carDoorWidth && p.carDoorHeight ? p.carDoorWidth + '×' + p.carDoorHeight + ' mm' : '—', false], ['CWT Location', e.cwtLocation, p.cwtLocation, false], ['Shaft AH×BH', e.shaftAH && e.shaftBH ? e.shaftAH + '×' + e.shaftBH + ' mm' : '—', p.shaftAH && p.shaftBH ? p.shaftAH + '×' + p.shaftBH + ' mm' : '—', false], ['LE Wall', e.leWall ? e.leWall + ' mm' : '—', p.leWall ? p.leWall + ' mm' : '—', false], ['RE Wall', e.reWall ? e.reWall + ' mm' : '—', p.reWall ? p.reWall + ' mm' : '—', false], ['Overhead OH', e.overhead ? e.overhead + ' mm' : '—', p.overhead ? p.overhead + ' mm' : '—', false, 'OH'], ['Pit Depth PD', e.pitDepth ? e.pitDepth + ' mm' : '—', p.pitDepth ? p.pitDepth + ' mm' : '—', false, 'PIT'], ['Hoistway', e.hoistway === 'remark' ? (e.hoistwayremark || 'remark') + ' (remark)' : e.hoistway, p.hoistway === 'remark' ? (p.hoistwayremark || 'remark') + ' (remark)' : p.hoistway, false], ['Car Design', null, null, true], ['COP Main', e.cop, p.mainCOP + (p.mainCOPRemark ? ' (' + p.mainCOPRemark + ')' : ''), false], ['Ceiling', e.ceiling, p.ceilingType + (p.ceilingTypeRemark ? ' (' + p.ceilingTypeRemark + ')' : ''), false], ['Car Wall', e.carWall, p.carWallFinish === 'remark' ? (p.carWallFinishRemark || 'remark') + ' (remark)' : p.carWallFinish, false], ['Car Door', e.carDoor, p.carDoorFinish === 'remark' ? (p.carDoorFinishRemark || 'remark') + ' (remark)' : p.carDoorFinish, false], ['Flooring', e.flooring, p.flooring === 'remark' ? (p.flooringRemark || 'remark') + ' (remark)' : p.flooring, false], ['Entrance Design', null, null, true], ['Landing door (main)', e.landingDoorMain, p.landingDoorMain === 'remark' ? (p.landingDoorMainRemark || 'remark') + ' (remark)' : p.landingDoorMain, false], ['Landing door (typical)', e.landingDoorTypical, p.landingDoorTypical === 'remark' ? (p.landingDoorTypicalRemark || 'remark') + ' (remark)' : p.landingDoorTypical, false], ['Jamb (main)', e.jambMain, p.jambMain === 'remark' ? (p.jambMainRemark || 'remark') + ' (remark)' : p.jambMain, false], ['Jamb (typical)', e.jambTypical, p.jambTypical === 'remark' ? (p.jambTypicalRemark || 'remark') + ' (remark)' : p.jambTypical, false], ['Kick Plate', e.kickPlate, p.kickPlate === 'remark' ? (p.kickPlateRemark || 'remark') + ' (remark)' : p.kickPlate, false], ['Jamb (main)', e.jambMain, p.jambMain === 'remark' ? (p.jambMainRemark || 'remark') + ' (remark)' : p.jambMain, false], ['Jamb (typical)', e.jambTypical, p.jambTypical, false], ['Jamb type (main)', e.jambTypeMain, p.jambTypeMain + (p.jambTypeMainRemark ? ' (' + p.jambTypeMainRemark + ')' : ''), false], ['Jamb type (typical)', e.jambTypeTypical, p.jambTypeTypical + (p.jambTypeTypicalRemark ? ' (' + p.jambTypeTypicalRemark + ')' : ''), false], e.hallBtnMain || p.hallBtnMain ? ['Hall button (main)', e.hallBtnMain, p.hallBtnMain + (p.hallBtnMainRemark ? ' (' + p.hallBtnMainRemark + ')' : ''), false] : null, e.hallBtnTypical || p.hallBtnTypical ? ['Hall button (typical)', e.hallBtnTypical, p.hallBtnTypical + (p.hallBtnTypicalRemark ? ' (' + p.hallBtnTypicalRemark + ')' : ''), false] : null, e.hallLanternMain || p.hallLanternMain ? ['Hall lantern (main)', e.hallLanternMain, p.hallLanternMain + (p.hallLanternMainRemark ? ' (' + p.hallLanternMainRemark + ')' : ''), false] : null, e.hallPIVMain || p.hallPIVMain ? ['Hall pos. ind. (main)', e.hallPIVMain, p.hallPIVMain + (p.hallPIVMainRemark ? ' (' + p.hallPIVMainRemark + ')' : ''), false] : null].filter(Boolean);
-    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance]].filter(function (_ref47) {
-      var _ref48 = _slicedToArray(_ref47, 2),
-        v = _ref48[1];
+    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance]].filter(function (_ref48) {
+      var _ref49 = _slicedToArray(_ref48, 2),
+        v = _ref49[1];
       return v && v !== 'No';
     });
     return /*#__PURE__*/React.createElement("div", {
