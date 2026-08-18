@@ -4309,22 +4309,25 @@ function CMEditor(_ref22) {
   }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Mirror",
     half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
   }, /*#__PURE__*/React.createElement(CMsel, {
     val: cm.mirror,
     onChange: function onChange(e) {
       return sc("mirror")(e.target.value);
     },
-    opts: ["No", "Half", "Full", "remark"]
-  })), cm.mirror === "remark" && /*#__PURE__*/React.createElement(CMfield, {
-    label: "Mirror (specify)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
+    opts: ["No", "Half", "Full", "By local", "remark"]
+  }), cm.mirror === "remark" && /*#__PURE__*/React.createElement(CMinp, {
     val: cm.mirrorR,
     onChange: function onChange(e) {
       return sc("mirrorR")(e.target.value);
     },
     ph: "specify..."
-  })), /*#__PURE__*/React.createElement(CMfield, {
+  }))), /*#__PURE__*/React.createElement(CMfield, {
     label: "Handrail",
     half: true
   }, /*#__PURE__*/React.createElement("div", {
@@ -5056,9 +5059,10 @@ function FeatStep(_ref23) {
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "FE + FELC",
     label: "Firefighters' Emergency Operation",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.FE !== false,
+    onChange: function onChange(v) {
+      return sf('FE')(v);
+    }
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "SDE",
     label: "Safety Door Edge",
@@ -5101,9 +5105,10 @@ function FeatStep(_ref23) {
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "DKO-TB",
     label: "Door Hold Open",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.DKO_TB !== false,
+    onChange: function onChange(v) {
+      return sf('DKO_TB')(v);
+    }
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "ACB",
     label: "Sonic Car Button",
@@ -5121,9 +5126,10 @@ function FeatStep(_ref23) {
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "FCC-P",
     label: "Floor Call Cancel",
-    locked: true,
-    checked: true,
-    onChange: function onChange() {}
+    checked: feats.FCC_P !== false,
+    onChange: function onChange(v) {
+      return sf('FCC_P')(v);
+    }
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "CCTV",
     label: "CCTV",
@@ -6131,7 +6137,126 @@ function App() {
 
             // ── PER-LIFT SHEETS ─────────────────────────────────────────────
             groups.forEach(function (g, gi) {
-              if (g.type === 'CM') return; // CM handled above
+              // ── CM sheet ──────────────────────────────────────────────────
+              if (g.type === 'CM') {
+                var cm = g.cm || {};
+                var _shName = ('G' + (gi + 1) + (cm.techInquiryNo ? '_' + cm.techInquiryNo : '')).slice(0, 31).replace(/[\/\\?*\[\]:]/g, '_');
+                var _ws = wb.addWorksheet(_shName);
+                [8, 55, 30].forEach(function (w, i) {
+                  _ws.getColumn(i + 1).width = w;
+                });
+                addMerged(_ws, "".concat(proj.name || 'Project', " | ").concat(proj.rev), NAV, {
+                  color: {
+                    argb: WHT
+                  },
+                  bold: true,
+                  size: 12
+                }, 3, 24);
+                addMerged(_ws, "CM | ".concat(cm.techInquiryNo || '', " | ").concat(cm.product || '—', " | Tech Level: ").concat(cm.techLevel || '—'), GRP, {
+                  color: {
+                    argb: WHT
+                  },
+                  bold: true,
+                  size: 11
+                }, 3, 20);
+                var ch = _ws.addRow(['No.', 'Description', 'Value']);
+                ch.height = 22;
+                ['A', 'B', 'C'].forEach(function (col) {
+                  var cell = ch.getCell(col);
+                  fs(cell, NAV);
+                  cell.font = {
+                    color: {
+                      argb: WHT
+                    },
+                    bold: true,
+                    size: 11
+                  };
+                  al(cell, col === 'B' ? 'left' : 'center');
+                  bd(cell);
+                });
+                var cidx = 0;
+                buildCMRows(g).forEach(function (row) {
+                  if (row.type === 'sec') {
+                    cidx = 0;
+                    var r = _ws.addRow([row.title, '', '']);
+                    _ws.mergeCells("A".concat(r.number, ":C").concat(r.number));
+                    r.height = 18;
+                    var cell = r.getCell('A');
+                    var isLocal = row.title.includes('Local');
+                    var isFeat = row.title === 'Features';
+                    fs(cell, isLocal || isFeat ? AMBL : SECL);
+                    cell.font = {
+                      color: {
+                        argb: isLocal || isFeat ? AMBD : NAV
+                      },
+                      bold: true,
+                      size: 10.5
+                    };
+                    al(cell);
+                    bd(cell);
+                  } else if (row.type === 'feat') {
+                    var _r = _ws.addRow([++cidx, row.field, row.std ? 'Standard' : 'Optional']);
+                    _r.height = 17;
+                    var bg = cidx % 2 === 0 ? 'FFFFFFFF' : ALT;
+                    var nc = _r.getCell('A');
+                    fs(nc, bg);
+                    nc.font = {
+                      color: {
+                        argb: BLU
+                      },
+                      bold: true
+                    };
+                    al(nc, 'center');
+                    bd(nc);
+                    var dc = _r.getCell('B');
+                    fs(dc, bg);
+                    al(dc, 'left');
+                    bd(dc);
+                    var vc = _r.getCell('C');
+                    fs(vc, row.std ? SECL : AMBL);
+                    al(vc, 'center');
+                    vc.font = {
+                      color: {
+                        argb: row.std ? NAV : AMBD
+                      },
+                      size: 10,
+                      bold: true
+                    };
+                    bd(vc);
+                  } else {
+                    var _r2 = _ws.addRow([++cidx, row.field, row.pr || '—']);
+                    _r2.height = 17;
+                    var _bg = cidx % 2 === 0 ? 'FFFFFFFF' : ALT;
+                    var _nc = _r2.getCell('A');
+                    fs(_nc, _bg);
+                    _nc.font = {
+                      color: {
+                        argb: BLU
+                      },
+                      bold: true
+                    };
+                    al(_nc, 'center');
+                    bd(_nc);
+                    var _dc = _r2.getCell('B');
+                    fs(_dc, _bg);
+                    al(_dc, 'left');
+                    bd(_dc);
+                    var _vc = _r2.getCell('C');
+                    fs(_vc, 'FFFFF7ED');
+                    al(_vc, 'left');
+                    _vc.font = {
+                      color: {
+                        argb: NAV
+                      },
+                      bold: true,
+                      size: 11
+                    };
+                    bd(_vc);
+                  }
+                });
+                return;
+              }
+              // ── FM sheet ──────────────────────────────────────────────────
               var e = g.existing || {},
                 p = g.proposed || {},
                 f = g.feats || {},
@@ -8070,6 +8195,7 @@ function App() {
   }, "#"), /*#__PURE__*/React.createElement("th", {
     style: {
       padding: "5px 8px",
+      width: "40%",
       fontSize: 10.5,
       fontWeight: 500,
       color: "#64748b",
@@ -8080,6 +8206,7 @@ function App() {
   }, "Field"), /*#__PURE__*/React.createElement("th", {
     style: {
       padding: "5px 8px",
+      width: "60%",
       fontSize: 10.5,
       fontWeight: 500,
       color: NAV,
