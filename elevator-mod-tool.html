@@ -5805,7 +5805,7 @@ function buildFMRows(g) {
   return rows;
 }
 function App() {
-  var _previewGroup$cm, _previewGroup$cm2, _previewGroup$existin, _previewGroup$existin2, _previewGroup$propose, _previewGroup$propose2, _previewGroup$propose3;
+  var _previewGroup$cm, _previewGroup$cm2, _previewGroup$cm3, _previewGroup$cm4, _previewGroup$cm5, _previewGroup$existin, _previewGroup$existin2, _previewGroup$propose, _previewGroup$propose2, _previewGroup$propose3;
   var _useState3 = useState(_objectSpread({}, INIT_PROJ)),
     _useState4 = _slicedToArray(_useState3, 2),
     proj = _useState4[0],
@@ -7687,46 +7687,133 @@ function App() {
         color: g.type === 'CM' ? AMBERD : NAV,
         fontWeight: 500
       }
-    }, isOpen ? "▼" : "▶")), isOpen && g.type === 'CM' && /*#__PURE__*/React.createElement("div", null, buildCMRows(g).map(function (r, ri) {
-      return r.type === 'hdr' ? /*#__PURE__*/React.createElement("div", {
-        key: ri,
+    }, isOpen ? "▼" : "▶")), isOpen && g.type === 'CM' && /*#__PURE__*/React.createElement("table", {
+      style: {
+        width: "100%",
+        borderCollapse: "collapse"
+      }
+    }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
+      style: {
+        background: "#f8fafc"
+      }
+    }, /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        width: 28,
+        fontSize: 10,
+        fontWeight: 500,
+        color: "#94a3b8",
+        textAlign: "center",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "#"), /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 10.5,
+        fontWeight: 500,
+        color: "#64748b",
+        textAlign: "left",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "Field"), /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 10.5,
+        fontWeight: 500,
+        color: NAV,
+        textAlign: "left",
+        background: "#fef3c7",
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "Value"))), /*#__PURE__*/React.createElement("tbody", null, buildCMRows(g).map(function (r, ri) {
+      if (r.type === 'sec') return /*#__PURE__*/React.createElement("tr", {
+        key: ri
+      }, /*#__PURE__*/React.createElement("td", {
+        colSpan: 3,
         style: {
-          padding: "6px 14px",
-          background: ["Standard Features", "Optional Features"].includes(r.title) ? "#fff7ed" : "#eef2f7",
+          padding: "5px 8px",
+          background: r.title.includes('Local') ? AMBERL : r.title === 'Features' ? "#fff7ed" : "#eef2f7",
+          color: r.title.includes('Local') ? AMBERD : r.title === 'Features' ? AMBERD : NAV,
           fontSize: 11,
-          fontWeight: 600,
-          color: ["Standard Features", "Optional Features"].includes(r.title) ? AMBERD : NAV,
-          borderTop: "0.5px solid #e2e8f0"
+          fontWeight: 600
         }
-      }, r.title) : /*#__PURE__*/React.createElement("div", {
+      }, r.title));
+      if (r.type === 'feat') return /*#__PURE__*/React.createElement("tr", {
         key: ri,
         style: {
-          display: "grid",
-          gridTemplateColumns: "40px 1fr 50px",
-          padding: "6px 14px",
-          borderTop: "0.5px solid #f1f5f9",
           background: ri % 2 === 0 ? "#fff" : "#fafafa"
+        }
+      }, /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 11,
+          color: "#94a3b8",
+          textAlign: "center",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, ri), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 12,
+          color: "#475569",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, r.field), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          background: "#fff7ed",
+          borderBottom: "0.5px solid #f1f5f9",
+          textAlign: "center"
         }
       }, /*#__PURE__*/React.createElement("span", {
         style: {
-          fontSize: 12,
-          color: BLUE,
+          padding: "1px 7px",
+          borderRadius: 3,
+          fontSize: 10,
           fontWeight: 500,
-          textAlign: "center"
+          background: r.std ? "#eef2f7" : "#fde68a",
+          color: r.std ? NAV : AMBERD
         }
-      }, r.no), /*#__PURE__*/React.createElement("span", {
+      }, r.std ? "Standard" : "Optional")));
+      return /*#__PURE__*/React.createElement("tr", {
+        key: ri,
         style: {
-          fontSize: 12.5,
-          color: "#475569"
+          background: ri % 2 === 0 ? "#fff" : "#fafafa"
         }
-      }, r.desc), /*#__PURE__*/React.createElement("span", {
+      }, /*#__PURE__*/React.createElement("td", {
         style: {
-          fontSize: 12,
+          padding: "5px 8px",
+          fontSize: 11,
           color: "#94a3b8",
-          textAlign: "center"
+          textAlign: "center",
+          background: "#f8fafc",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
         }
-      }, r.qty > 1 ? r.qty : ""));
-    })), isOpen && g.type !== 'CM' && /*#__PURE__*/React.createElement("table", {
+      }, ri), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 11.5,
+          color: "#64748b",
+          fontWeight: 500,
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, r.field), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 12.5,
+          color: NAV,
+          fontWeight: 500,
+          background: "#fff7ed",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, r.pr));
+    }))), isOpen && g.type !== 'CM' && /*#__PURE__*/React.createElement("table", {
       style: {
         width: "100%",
         borderCollapse: "collapse"
@@ -7937,7 +8024,12 @@ function App() {
       alignItems: "center",
       justifyContent: "space-between"
     }
-  }, /*#__PURE__*/React.createElement("span", null, "CM \u2014 ", ((_previewGroup$cm = previewGroup.cm) === null || _previewGroup$cm === void 0 ? void 0 : _previewGroup$cm.techInquiryNo) || ((_previewGroup$cm2 = previewGroup.cm) === null || _previewGroup$cm2 === void 0 ? void 0 : _previewGroup$cm2.product) || "Group"), /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", null, "CM \u2014 ", ((_previewGroup$cm = previewGroup.cm) === null || _previewGroup$cm === void 0 ? void 0 : _previewGroup$cm.techInquiryNo) || ((_previewGroup$cm2 = previewGroup.cm) === null || _previewGroup$cm2 === void 0 ? void 0 : _previewGroup$cm2.product) || "Group"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      fontWeight: 400
+    }
+  }, ((_previewGroup$cm3 = previewGroup.cm) === null || _previewGroup$cm3 === void 0 ? void 0 : _previewGroup$cm3.product) || "", " \xB7 ", ((_previewGroup$cm4 = previewGroup.cm) === null || _previewGroup$cm4 === void 0 ? void 0 : _previewGroup$cm4.capacity) || "", " kg \xB7 ", ((_previewGroup$cm5 = previewGroup.cm) === null || _previewGroup$cm5 === void 0 ? void 0 : _previewGroup$cm5.speed) || "", " m/s")), /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
       return setPreviewGroup(null);
     },
@@ -7945,7 +8037,7 @@ function App() {
       background: "transparent",
       border: "none",
       color: NAV,
-      fontSize: 16,
+      fontSize: 18,
       cursor: "pointer",
       fontWeight: 500
     }
@@ -7955,46 +8047,133 @@ function App() {
       borderRadius: "0 0 12px 12px",
       overflow: "hidden"
     }
-  }, buildCMRows(previewGroup).map(function (r, ri) {
-    return r.type === 'hdr' ? /*#__PURE__*/React.createElement("div", {
-      key: ri,
+  }, /*#__PURE__*/React.createElement("table", {
+    style: {
+      width: "100%",
+      borderCollapse: "collapse"
+    }
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
+    style: {
+      background: "#f8fafc"
+    }
+  }, /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: "5px 8px",
+      width: 28,
+      fontSize: 10,
+      fontWeight: 500,
+      color: "#94a3b8",
+      textAlign: "center",
+      borderRight: "0.5px solid #e2e8f0",
+      borderBottom: "0.5px solid #e2e8f0"
+    }
+  }, "#"), /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: "5px 8px",
+      fontSize: 10.5,
+      fontWeight: 500,
+      color: "#64748b",
+      textAlign: "left",
+      borderRight: "0.5px solid #e2e8f0",
+      borderBottom: "0.5px solid #e2e8f0"
+    }
+  }, "Field"), /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: "5px 8px",
+      fontSize: 10.5,
+      fontWeight: 500,
+      color: NAV,
+      textAlign: "left",
+      background: "#fef3c7",
+      borderBottom: "0.5px solid #e2e8f0"
+    }
+  }, "Value"))), /*#__PURE__*/React.createElement("tbody", null, buildCMRows(previewGroup).map(function (r, ri) {
+    if (r.type === 'sec') return /*#__PURE__*/React.createElement("tr", {
+      key: ri
+    }, /*#__PURE__*/React.createElement("td", {
+      colSpan: 3,
       style: {
-        padding: "6px 14px",
-        background: ["Standard Features", "Optional Features"].includes(r.title) ? "#fff7ed" : "#eef2f7",
-        fontSize: 12,
-        fontWeight: 600,
-        color: ["Standard Features", "Optional Features"].includes(r.title) ? AMBERD : NAV,
-        borderTop: "0.5px solid #e2e8f0"
+        padding: "5px 8px",
+        background: r.title.includes('Local') ? AMBERL : r.title === 'Features' ? "#fff7ed" : "#eef2f7",
+        color: r.title.includes('Local') ? AMBERD : r.title === 'Features' ? AMBERD : NAV,
+        fontSize: 11,
+        fontWeight: 600
       }
-    }, r.title) : /*#__PURE__*/React.createElement("div", {
+    }, r.title));
+    if (r.type === 'feat') return /*#__PURE__*/React.createElement("tr", {
       key: ri,
       style: {
-        display: "grid",
-        gridTemplateColumns: "40px 1fr 50px",
-        padding: "6px 14px",
-        borderTop: "0.5px solid #f1f5f9",
         background: ri % 2 === 0 ? "#fff" : "#fafafa"
+      }
+    }, /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11,
+        color: "#94a3b8",
+        textAlign: "center",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, ri), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 12,
+        color: "#475569",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.field), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        background: "#fff7ed",
+        borderBottom: "0.5px solid #f1f5f9",
+        textAlign: "center"
       }
     }, /*#__PURE__*/React.createElement("span", {
       style: {
-        fontSize: 12,
-        color: BLUE,
+        padding: "1px 7px",
+        borderRadius: 3,
+        fontSize: 10,
         fontWeight: 500,
-        textAlign: "center"
+        background: r.std ? "#eef2f7" : "#fde68a",
+        color: r.std ? NAV : AMBERD
       }
-    }, r.no), /*#__PURE__*/React.createElement("span", {
+    }, r.std ? "Standard" : "Optional")));
+    return /*#__PURE__*/React.createElement("tr", {
+      key: ri,
       style: {
-        fontSize: 12.5,
-        color: "#475569"
+        background: ri % 2 === 0 ? "#fff" : "#fafafa"
       }
-    }, r.desc), /*#__PURE__*/React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("td", {
       style: {
-        fontSize: 12,
+        padding: "5px 8px",
+        fontSize: 11,
         color: "#94a3b8",
-        textAlign: "center"
+        textAlign: "center",
+        background: "#f8fafc",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
       }
-    }, r.qty > 1 ? r.qty : ""));
-  })), /*#__PURE__*/React.createElement("div", {
+    }, ri), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11.5,
+        color: "#64748b",
+        fontWeight: 500,
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.field), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 12.5,
+        color: NAV,
+        fontWeight: 500,
+        background: "#fff7ed",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.pr));
+  })))), /*#__PURE__*/React.createElement("div", {
     style: {
       padding: "10px 16px",
       textAlign: "center",
