@@ -4581,6 +4581,33 @@ function CMEditor(_ref22) {
     },
     ph: "specify..."
   }))), /*#__PURE__*/React.createElement(CMfield, {
+    label: "Handicap Hall Button",
+    half: true
+  }, /*#__PURE__*/React.createElement(CMsel, {
+    val: cm.handicapHallBtn,
+    onChange: function onChange(e) {
+      return sc("handicapHallBtn")(e.target.value);
+    },
+    opts: ["No", "Yes"]
+  })), /*#__PURE__*/React.createElement(CMfield, {
+    label: "Hall PIV (Main)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.hallPIVMain,
+    onChange: function onChange(e) {
+      return sc("hallPIVMain")(e.target.value);
+    },
+    ph: "model"
+  })), /*#__PURE__*/React.createElement(CMfield, {
+    label: "Hall PIV (Typical)",
+    half: true
+  }, /*#__PURE__*/React.createElement(CMinp, {
+    val: cm.hallPIVTypical,
+    onChange: function onChange(e) {
+      return sc("hallPIVTypical")(e.target.value);
+    },
+    ph: "model"
+  })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Hall Button (Main)",
     half: true
   }, /*#__PURE__*/React.createElement(CMinp, {
@@ -4616,42 +4643,6 @@ function CMEditor(_ref22) {
       return sc("hallLanternTypical")(e.target.value);
     },
     ph: "model"
-  })), /*#__PURE__*/React.createElement(CMfield, {
-    label: "Hall PIV (Main)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
-    val: cm.hallPIVMain,
-    onChange: function onChange(e) {
-      return sc("hallPIVMain")(e.target.value);
-    },
-    ph: "model"
-  })), /*#__PURE__*/React.createElement(CMfield, {
-    label: "Hall PIV (Typical)",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
-    val: cm.hallPIVTypical,
-    onChange: function onChange(e) {
-      return sc("hallPIVTypical")(e.target.value);
-    },
-    ph: "model"
-  })), /*#__PURE__*/React.createElement(CMfield, {
-    label: "Handicap Hall Button",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMsel, {
-    val: cm.handicapHallBtn,
-    onChange: function onChange(e) {
-      return sc("handicapHallBtn")(e.target.value);
-    },
-    opts: ["No", "Yes"]
-  })), cm.handicapHallBtn === "Yes" && /*#__PURE__*/React.createElement(CMfield, {
-    label: "Handicap Hall Button Type",
-    half: true
-  }, /*#__PURE__*/React.createElement(CMinp, {
-    val: cm.handicapHallBtnType,
-    onChange: function onChange(e) {
-      return sc("handicapHallBtnType")(e.target.value);
-    },
-    ph: "e.g. model number"
   })), /*#__PURE__*/React.createElement(CMfield, {
     label: "Braille plate at hall button",
     half: true
@@ -5246,6 +5237,20 @@ function FeatStep(_ref23) {
     label: "Operation by Emergency Power Source",
     checked: feats.OEPS_SA,
     onChange: sf('OEPS_SA')
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "WP-W (MELEYE)",
+    label: "MelEye Monitoring and Control",
+    checked: !!feats.WP_W,
+    onChange: function onChange(v) {
+      return sf('WP_W')(v);
+    }
+  }), /*#__PURE__*/React.createElement(FeatItem, {
+    code: "Niagara",
+    label: "Niagara IoT Platform",
+    checked: !!feats.Niagara,
+    onChange: function onChange(v) {
+      return sf('Niagara')(v);
+    }
   }), /*#__PURE__*/React.createElement(FeatItem, {
     code: "ITP",
     label: "Intercom",
