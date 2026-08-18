@@ -6210,7 +6210,7 @@ function App() {
                 [8, 55, 30].forEach(function (w, i) {
                   _ws.getColumn(i + 1).width = w;
                 });
-                addMerged(_ws, "".concat(proj.name || 'Project', " | ").concat(proj.rev), NAV, {
+                addMerged(_ws, "".concat(proj.name || 'Project', " | ").concat(proj.rev), NAV_C, {
                   color: {
                     argb: WHT
                   },
@@ -6228,7 +6228,7 @@ function App() {
                 ch.height = 22;
                 ['A', 'B', 'C'].forEach(function (col) {
                   var cell = ch.getCell(col);
-                  fs(cell, NAV);
+                  fs(cell, NAV_C);
                   cell.font = {
                     color: {
                       argb: WHT
@@ -6252,7 +6252,7 @@ function App() {
                     fs(cell, isLocal || isFeat ? AMBL : SECL);
                     cell.font = {
                       color: {
-                        argb: isLocal || isFeat ? AMBD : NAV
+                        argb: isLocal || isFeat ? 'FF92400E' : NAV_C
                       },
                       bold: true,
                       size: 10.5
@@ -6282,7 +6282,7 @@ function App() {
                     al(vc, 'center');
                     vc.font = {
                       color: {
-                        argb: row.std ? NAV : AMBD
+                        argb: row.std ? NAV_C : 'FF92400E'
                       },
                       size: 10,
                       bold: true
@@ -6311,7 +6311,7 @@ function App() {
                     al(_vc, 'left');
                     _vc.font = {
                       color: {
-                        argb: NAV
+                        argb: NAV_C
                       },
                       bold: true,
                       size: 11
