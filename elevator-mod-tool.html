@@ -6323,33 +6323,31 @@ function App() {
               }
               // ── FM sheet ──────────────────────────────────────────────────
               var e = g.existing || {},
-                p = g.proposed || {},
-                f = g.feats || {},
-                l = g.local || {};
+                p = g.proposed || {};
               var shName = ('G' + (gi + 1) + (e.elevNo ? ' - ' + e.elevNo : '')).slice(0, 31).replace(/[\/\\?*\[\]:]/g, '');
               var ws = wb.addWorksheet(shName);
-              [6, 36, 36, 36].forEach(function (w, i) {
+              [6, 40, 28, 28].forEach(function (w, i) {
                 ws.getColumn(i + 1).width = w;
               });
-              addMerged(ws, "".concat(proj.name || 'Project', " | ").concat(proj.rev), AMBR, {
+              addMerged(ws, "".concat(proj.name || 'Project', " | ").concat(proj.rev), NAV_C, {
                 color: {
                   argb: WHT
                 },
                 bold: true,
                 size: 12
               }, 4, 24);
-              addMerged(ws, "".concat(e.elevNo || 'Lift ' + (gi + 1), " \u2014 Modernization Full Replacement"), AMBR, {
+              addMerged(ws, "".concat(e.elevNo || 'Lift ' + (gi + 1), " \u2014 Modernization Full Replacement"), 'FF2D5086', {
                 color: {
                   argb: WHT
                 },
                 bold: true,
                 size: 11
               }, 4, 20);
-              var hr = ws.addRow(['', 'Field', 'Existing Lift', 'Modernization Full Replacement']);
+              var hr = ws.addRow(['#', 'Field', 'Existing Lift', 'Modernization']);
               hr.height = 22;
               ['A', 'B', 'C', 'D'].forEach(function (c, ci) {
                 var cell = hr.getCell(c);
-                fs(cell, AMBR);
+                fs(cell, NAV_C);
                 cell.font = {
                   color: {
                     argb: WHT
@@ -6360,215 +6358,117 @@ function App() {
                 al(cell, ci === 0 ? 'center' : ci === 1 ? 'left' : 'center');
                 bd(cell);
               });
-              var n = 1;
-              var secHdr = function secHdr(title) {
-                var r = ws.addRow(['', title, '', '']);
-                ws.mergeCells("B".concat(r.number, ":D").concat(r.number));
-                r.height = 18;
-                var c = r.getCell('B');
-                fs(c, AMBR);
-                c.font = {
-                  color: {
-                    argb: WHT
-                  },
-                  bold: true,
-                  size: 11
-                };
-                al(c);
-                bd(c);
-                n = 1;
-              };
-              var row = function row(label, ex, pr, redIfMore) {
-                var r = ws.addRow([n++, label, ex || '—', pr || '—']);
-                r.height = 17;
-                var bg = n % 2 === 0 ? 'FFFFFFFF' : ALT;
-                var nc = r.getCell('A');
-                fs(nc, bg);
-                al(nc, 'center');
-                bd(nc);
-                var lc = r.getCell('B');
-                fs(lc, SECL);
-                al(lc);
-                lc.font = {
-                  bold: true,
-                  size: 10
-                };
-                bd(lc);
-                var ec = r.getCell('C');
-                fs(ec, bg);
-                al(ec);
-                bd(ec);
-                var pc = r.getCell('D');
-                fs(pc, 'FFFFF7ED');
-                al(pc);
-                pc.font = {
-                  color: {
-                    argb: NAV_C
-                  },
-                  bold: true
-                };
-                if (redIfMore) {
-                  var ev = Number(ex),
-                    pv = Number(pr);
-                  if (!isNaN(ev) && !isNaN(pv) && pv > ev) {
-                    pc.font = {
-                      color: {
-                        argb: 'FFDC2626'
-                      },
-                      bold: true
-                    };
-                    pc.value = (pr || '—') + ' (+' + (pv - ev) + 'mm)';
-                  }
-                }
-                bd(pc);
-              };
-              var locRow = function locRow(label, val) {
-                var r = ws.addRow([n++, label, val || '—', '']);
-                ws.mergeCells("C".concat(r.number, ":D").concat(r.number));
-                r.height = 17;
-                var bg = n % 2 === 0 ? 'FFFFFFFF' : ALT;
-                ['A', 'B', 'C'].forEach(function (c) {
-                  fs(r.getCell(c), c === 'B' ? SECL : bg);
-                  al(r.getCell(c));
-                  bd(r.getCell(c));
-                });
-                r.getCell('B').font = {
-                  bold: true,
-                  size: 10
-                };
-                var vc = r.getCell('C');
-                if (val === 'By MET') {
-                  vc.font = {
+              var rn = 0;
+              buildFMRows(g).forEach(function (row) {
+                if (row.type === 'sec') {
+                  rn = 0;
+                  var r = ws.addRow([row.title, '', '', '']);
+                  ws.mergeCells("A".concat(r.number, ":D").concat(r.number));
+                  r.height = 18;
+                  var cell = r.getCell('A');
+                  fs(cell, row.title.includes('Features') || row.title.includes('Local') ? AMBL : SECL);
+                  cell.font = {
                     color: {
-                      argb: 'FF166534'
+                      argb: row.title.includes('Features') || row.title.includes('Local') ? 'FF92400E' : NAV_C
+                    },
+                    bold: true,
+                    size: 10.5
+                  };
+                  al(cell);
+                  bd(cell);
+                } else if (row.type === 'feat') {
+                  var _r3 = ws.addRow([++rn, row.field, '', row.std ? 'Standard' : 'Optional']);
+                  _r3.height = 17;
+                  var bg = rn % 2 === 0 ? 'FFFFFFFF' : ALT;
+                  var nc = _r3.getCell('A');
+                  fs(nc, bg);
+                  nc.font = {
+                    color: {
+                      argb: BLU
                     },
                     bold: true
                   };
-                } else if (val === 'By owner') {
+                  al(nc, 'center');
+                  bd(nc);
+                  var fc = _r3.getCell('B');
+                  fs(fc, bg);
+                  al(fc, 'left');
+                  bd(fc);
+                  var ec = _r3.getCell('C');
+                  fs(ec, bg);
+                  al(ec, 'center');
+                  bd(ec);
+                  var vc = _r3.getCell('D');
+                  fs(vc, row.std ? SECL : AMBL);
+                  al(vc, 'center');
                   vc.font = {
                     color: {
-                      argb: 'FF92400E'
+                      argb: row.std ? NAV_C : 'FF92400E'
+                    },
+                    bold: true,
+                    size: 10
+                  };
+                  bd(vc);
+                } else if (row.type === 'local') {
+                  var _r4 = ws.addRow([++rn, row.field, '', row.val || '—']);
+                  _r4.height = 17;
+                  var _bg2 = rn % 2 === 0 ? 'FFFFFFFF' : ALT;
+                  ['A', 'B', 'C', 'D'].forEach(function (c, ci) {
+                    var cell = _r4.getCell(c);
+                    fs(cell, ci === 3 ? 'FFFFF7ED' : _bg2);
+                    al(cell, ci === 0 ? 'center' : 'left');
+                    bd(cell);
+                  });
+                  _r4.getCell('A').font = {
+                    color: {
+                      argb: BLU
                     },
                     bold: true
                   };
+                  _r4.getCell('D').font = {
+                    color: {
+                      argb: NAV_C
+                    },
+                    bold: true
+                  };
+                } else {
+                  var _r5 = ws.addRow([++rn, row.field, row.ex || '—', row.pr || '—']);
+                  _r5.height = 17;
+                  var _bg3 = rn % 2 === 0 ? 'FFFFFFFF' : ALT;
+                  var _nc2 = _r5.getCell('A');
+                  fs(_nc2, _bg3);
+                  _nc2.font = {
+                    color: {
+                      argb: BLU
+                    },
+                    bold: true
+                  };
+                  al(_nc2, 'center');
+                  bd(_nc2);
+                  var lc = _r5.getCell('B');
+                  fs(lc, SECL);
+                  lc.font = {
+                    bold: true,
+                    size: 10
+                  };
+                  al(lc);
+                  bd(lc);
+                  var _ec = _r5.getCell('C');
+                  fs(_ec, _bg3);
+                  al(_ec);
+                  bd(_ec);
+                  var pc = _r5.getCell('D');
+                  fs(pc, 'FFFFF7ED');
+                  pc.font = {
+                    color: {
+                      argb: NAV_C
+                    },
+                    bold: true
+                  };
+                  al(pc);
+                  bd(pc);
                 }
-              };
-              secHdr('General Info');
-              row('Brand / Product', e.brand, [p.source, p.product, p.code].filter(Boolean).join(' / '));
-              row('Car Type', e.carType, p.carType);
-              row('Capacity', e.capacity ? e.capacity + ' kg' : '—', p.kg ? p.kg + ' kg (' + p.persons + 'P)' : '—');
-              row('Door Type', e.doorType, p.doorType);
-              row('Speed', e.speed ? e.speed + ' m/s' : '—', p.speed ? p.speed + ' m/s' : '—');
-              row('Operation', e.operation, p.operation);
-              row('No. of Stop', e.noOfStop, p.noOfStop || e.noOfStop);
-              row('Travel', e.travel ? e.travel + ' m' : '—', p.travel ? p.travel + ' m' : '—');
-              row('Machine Room', e.machineRoom, p.machineRoom);
-              secHdr('Shaft & Civil Dimensions');
-              row('Car AA×BB (mm)', e.carW && e.carD ? e.carW + '×' + e.carD : '—', p.carWidth && p.carDepth ? p.carWidth + '×' + p.carDepth : '—');
-              row('Shaft AH×BH (mm)', e.shaftAH && e.shaftBH ? e.shaftAH + '×' + e.shaftBH : '—', p.shaftAH && p.shaftBH ? p.shaftAH + '×' + p.shaftBH : '—');
-              row('Overhead OH (mm)', e.overhead, p.overhead, true);
-              row('Pit Depth PD (mm)', e.pitDepth, p.pitDepth, true);
-              if (e.hoistway) row('Hoistway', e.hoistway === 'remark' ? e.hoistwayremark || 'remark' : e.hoistway, p.hoistway === 'remark' ? p.hoistwayremark || 'remark' : p.hoistway);
-              secHdr('Car Design');
-              row('COP Main', e.cop, p.mainCOP + (p.mainCOPRemark ? ' (' + p.mainCOPRemark + ')' : ''));
-              row('Ceiling', e.ceiling, p.ceilingType + (p.ceilingTypeRemark ? ' (' + p.ceilingTypeRemark + ')' : ''));
-              row('Car Wall', e.carWall, p.carWallFinish === 'remark' ? (p.carWallFinishRemark || 'remark') + ' (remark)' : p.carWallFinish);
-              row('Car Door', e.carDoor, p.carDoorFinish === 'remark' ? (p.carDoorFinishRemark || 'remark') + ' (remark)' : p.carDoorFinish);
-              row('Flooring', e.flooring, p.flooring === 'remark' ? (p.flooringRemark || 'remark') + ' (remark)' : p.flooring);
-              if (e.kickPlate || p.kickPlate) row('Kick Plate', e.kickPlate, p.kickPlate === 'remark' ? (p.kickPlateRemark || 'remark') + ' (remark)' : p.kickPlate);
-              if (e.recessFloor || p.recessFloor) row('Recess Floor', e.recessFloor, p.recessFloor);
-              secHdr('Entrance Design');
-              row('Landing door (main)', e.landingDoorMain, p.landingDoorMain === 'remark' ? (p.landingDoorMainRemark || 'remark') + ' (remark)' : p.landingDoorMain);
-              row('Landing door (typical)', e.landingDoorTypical, p.landingDoorTypical === 'remark' ? (p.landingDoorTypicalRemark || 'remark') + ' (remark)' : p.landingDoorTypical);
-              row('Jamb (main)', e.jambMain, p.jambMain === 'remark' ? (p.jambMainRemark || 'remark') + ' (remark)' : p.jambMain);
-              row('Jamb (typical)', e.jambTypical, p.jambTypical === 'remark' ? (p.jambTypicalRemark || 'remark') + ' (remark)' : p.jambTypical);
-              row('Kick Plate', e.kickPlate, p.kickPlate === 'remark' ? (p.kickPlateRemark || 'remark') + ' (remark)' : p.kickPlate);
-              row('Jamb (main)', e.jambMain, p.jambMain === 'remark' ? (p.jambMainRemark || 'remark') + ' (remark)' : p.jambMain);
-              row('Jamb type (main)', e.jambTypeMain, p.jambTypeMain + (p.jambTypeMainRemark ? ' (' + p.jambTypeMainRemark + ')' : ''));
-              if (e.hallBtnMain || p.hallBtnMain) row('Hall button (main)', e.hallBtnMain, p.hallBtnMain + (p.hallBtnMainRemark ? ' (' + p.hallBtnMainRemark + ')' : ''));
-              if (e.hallLanternMain || p.hallLanternMain) row('Hall lantern (main)', e.hallLanternMain, p.hallLanternMain + (p.hallLanternMainRemark ? ' (' + p.hallLanternMainRemark + ')' : ''));
-              if (e.hallPIVMain || p.hallPIVMain) row('Hall pos. ind. (main)', e.hallPIVMain, p.hallPIVMain + (p.hallPIVMainRemark ? ' (' + p.hallPIVMainRemark + ')' : ''));
-              var stdFeats = 'ECL · MELD · DKO-TB · FCC-P · OLHL · CCTV';
-              var optList = Object.entries({
-                BMS_GW: 'BMS-GW',
-                EER: 'EER',
-                FER: 'FER',
-                FE: 'FE',
-                WP_W: 'WP-W',
-                OEPS_SA: 'OEPS-SA',
-                WP_S: 'WP-S',
-                Niagara: 'Niagara',
-                AS: 'AS',
-                cardreader: 'Cardreader',
-                PCNV: 'PCNV',
-                AAN: 'AAN',
-                AECC: 'AECC',
-                AIL: 'AIL',
-                ITP: 'ITP'
               });
-              var optFeats = optList.filter(function (_ref32) {
-                var _ref33 = _slicedToArray(_ref32, 1),
-                  k = _ref33[0];
-                return f[k];
-              }).map(function (_ref34) {
-                var _ref35 = _slicedToArray(_ref34, 2),
-                  k = _ref35[0],
-                  v = _ref35[1];
-                return v;
-              }).join(' · ');
-              secHdr('Features (Proposed)');
-              var xlStd = ['ITP', 'DKO-TB', 'OLHL', 'ECL', 'MELD', 'SDE', 'ACB', 'FCC-P', 'CCTV', 'RSRL', 'EMB', "AECC (".concat(f.AECC_type, ")"), 'MFP', 'HOS'];
-              var xlOpt = [f.EER && "EER (".concat(f.EER_type, ")"), f.ABP && 'ABP', f.FE && (f.FE_FELC === 'Yes' ? 'FE + FELC' : 'FE'), f.AAN && "AAN (".concat(f.AAN_type, ")"), f.AS && 'AS', f.FCC_A && 'FCC-A', f.cardreader && 'Cardreader', f.OEPS_SA && 'OEPS-SA', f.ITP && "ITP (".concat(f.ITP_volt, ")")].filter(Boolean);
-              [].concat(_toConsumableArray(xlStd.map(function (v) {
-                return {
-                  v: v,
-                  std: true
-                };
-              })), _toConsumableArray(xlOpt.map(function (v) {
-                return {
-                  v: v,
-                  std: false
-                };
-              }))).forEach(function (_ref36, fi) {
-                var v = _ref36.v,
-                  std = _ref36.std;
-                var r2 = ws.addRow([fi + 1, v, std ? 'Standard' : 'Optional', '']);
-                ws.mergeCells("C".concat(r2.number, ":D").concat(r2.number));
-                r2.height = 16;
-                var nb = r2.getCell('A');
-                fs(nb, fi % 2 === 0 ? 'FFFFFFFF' : ALT);
-                al(nb, 'center');
-                bd(nb);
-                var lb = r2.getCell('B');
-                fs(lb, fi % 2 === 0 ? 'FFFFFFFF' : ALT);
-                al(lb);
-                bd(lb);
-                var vb = r2.getCell('C');
-                fs(vb, 'FFFFF7ED');
-                al(vb, 'center');
-                vb.font = {
-                  color: {
-                    argb: std ? NAV_C : 'FFC2410C'
-                  },
-                  bold: true,
-                  size: 10
-                };
-                bd(vb);
-              });
-              var localItems = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(function (_ref37) {
-                var _ref38 = _slicedToArray(_ref37, 2),
-                  v = _ref38[1];
-                return v && v !== 'No';
-              });
-              if (localItems.length > 0) {
-                secHdr('Local Scope (MOD)');
-                localItems.forEach(function (_ref39) {
-                  var _ref40 = _slicedToArray(_ref39, 2),
-                    label = _ref40[0],
-                    val = _ref40[1];
-                  return locRow(label, val);
-                });
-              }
             });
             _context.n = 2;
             return wb.xlsx.writeBuffer();
@@ -7076,10 +6976,10 @@ function App() {
       overflow: "hidden",
       marginBottom: 8
     }
-  }, [["FM", "🔄 FM — Full Replacement"], ["CM", "⚙️ CM — Control Modernization"]].map(function (_ref41) {
-    var _ref42 = _slicedToArray(_ref41, 2),
-      t = _ref42[0],
-      l = _ref42[1];
+  }, [["FM", "🔄 FM — Full Replacement"], ["CM", "⚙️ CM — Control Modernization"]].map(function (_ref32) {
+    var _ref33 = _slicedToArray(_ref32, 2),
+      t = _ref33[0],
+      l = _ref33[1];
     return /*#__PURE__*/React.createElement("button", {
       key: t,
       onClick: function onClick() {
@@ -7215,10 +7115,10 @@ function App() {
         gridTemplateColumns: "repeat(3,1fr)",
         gap: 8
       }
-    }, isCM ? [["Product", cm.product || "—"], ["Capacity", cm.capacity ? cm.capacity + " kg" : "—"], ["Speed", cm.speed ? cm.speed + " m/s" : "—"], ["Tech Level", cm.techLevel || "—"], ["Tech Inquiry No.", cm.techInquiryNo || "—"], ["Traction", cm.tractionMachine || "—"]].map(function (_ref43) {
-      var _ref44 = _slicedToArray(_ref43, 2),
-        l = _ref44[0],
-        v = _ref44[1];
+    }, isCM ? [["Product", cm.product || "—"], ["Capacity", cm.capacity ? cm.capacity + " kg" : "—"], ["Speed", cm.speed ? cm.speed + " m/s" : "—"], ["Tech Level", cm.techLevel || "—"], ["Tech Inquiry No.", cm.techInquiryNo || "—"], ["Traction", cm.tractionMachine || "—"]].map(function (_ref34) {
+      var _ref35 = _slicedToArray(_ref34, 2),
+        l = _ref35[0],
+        v = _ref35[1];
       return /*#__PURE__*/React.createElement("div", {
         key: l,
         style: {
@@ -7238,10 +7138,10 @@ function App() {
           fontWeight: 500
         }
       }, v));
-    }) : [[" Existing speed", e.speed ? e.speed + " m/s" : "—"], ["Proposed speed", p.speed ? p.speed + " m/s" : "—"], ["Capacity", p.kg ? p.kg + " kg" : "—"], ["No. of Stop", e.noOfStop || "—"], ["Travel", e.travel ? e.travel + " m" : "—"], ["Machine Room", p.machineRoom || "—"]].map(function (_ref45) {
-      var _ref46 = _slicedToArray(_ref45, 2),
-        l = _ref46[0],
-        v = _ref46[1];
+    }) : [[" Existing speed", e.speed ? e.speed + " m/s" : "—"], ["Proposed speed", p.speed ? p.speed + " m/s" : "—"], ["Capacity", p.kg ? p.kg + " kg" : "—"], ["No. of Stop", e.noOfStop || "—"], ["Travel", e.travel ? e.travel + " m" : "—"], ["Machine Room", p.machineRoom || "—"]].map(function (_ref36) {
+      var _ref37 = _slicedToArray(_ref36, 2),
+        l = _ref37[0],
+        v = _ref37[1];
       return /*#__PURE__*/React.createElement("div", {
         key: l,
         style: {
@@ -7569,14 +7469,14 @@ function App() {
       flexWrap: "wrap",
       padding: "0 16px 10px"
     }
-  }, [["Customer", proj.customer], ["Building", proj.building], ["Location", proj.location], ["Date", proj.date], ["Sales", proj.sales], ["Engineer", proj.engineer]].filter(function (_ref47) {
-    var _ref48 = _slicedToArray(_ref47, 2),
-      v = _ref48[1];
+  }, [["Customer", proj.customer], ["Building", proj.building], ["Location", proj.location], ["Date", proj.date], ["Sales", proj.sales], ["Engineer", proj.engineer]].filter(function (_ref38) {
+    var _ref39 = _slicedToArray(_ref38, 2),
+      v = _ref39[1];
     return v;
-  }).map(function (_ref49) {
-    var _ref50 = _slicedToArray(_ref49, 2),
-      l = _ref50[0],
-      v = _ref50[1];
+  }).map(function (_ref40) {
+    var _ref41 = _slicedToArray(_ref40, 2),
+      l = _ref41[0],
+      v = _ref41[1];
     return /*#__PURE__*/React.createElement("div", {
       key: l
     }, /*#__PURE__*/React.createElement("div", {
@@ -7596,10 +7496,10 @@ function App() {
       display: "flex",
       gap: 20
     }
-  }, [["Lifts", groups.length], ["Date", proj.date || "—"], ["Revision", proj.rev]].map(function (_ref51) {
-    var _ref52 = _slicedToArray(_ref51, 2),
-      l = _ref52[0],
-      v = _ref52[1];
+  }, [["Lifts", groups.length], ["Date", proj.date || "—"], ["Revision", proj.rev]].map(function (_ref42) {
+    var _ref43 = _slicedToArray(_ref42, 2),
+      l = _ref43[0],
+      v = _ref43[1];
     return /*#__PURE__*/React.createElement("div", {
       key: l
     }, /*#__PURE__*/React.createElement("div", {
@@ -7797,14 +7697,14 @@ function App() {
       MFP: 'MFP',
       VIP_S: 'VIP-S'
     });
-    var optFeats = optList.filter(function (_ref53) {
-      var _ref54 = _slicedToArray(_ref53, 1),
-        k = _ref54[0];
+    var optFeats = optList.filter(function (_ref44) {
+      var _ref45 = _slicedToArray(_ref44, 1),
+        k = _ref45[0];
       return f[k];
-    }).map(function (_ref55) {
-      var _ref56 = _slicedToArray(_ref55, 2),
-        k = _ref56[0],
-        v = _ref56[1];
+    }).map(function (_ref46) {
+      var _ref47 = _slicedToArray(_ref46, 2),
+        k = _ref47[0],
+        v = _ref47[1];
       return v;
     });
     var scopeColor = function scopeColor(v) {
@@ -7819,9 +7719,9 @@ function App() {
       };
     };
     var rows = [['General Info', null, null, true], ['Elevator No.', e.elevNo, e.elevNo, false], ['Usage', e.usage, p.usage || e.usage, false], ['Brand / Product', e.brand, [p.source, p.product, p.code].filter(Boolean).join(' / '), false], ['Capacity', e.capacity ? e.capacity + ' kg' : '—', p.kg ? p.kg + ' kg (' + p.persons + 'P)' : '—', false], ['Door Type', e.doorType, p.doorType, false], ['Speed', e.speed ? e.speed + ' m/s' : '—', p.speed ? p.speed + ' m/s' : '—', false], ['Operation', e.operation, p.operation, false], ['Travel', e.travel ? e.travel + ' m' : '—', p.travel ? p.travel + ' m' : '—', false], ['No. of Stop', e.noOfStop, p.noOfStop || e.noOfStop, false], ['Machine Room', e.machineRoom, p.machineRoom, false], ['Shaft & Civil', null, null, true], ['Car AA×BB', e.carW && e.carD ? e.carW + '×' + e.carD + ' mm' : '—', p.carWidth && p.carDepth ? p.carWidth + '×' + p.carDepth + ' mm' : '—', false], ['Ceiling HL', e.ceilingHL ? e.ceilingHL + ' mm' : '—', p.ceilingHeight ? p.ceilingHeight + ' mm' : '—', false], ['Entrance JJ×HH', e.entranceJJ && e.entranceHH ? e.entranceJJ + '×' + e.entranceHH + ' mm' : '—', p.carDoorWidth && p.carDoorHeight ? p.carDoorWidth + '×' + p.carDoorHeight + ' mm' : '—', false], ['CWT Location', e.cwtLocation, p.cwtLocation, false], ['Shaft AH×BH', e.shaftAH && e.shaftBH ? e.shaftAH + '×' + e.shaftBH + ' mm' : '—', p.shaftAH && p.shaftBH ? p.shaftAH + '×' + p.shaftBH + ' mm' : '—', false], ['LE Wall', e.leWall ? e.leWall + ' mm' : '—', p.leWall ? p.leWall + ' mm' : '—', false], ['RE Wall', e.reWall ? e.reWall + ' mm' : '—', p.reWall ? p.reWall + ' mm' : '—', false], ['Overhead OH', e.overhead ? e.overhead + ' mm' : '—', p.overhead ? p.overhead + ' mm' : '—', false, 'OH'], ['Pit Depth PD', e.pitDepth ? e.pitDepth + ' mm' : '—', p.pitDepth ? p.pitDepth + ' mm' : '—', false, 'PIT'], ['Hoistway', e.hoistway === 'remark' ? (e.hoistwayremark || 'remark') + ' (remark)' : e.hoistway, p.hoistway === 'remark' ? (p.hoistwayremark || 'remark') + ' (remark)' : p.hoistway, false], ['Car Design', null, null, true], ['COP Main', e.cop, p.mainCOP + (p.mainCOPRemark ? ' (' + p.mainCOPRemark + ')' : ''), false], ['Ceiling', e.ceiling, p.ceilingType + (p.ceilingTypeRemark ? ' (' + p.ceilingTypeRemark + ')' : ''), false], ['Car Wall', e.carWall, p.carWallFinish === 'remark' ? (p.carWallFinishRemark || 'remark') + ' (remark)' : p.carWallFinish, false], ['Car Door', e.carDoor, p.carDoorFinish === 'remark' ? (p.carDoorFinishRemark || 'remark') + ' (remark)' : p.carDoorFinish, false], ['Flooring', e.flooring, p.flooring === 'remark' ? (p.flooringRemark || 'remark') + ' (remark)' : p.flooring, false], ['Entrance Design', null, null, true], ['Landing door (main)', e.landingDoorMain, p.landingDoorMain === 'remark' ? (p.landingDoorMainRemark || 'remark') + ' (remark)' : p.landingDoorMain, false], ['Landing door (typical)', e.landingDoorTypical, p.landingDoorTypical === 'remark' ? (p.landingDoorTypicalRemark || 'remark') + ' (remark)' : p.landingDoorTypical, false], ['Jamb (main)', e.jambMain, p.jambMain === 'remark' ? (p.jambMainRemark || 'remark') + ' (remark)' : p.jambMain, false], ['Jamb (typical)', e.jambTypical, p.jambTypical === 'remark' ? (p.jambTypicalRemark || 'remark') + ' (remark)' : p.jambTypical, false], ['Kick Plate', e.kickPlate, p.kickPlate === 'remark' ? (p.kickPlateRemark || 'remark') + ' (remark)' : p.kickPlate, false], ['Jamb (main)', e.jambMain, p.jambMain === 'remark' ? (p.jambMainRemark || 'remark') + ' (remark)' : p.jambMain, false], ['Jamb (typical)', e.jambTypical, p.jambTypical, false], ['Jamb type (main)', e.jambTypeMain, p.jambTypeMain + (p.jambTypeMainRemark ? ' (' + p.jambTypeMainRemark + ')' : ''), false], ['Jamb type (typical)', e.jambTypeTypical, p.jambTypeTypical + (p.jambTypeTypicalRemark ? ' (' + p.jambTypeTypicalRemark + ')' : ''), false], e.hallBtnMain || p.hallBtnMain ? ['Hall button (main)', e.hallBtnMain, p.hallBtnMain + (p.hallBtnMainRemark ? ' (' + p.hallBtnMainRemark + ')' : ''), false] : null, e.hallBtnTypical || p.hallBtnTypical ? ['Hall button (typical)', e.hallBtnTypical, p.hallBtnTypical + (p.hallBtnTypicalRemark ? ' (' + p.hallBtnTypicalRemark + ')' : ''), false] : null, e.hallLanternMain || p.hallLanternMain ? ['Hall lantern (main)', e.hallLanternMain, p.hallLanternMain + (p.hallLanternMainRemark ? ' (' + p.hallLanternMainRemark + ')' : ''), false] : null, e.hallPIVMain || p.hallPIVMain ? ['Hall pos. ind. (main)', e.hallPIVMain, p.hallPIVMain + (p.hallPIVMainRemark ? ' (' + p.hallPIVMainRemark + ')' : ''), false] : null].filter(Boolean);
-    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance]].filter(function (_ref57) {
-      var _ref58 = _slicedToArray(_ref57, 2),
-        v = _ref58[1];
+    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance]].filter(function (_ref48) {
+      var _ref49 = _slicedToArray(_ref48, 2),
+        v = _ref49[1];
       return v && v !== 'No';
     });
     return /*#__PURE__*/React.createElement("div", {
