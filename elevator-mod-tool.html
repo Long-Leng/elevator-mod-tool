@@ -5815,6 +5815,66 @@ function buildFMRows(g) {
   });
   return rows;
 }
+var ProjHdr = function ProjHdr(_ref27) {
+  var proj = _ref27.proj;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: NAV,
+      borderRadius: "10px 10px 0 0",
+      padding: "12px 16px",
+      borderBottom: "0.5px solid rgba(255,255,255,0.15)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 9.5,
+      color: "rgba(255,255,255,0.5)",
+      letterSpacing: ".1em",
+      textTransform: "uppercase",
+      marginBottom: 2
+    }
+  }, "Pre-Sale Inquiry \u2014 MOD Tool"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: "#fff",
+      fontSize: 15,
+      fontWeight: 500,
+      marginBottom: 6
+    }
+  }, proj.name || "Unnamed Project", " ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 400,
+      color: "rgba(255,255,255,0.6)"
+    }
+  }, "| ", proj.rev || "Rev.0")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 16,
+      flexWrap: "wrap"
+    }
+  }, [["Customer", proj.customer], ["Building", proj.building], ["Location", proj.location], ["Date", proj.date], ["Sales", proj.sales], ["Engineer", proj.engineer]].filter(function (_ref28) {
+    var _ref29 = _slicedToArray(_ref28, 2),
+      v = _ref29[1];
+    return v;
+  }).map(function (_ref30) {
+    var _ref31 = _slicedToArray(_ref30, 2),
+      l = _ref31[0],
+      v = _ref31[1];
+    return /*#__PURE__*/React.createElement("div", {
+      key: l
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 9,
+        color: "rgba(255,255,255,0.4)"
+      }
+    }, l), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11.5,
+        color: "#fff",
+        fontWeight: 500
+      }
+    }, v));
+  })));
+};
 function App() {
   var _previewGroup$cm, _previewGroup$cm2, _previewGroup$cm3, _previewGroup$cm4, _previewGroup$cm5, _previewGroup$existin, _previewGroup$existin2, _previewGroup$propose, _previewGroup$propose2, _previewGroup$propose3;
   var _useState3 = useState(_objectSpread({}, INIT_PROJ)),
@@ -6446,14 +6506,14 @@ function App() {
                 AIL: 'AIL',
                 ITP: 'ITP'
               });
-              var optFeats = optList.filter(function (_ref27) {
-                var _ref28 = _slicedToArray(_ref27, 1),
-                  k = _ref28[0];
+              var optFeats = optList.filter(function (_ref32) {
+                var _ref33 = _slicedToArray(_ref32, 1),
+                  k = _ref33[0];
                 return f[k];
-              }).map(function (_ref29) {
-                var _ref30 = _slicedToArray(_ref29, 2),
-                  k = _ref30[0],
-                  v = _ref30[1];
+              }).map(function (_ref34) {
+                var _ref35 = _slicedToArray(_ref34, 2),
+                  k = _ref35[0],
+                  v = _ref35[1];
                 return v;
               }).join(' · ');
               secHdr('Features (Proposed)');
@@ -6469,9 +6529,9 @@ function App() {
                   v: v,
                   std: false
                 };
-              }))).forEach(function (_ref31, fi) {
-                var v = _ref31.v,
-                  std = _ref31.std;
+              }))).forEach(function (_ref36, fi) {
+                var v = _ref36.v,
+                  std = _ref36.std;
                 var r2 = ws.addRow([fi + 1, v, std ? 'Standard' : 'Optional', '']);
                 ws.mergeCells("C".concat(r2.number, ":D").concat(r2.number));
                 r2.height = 16;
@@ -6495,17 +6555,17 @@ function App() {
                 };
                 bd(vb);
               });
-              var localItems = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(function (_ref32) {
-                var _ref33 = _slicedToArray(_ref32, 2),
-                  v = _ref33[1];
+              var localItems = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul]].filter(function (_ref37) {
+                var _ref38 = _slicedToArray(_ref37, 2),
+                  v = _ref38[1];
                 return v && v !== 'No';
               });
               if (localItems.length > 0) {
                 secHdr('Local Scope (MOD)');
-                localItems.forEach(function (_ref34) {
-                  var _ref35 = _slicedToArray(_ref34, 2),
-                    label = _ref35[0],
-                    val = _ref35[1];
+                localItems.forEach(function (_ref39) {
+                  var _ref40 = _slicedToArray(_ref39, 2),
+                    label = _ref40[0],
+                    val = _ref40[1];
                   return locRow(label, val);
                 });
               }
@@ -7016,10 +7076,10 @@ function App() {
       overflow: "hidden",
       marginBottom: 8
     }
-  }, [["FM", "🔄 FM — Full Replacement"], ["CM", "⚙️ CM — Control Modernization"]].map(function (_ref36) {
-    var _ref37 = _slicedToArray(_ref36, 2),
-      t = _ref37[0],
-      l = _ref37[1];
+  }, [["FM", "🔄 FM — Full Replacement"], ["CM", "⚙️ CM — Control Modernization"]].map(function (_ref41) {
+    var _ref42 = _slicedToArray(_ref41, 2),
+      t = _ref42[0],
+      l = _ref42[1];
     return /*#__PURE__*/React.createElement("button", {
       key: t,
       onClick: function onClick() {
@@ -7155,10 +7215,10 @@ function App() {
         gridTemplateColumns: "repeat(3,1fr)",
         gap: 8
       }
-    }, isCM ? [["Product", cm.product || "—"], ["Capacity", cm.capacity ? cm.capacity + " kg" : "—"], ["Speed", cm.speed ? cm.speed + " m/s" : "—"], ["Tech Level", cm.techLevel || "—"], ["Tech Inquiry No.", cm.techInquiryNo || "—"], ["Traction", cm.tractionMachine || "—"]].map(function (_ref38) {
-      var _ref39 = _slicedToArray(_ref38, 2),
-        l = _ref39[0],
-        v = _ref39[1];
+    }, isCM ? [["Product", cm.product || "—"], ["Capacity", cm.capacity ? cm.capacity + " kg" : "—"], ["Speed", cm.speed ? cm.speed + " m/s" : "—"], ["Tech Level", cm.techLevel || "—"], ["Tech Inquiry No.", cm.techInquiryNo || "—"], ["Traction", cm.tractionMachine || "—"]].map(function (_ref43) {
+      var _ref44 = _slicedToArray(_ref43, 2),
+        l = _ref44[0],
+        v = _ref44[1];
       return /*#__PURE__*/React.createElement("div", {
         key: l,
         style: {
@@ -7178,10 +7238,10 @@ function App() {
           fontWeight: 500
         }
       }, v));
-    }) : [[" Existing speed", e.speed ? e.speed + " m/s" : "—"], ["Proposed speed", p.speed ? p.speed + " m/s" : "—"], ["Capacity", p.kg ? p.kg + " kg" : "—"], ["No. of Stop", e.noOfStop || "—"], ["Travel", e.travel ? e.travel + " m" : "—"], ["Machine Room", p.machineRoom || "—"]].map(function (_ref40) {
-      var _ref41 = _slicedToArray(_ref40, 2),
-        l = _ref41[0],
-        v = _ref41[1];
+    }) : [[" Existing speed", e.speed ? e.speed + " m/s" : "—"], ["Proposed speed", p.speed ? p.speed + " m/s" : "—"], ["Capacity", p.kg ? p.kg + " kg" : "—"], ["No. of Stop", e.noOfStop || "—"], ["Travel", e.travel ? e.travel + " m" : "—"], ["Machine Room", p.machineRoom || "—"]].map(function (_ref45) {
+      var _ref46 = _slicedToArray(_ref45, 2),
+        l = _ref46[0],
+        v = _ref46[1];
       return /*#__PURE__*/React.createElement("div", {
         key: l,
         style: {
@@ -7475,69 +7535,71 @@ function App() {
     }
   }, "\uD83D\uDCCA Export Excel")), /*#__PURE__*/React.createElement("div", {
     style: {
-      background: AMBER,
+      background: NAV,
       borderRadius: 10,
-      padding: 16,
-      marginBottom: 12,
-      borderLeft: "5px solid #fff3e0"
+      overflow: "hidden",
+      marginBottom: 12
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 9.5,
-      color: "rgba(255,255,255,0.8)",
+      color: "rgba(255,255,255,0.5)",
       letterSpacing: ".1em",
       textTransform: "uppercase",
-      marginBottom: 3
+      padding: "10px 16px 0",
+      marginBottom: 2
     }
-  }, "MOD Pre-Sale Inquiry Form \u2014 For Sales Planning Team"), /*#__PURE__*/React.createElement("div", {
+  }, "Pre-Sale Inquiry \u2014 MOD Tool"), /*#__PURE__*/React.createElement("div", {
     style: {
       color: "#fff",
-      fontSize: 17,
+      fontSize: 16,
       fontWeight: 500,
-      marginBottom: 3
+      padding: "0 16px 6px"
     }
-  }, proj.name || "Unnamed Project"), /*#__PURE__*/React.createElement("div", {
+  }, proj.name || "Unnamed Project", " ", /*#__PURE__*/React.createElement("span", {
     style: {
-      fontSize: 13,
-      marginBottom: 10,
+      fontSize: 11,
+      fontWeight: 400,
+      color: "rgba(255,255,255,0.6)"
+    }
+  }, "| ", proj.rev || "Rev.0")), /*#__PURE__*/React.createElement("div", {
+    style: {
       display: "flex",
-      flexDirection: "column",
-      gap: 4
+      gap: 16,
+      flexWrap: "wrap",
+      padding: "0 16px 10px"
     }
-  }, proj.customer && /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: "rgba(255,255,255,0.9)",
-      fontWeight: 500
-    }
-  }, "Customer: ", proj.customer), proj.building && /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: "rgba(255,255,255,0.8)"
-    }
-  }, "Building: ", proj.building), proj.location && /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: "rgba(255,255,255,0.8)"
-    }
-  }, "Location: ", proj.location), proj.date && /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: "rgba(255,255,255,0.8)"
-    }
-  }, "Date: ", proj.date), proj.sales && /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: "rgba(255,255,255,0.8)"
-    }
-  }, "Sales: ", proj.sales), proj.engineer && /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: "rgba(255,255,255,0.8)"
-    }
-  }, "Engineer: ", proj.engineer)), /*#__PURE__*/React.createElement("div", {
+  }, [["Customer", proj.customer], ["Building", proj.building], ["Location", proj.location], ["Date", proj.date], ["Sales", proj.sales], ["Engineer", proj.engineer]].filter(function (_ref47) {
+    var _ref48 = _slicedToArray(_ref47, 2),
+      v = _ref48[1];
+    return v;
+  }).map(function (_ref49) {
+    var _ref50 = _slicedToArray(_ref49, 2),
+      l = _ref50[0],
+      v = _ref50[1];
+    return /*#__PURE__*/React.createElement("div", {
+      key: l
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 9,
+        color: "rgba(255,255,255,0.4)"
+      }
+    }, l), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11.5,
+        color: "#fff",
+        fontWeight: 500
+      }
+    }, v));
+  })), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 20
     }
-  }, [["Lifts", groups.length], ["Date", proj.date || "—"], ["Revision", proj.rev]].map(function (_ref42) {
-    var _ref43 = _slicedToArray(_ref42, 2),
-      l = _ref43[0],
-      v = _ref43[1];
+  }, [["Lifts", groups.length], ["Date", proj.date || "—"], ["Revision", proj.rev]].map(function (_ref51) {
+    var _ref52 = _slicedToArray(_ref51, 2),
+      l = _ref52[0],
+      v = _ref52[1];
     return /*#__PURE__*/React.createElement("div", {
       key: l
     }, /*#__PURE__*/React.createElement("div", {
@@ -7735,14 +7797,14 @@ function App() {
       MFP: 'MFP',
       VIP_S: 'VIP-S'
     });
-    var optFeats = optList.filter(function (_ref44) {
-      var _ref45 = _slicedToArray(_ref44, 1),
-        k = _ref45[0];
+    var optFeats = optList.filter(function (_ref53) {
+      var _ref54 = _slicedToArray(_ref53, 1),
+        k = _ref54[0];
       return f[k];
-    }).map(function (_ref46) {
-      var _ref47 = _slicedToArray(_ref46, 2),
-        k = _ref47[0],
-        v = _ref47[1];
+    }).map(function (_ref55) {
+      var _ref56 = _slicedToArray(_ref55, 2),
+        k = _ref56[0],
+        v = _ref56[1];
       return v;
     });
     var scopeColor = function scopeColor(v) {
@@ -7757,9 +7819,9 @@ function App() {
       };
     };
     var rows = [['General Info', null, null, true], ['Elevator No.', e.elevNo, e.elevNo, false], ['Usage', e.usage, p.usage || e.usage, false], ['Brand / Product', e.brand, [p.source, p.product, p.code].filter(Boolean).join(' / '), false], ['Capacity', e.capacity ? e.capacity + ' kg' : '—', p.kg ? p.kg + ' kg (' + p.persons + 'P)' : '—', false], ['Door Type', e.doorType, p.doorType, false], ['Speed', e.speed ? e.speed + ' m/s' : '—', p.speed ? p.speed + ' m/s' : '—', false], ['Operation', e.operation, p.operation, false], ['Travel', e.travel ? e.travel + ' m' : '—', p.travel ? p.travel + ' m' : '—', false], ['No. of Stop', e.noOfStop, p.noOfStop || e.noOfStop, false], ['Machine Room', e.machineRoom, p.machineRoom, false], ['Shaft & Civil', null, null, true], ['Car AA×BB', e.carW && e.carD ? e.carW + '×' + e.carD + ' mm' : '—', p.carWidth && p.carDepth ? p.carWidth + '×' + p.carDepth + ' mm' : '—', false], ['Ceiling HL', e.ceilingHL ? e.ceilingHL + ' mm' : '—', p.ceilingHeight ? p.ceilingHeight + ' mm' : '—', false], ['Entrance JJ×HH', e.entranceJJ && e.entranceHH ? e.entranceJJ + '×' + e.entranceHH + ' mm' : '—', p.carDoorWidth && p.carDoorHeight ? p.carDoorWidth + '×' + p.carDoorHeight + ' mm' : '—', false], ['CWT Location', e.cwtLocation, p.cwtLocation, false], ['Shaft AH×BH', e.shaftAH && e.shaftBH ? e.shaftAH + '×' + e.shaftBH + ' mm' : '—', p.shaftAH && p.shaftBH ? p.shaftAH + '×' + p.shaftBH + ' mm' : '—', false], ['LE Wall', e.leWall ? e.leWall + ' mm' : '—', p.leWall ? p.leWall + ' mm' : '—', false], ['RE Wall', e.reWall ? e.reWall + ' mm' : '—', p.reWall ? p.reWall + ' mm' : '—', false], ['Overhead OH', e.overhead ? e.overhead + ' mm' : '—', p.overhead ? p.overhead + ' mm' : '—', false, 'OH'], ['Pit Depth PD', e.pitDepth ? e.pitDepth + ' mm' : '—', p.pitDepth ? p.pitDepth + ' mm' : '—', false, 'PIT'], ['Hoistway', e.hoistway === 'remark' ? (e.hoistwayremark || 'remark') + ' (remark)' : e.hoistway, p.hoistway === 'remark' ? (p.hoistwayremark || 'remark') + ' (remark)' : p.hoistway, false], ['Car Design', null, null, true], ['COP Main', e.cop, p.mainCOP + (p.mainCOPRemark ? ' (' + p.mainCOPRemark + ')' : ''), false], ['Ceiling', e.ceiling, p.ceilingType + (p.ceilingTypeRemark ? ' (' + p.ceilingTypeRemark + ')' : ''), false], ['Car Wall', e.carWall, p.carWallFinish === 'remark' ? (p.carWallFinishRemark || 'remark') + ' (remark)' : p.carWallFinish, false], ['Car Door', e.carDoor, p.carDoorFinish === 'remark' ? (p.carDoorFinishRemark || 'remark') + ' (remark)' : p.carDoorFinish, false], ['Flooring', e.flooring, p.flooring === 'remark' ? (p.flooringRemark || 'remark') + ' (remark)' : p.flooring, false], ['Entrance Design', null, null, true], ['Landing door (main)', e.landingDoorMain, p.landingDoorMain === 'remark' ? (p.landingDoorMainRemark || 'remark') + ' (remark)' : p.landingDoorMain, false], ['Landing door (typical)', e.landingDoorTypical, p.landingDoorTypical === 'remark' ? (p.landingDoorTypicalRemark || 'remark') + ' (remark)' : p.landingDoorTypical, false], ['Jamb (main)', e.jambMain, p.jambMain === 'remark' ? (p.jambMainRemark || 'remark') + ' (remark)' : p.jambMain, false], ['Jamb (typical)', e.jambTypical, p.jambTypical === 'remark' ? (p.jambTypicalRemark || 'remark') + ' (remark)' : p.jambTypical, false], ['Kick Plate', e.kickPlate, p.kickPlate === 'remark' ? (p.kickPlateRemark || 'remark') + ' (remark)' : p.kickPlate, false], ['Jamb (main)', e.jambMain, p.jambMain === 'remark' ? (p.jambMainRemark || 'remark') + ' (remark)' : p.jambMain, false], ['Jamb (typical)', e.jambTypical, p.jambTypical, false], ['Jamb type (main)', e.jambTypeMain, p.jambTypeMain + (p.jambTypeMainRemark ? ' (' + p.jambTypeMainRemark + ')' : ''), false], ['Jamb type (typical)', e.jambTypeTypical, p.jambTypeTypical + (p.jambTypeTypicalRemark ? ' (' + p.jambTypeTypicalRemark + ')' : ''), false], e.hallBtnMain || p.hallBtnMain ? ['Hall button (main)', e.hallBtnMain, p.hallBtnMain + (p.hallBtnMainRemark ? ' (' + p.hallBtnMainRemark + ')' : ''), false] : null, e.hallBtnTypical || p.hallBtnTypical ? ['Hall button (typical)', e.hallBtnTypical, p.hallBtnTypical + (p.hallBtnTypicalRemark ? ' (' + p.hallBtnTypicalRemark + ')' : ''), false] : null, e.hallLanternMain || p.hallLanternMain ? ['Hall lantern (main)', e.hallLanternMain, p.hallLanternMain + (p.hallLanternMainRemark ? ' (' + p.hallLanternMainRemark + ')' : ''), false] : null, e.hallPIVMain || p.hallPIVMain ? ['Hall pos. ind. (main)', e.hallPIVMain, p.hallPIVMain + (p.hallPIVMainRemark ? ' (' + p.hallPIVMainRemark + ')' : ''), false] : null].filter(Boolean);
-    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance]].filter(function (_ref48) {
-      var _ref49 = _slicedToArray(_ref48, 2),
-        v = _ref49[1];
+    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance]].filter(function (_ref57) {
+      var _ref58 = _slicedToArray(_ref57, 2),
+        v = _ref58[1];
       return v && v !== 'No';
     });
     return /*#__PURE__*/React.createElement("div", {
@@ -8144,20 +8206,28 @@ function App() {
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: "12px 16px",
+      borderRadius: "12px 12px 0 0",
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement(ProjHdr, {
+    proj: proj
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 16px",
       background: AMBER,
       color: NAV,
-      fontSize: 14,
-      fontWeight: 500,
-      borderRadius: "12px 12px 0 0",
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between"
     }
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", null, "CM \u2014 ", ((_previewGroup$cm = previewGroup.cm) === null || _previewGroup$cm === void 0 ? void 0 : _previewGroup$cm.techInquiryNo) || ((_previewGroup$cm2 = previewGroup.cm) === null || _previewGroup$cm2 === void 0 ? void 0 : _previewGroup$cm2.product) || "Group"), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: 11,
-      fontWeight: 400
+      fontSize: 13,
+      fontWeight: 500
+    }
+  }, "CM \u2014 ", ((_previewGroup$cm = previewGroup.cm) === null || _previewGroup$cm === void 0 ? void 0 : _previewGroup$cm.techInquiryNo) || ((_previewGroup$cm2 = previewGroup.cm) === null || _previewGroup$cm2 === void 0 ? void 0 : _previewGroup$cm2.product) || "Group"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11
     }
   }, ((_previewGroup$cm3 = previewGroup.cm) === null || _previewGroup$cm3 === void 0 ? void 0 : _previewGroup$cm3.product) || "", " \xB7 ", ((_previewGroup$cm4 = previewGroup.cm) === null || _previewGroup$cm4 === void 0 ? void 0 : _previewGroup$cm4.capacity) || "", " kg \xB7 ", ((_previewGroup$cm5 = previewGroup.cm) === null || _previewGroup$cm5 === void 0 ? void 0 : _previewGroup$cm5.speed) || "", " m/s")), /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
@@ -8171,7 +8241,7 @@ function App() {
       cursor: "pointer",
       fontWeight: 500
     }
-  }, "\u2715")), /*#__PURE__*/React.createElement("div", {
+  }, "\u2715"))), /*#__PURE__*/React.createElement("div", {
     style: {
       background: "#fff",
       borderRadius: "0 0 12px 12px",
@@ -8346,17 +8416,23 @@ function App() {
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: "12px 16px",
+      borderRadius: "12px 12px 0 0",
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement(ProjHdr, {
+    proj: proj
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 16px",
       background: NAV,
       color: "#fff",
-      borderRadius: "12px 12px 0 0",
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between"
     }
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: 14,
+      fontSize: 13,
       fontWeight: 500
     }
   }, "Lift ", ((_previewGroup$existin = previewGroup.existing) === null || _previewGroup$existin === void 0 ? void 0 : _previewGroup$existin.elevNo) || "—", " \u2014 Modernization Full Replacement"), /*#__PURE__*/React.createElement("div", {
@@ -8376,7 +8452,7 @@ function App() {
       cursor: "pointer",
       fontWeight: 500
     }
-  }, "\u2715")), /*#__PURE__*/React.createElement("table", {
+  }, "\u2715"))), /*#__PURE__*/React.createElement("table", {
     style: {
       width: "100%",
       borderCollapse: "collapse"
