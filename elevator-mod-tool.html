@@ -5631,8 +5631,10 @@ function buildFMRows(g) {
   row('Entrance JJ×HH', e.entranceJJ && e.entranceHH ? e.entranceJJ + '×' + e.entranceHH + ' mm' : '—', p.carDoorWidth && p.carDoorHeight ? p.carDoorWidth + '×' + p.carDoorHeight + ' mm' : '—');
   row('LE Wall', e.leWall ? e.leWall + ' mm' : '—', p.leWall ? p.leWall + ' mm' : '—');
   row('RE Wall', e.reWall ? e.reWall + ' mm' : '—', p.reWall ? p.reWall + ' mm' : '—');
-  row('Overhead OH', e.overhead ? e.overhead + ' mm' : '—', p.overhead ? p.overhead + ' mm' : '—');
-  row('Pit Depth PD', e.pitDepth ? e.pitDepth + ' mm' : '—', p.pitDepth ? p.pitDepth + ' mm' : '—');
+  var ohDiff=e.overhead&&p.overhead?Number(p.overhead)-Number(e.overhead):null;
+  var pdDiff=e.pitDepth&&p.pitDepth?Number(p.pitDepth)-Number(e.pitDepth):null;
+  row('Overhead OH', e.overhead ? e.overhead + ' mm' : '—', p.overhead ? p.overhead + ' mm' + (ohDiff!=null?' ('+( ohDiff>0?'+':'')+ohDiff+' mm)':'') : '—');
+  row('Pit Depth PD', e.pitDepth ? e.pitDepth + ' mm' : '—', p.pitDepth ? p.pitDepth + ' mm' + (pdDiff!=null?' ('+(pdDiff>0?'+':'')+pdDiff+' mm)':'') : '—');
   sec('Car Design');
   row('COP Main', e.cop || '—', p.mainCOP === 'remark' ? (p.mainCOPRemark || 'remark') + ' (remark)' : p.mainCOP);
   row('Ceiling', e.ceiling || '—', p.ceilingHeight ? p.ceilingHeight + ' mm' : '—');
