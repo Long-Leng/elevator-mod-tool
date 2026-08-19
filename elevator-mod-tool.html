@@ -10,6 +10,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 <script>
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -5590,7 +5594,7 @@ function buildFMRows(g) {
     f = g.feats || {},
     l = g.local || {};
   var val = function val(v, r) {
-    return v === 'remark' ? (r || 'remark') + ' (remark)' : v || '—';
+    return v === 'remark' ? (r || 'remark') + ' (remark)' : v;
   };
   var rows = [];
   var sec = function sec(t) {
@@ -5608,250 +5612,196 @@ function buildFMRows(g) {
     });
   };
   sec('General Info');
-  row('Elevator No.', e.elevNo || '—', '—');
-  row('Usage', e.usage || '—', p.usage || '—');
-  row('Brand / Model', e.brand || '—', [p.source, p.product, p.code].filter(Boolean).join(' / ') || '—');
+  row('Elevator No.', e.elevNo, p.elevNo || '—');
+  row('Usage', e.usage, p.usage);
+  row('Brand / Model', e.brand, [p.source, p.product, p.code].filter(Boolean).join(' / '));
   row('Capacity', e.capacity ? e.capacity + ' kg' : '—', p.kg ? p.kg + ' kg (' + p.persons + 'P)' : '—');
-  row('Door Type', e.doorType || '—', p.doorType || '—');
+  row('Door Type', e.doorType, p.doorType);
   row('Speed', e.speed ? e.speed + ' m/s' : '—', p.speed ? p.speed + ' m/s' : '—');
   row('No. of Stop', e.noOfStop ? e.noOfStop + ' stops' : '—', p.noOfStop ? p.noOfStop + ' stops' : '—');
   row('Travel', e.travel ? e.travel + ' m' : '—', p.travel ? p.travel + ' m' : '—');
-  row('Machine Room', e.machineRoom || '—', p.machineRoom || '—');
-  row('CWT Location', e.cwtLocation || '—', p.cwtLocation || '—');
-  row('Hoistway', e.hoistway || '—', '—');
-  row('Operation', e.operation || '—', p.operation || '—');
-  row('Quantity', '—', p.noOfStop ? '1' : '—');
+  row('Machine Room', e.machineRoom, p.machineRoom);
+  row('CWT Location', e.cwtLocation, p.cwtLocation);
+  row('Hoistway', val(e.hoistway, ''), val(p.hoistway, p.hoistwayremark));
+  row('Operation', e.operation, p.operation);
+  row('Quantity', '—', p.quantity || '1');
   sec('Shaft & Civil Dimensions');
   row('Car AA×BB', e.carW && e.carD ? e.carW + '×' + e.carD + ' mm' : '—', p.carWidth && p.carDepth ? p.carWidth + '×' + p.carDepth + ' mm' : '—');
-  row('Car Door W×H', '—', p.carDoorWidth && p.carDoorHeight ? p.carDoorWidth + '×' + p.carDoorHeight + ' mm' : '—');
   row('Shaft AH×BH', e.shaftAH && e.shaftBH ? e.shaftAH + '×' + e.shaftBH + ' mm' : '—', p.shaftAH && p.shaftBH ? p.shaftAH + '×' + p.shaftBH + ' mm' : '—');
-  row('Entrance JJ×HH', e.entranceJJ && e.entranceHH ? e.entranceJJ + '×' + e.entranceHH + ' mm' : '—', '—');
+  row('Entrance JJ×HH', e.entranceJJ && e.entranceHH ? e.entranceJJ + '×' + e.entranceHH + ' mm' : '—', p.carDoorWidth && p.carDoorHeight ? p.carDoorWidth + '×' + p.carDoorHeight + ' mm' : '—');
   row('LE Wall', e.leWall ? e.leWall + ' mm' : '—', p.leWall ? p.leWall + ' mm' : '—');
   row('RE Wall', e.reWall ? e.reWall + ' mm' : '—', p.reWall ? p.reWall + ' mm' : '—');
   row('Overhead OH', e.overhead ? e.overhead + ' mm' : '—', p.overhead ? p.overhead + ' mm' : '—');
   row('Pit Depth PD', e.pitDepth ? e.pitDepth + ' mm' : '—', p.pitDepth ? p.pitDepth + ' mm' : '—');
   sec('Car Design');
-  row('COP Main', e.cop || '—', p.mainCOP === 'remark' ? (p.mainCOPRemark || 'remark') + ' (remark)' : p.mainCOP || '—');
-  row('Ceiling HL', e.ceilingHL ? e.ceilingHL + ' mm' : '—', p.ceilingHeight ? p.ceilingHeight + ' mm' : '—');
-  row('Ceiling Type', e.ceiling || '—', p.ceilingType === 'remark' ? (p.ceilingTypeRemark || 'remark') + ' (remark)' : p.ceilingType || '—');
+  row('COP Main', e.cop || '—', p.mainCOP === 'remark' ? (p.mainCOPRemark || 'remark') + ' (remark)' : p.mainCOP);
+  row('Ceiling', e.ceiling || '—', p.ceilingHeight ? p.ceilingHeight + ' mm' : '—');
   row('Car Wall', e.carWall || '—', val(p.carWallFinish, p.carWallFinishRemark));
   row('Car Door', e.carDoor || '—', val(p.carDoorFinish, p.carDoorFinishRemark));
   row('Flooring', e.flooring || '—', val(p.flooring, p.flooringRemark));
   row('Kick Plate', e.kickPlate || '—', val(p.kickPlate, p.kickPlateRemark));
   row('Recess Floor', e.recessFloor || '—', p.recessFloor || '—');
-  row('No. of Fan', e.noOfFan || '—', p.noOfFan || '—');
+  
+  
+  
+  
+  
+  row('No. of Fan', '—', p.noOfFan || '—');
   sec('Entrance Design');
-  row('Landing Door (Main)', val(e.landingDoorMain, e.landingDoorMainRemark), val(p.landingDoorMain, p.landingDoorMainRemark));
-  row('Landing Door (Typical)', val(e.landingDoorTypical, e.landingDoorTypicalRemark), val(p.landingDoorTypical, p.landingDoorTypicalRemark));
-  row('Jamb (Main)', val(e.jambMain, e.jambMainRemark), p.jambMain === 'remark' ? (p.jambMainRemark || 'remark') + ' (remark)' : p.jambMain || '—');
-  row('Jamb (Typical)', val(e.jambTypical, e.jambTypicalRemark), p.jambTypical === 'remark' ? (p.jambTypicalRemark || 'remark') + ' (remark)' : p.jambTypical || '—');
-  row('Jamb Type (Main)', val(e.jambTypeMain, e.jambTypeMainRemark), p.jambTypeMain === 'remark' ? (p.jambTypeMainRemark || 'remark') + ' (remark)' : p.jambTypeMain || '—');
-  row('Jamb Type (Typical)', val(e.jambTypeTypical, e.jambTypeTypicalRemark), p.jambTypeTypical === 'remark' ? (p.jambTypeTypicalRemark || 'remark') + ' (remark)' : p.jambTypeTypical || '—');
-  row('Hall Button (Main)', val(e.hallBtnMain, e.hallBtnMainRemark), p.hallBtnMain === 'remark' ? (p.hallBtnMainRemark || 'remark') + ' (remark)' : p.hallBtnMain || '—');
-  row('Hall Button (Typical)', val(e.hallBtnTypical, e.hallBtnTypicalRemark), p.hallBtnTypical === 'remark' ? (p.hallBtnTypicalRemark || 'remark') + ' (remark)' : p.hallBtnTypical || '—');
-  row('Hall Lantern (Main)', val(e.hallLanternMain, e.hallLanternMainRemark), p.hallLanternMain === 'remark' ? (p.hallLanternMainRemark || 'remark') + ' (remark)' : p.hallLanternMain || '—');
-  row('Hall Lantern (Typical)', val(e.hallLanternTypical, e.hallLanternTypicalRemark), p.hallLanternTypical === 'remark' ? (p.hallLanternTypicalRemark || 'remark') + ' (remark)' : p.hallLanternTypical || '—');
-  row('Hall PIV (Main)', val(e.hallPIVMain, e.hallPIVMainRemark), p.hallPIVMain === 'remark' ? (p.hallPIVMainRemark || 'remark') + ' (remark)' : p.hallPIVMain || '—');
-  row('Hall PIV (Typical)', val(e.hallPIVTypical, e.hallPIVTypicalRemark), p.hallPIVTypical === 'remark' ? (p.hallPIVTypicalRemark || 'remark') + ' (remark)' : p.hallPIVTypical || '—');
+  row('Landing Door (Main)', e.landingDoorMain || '—', val(p.landingDoorMain, p.landingDoorMainRemark));
+  row('Landing Door (Typical)', e.landingDoorTypical || '—', val(p.landingDoorTypical, p.landingDoorTypicalRemark));
+  row('Jamb (Main)', e.jambMain || '—', val(p.jambMain, p.jambMainRemark));
+  row('Jamb (Typical)', e.jambTypical || '—', val(p.jambTypical, p.jambTypicalRemark));
+  row('Jamb Type (Main)', e.jambTypeMain || '—', p.jambTypeMain === 'remark' ? (p.jambTypeMainRemark || 'remark') + ' (remark)' : p.jambTypeMain || '—');
+  row('Jamb Type (Typical)', e.jambTypeTypical || '—', p.jambTypeTypical === 'remark' ? (p.jambTypeTypicalRemark || 'remark') + ' (remark)' : p.jambTypeTypical || '—');
+  
+  
+  
+  row('Hall Button (Main)', e.hallBtnMain || '—', p.hallBtnMain === 'remark' ? (p.hallBtnMainRemark || 'remark') + ' (remark)' : p.hallBtnMain || '—');
+  row('Hall Button (Typical)', e.hallBtnTypical || '—', p.hallBtnTypical === 'remark' ? (p.hallBtnTypicalRemark || 'remark') + ' (remark)' : p.hallBtnTypical || '—');
+  row('Hall Lantern (Main)', e.hallLanternMain || '—', p.hallLanternMain === 'remark' ? (p.hallLanternMainRemark || 'remark') + ' (remark)' : p.hallLanternMain || '—');
+  row('Hall Lantern (Typical)', e.hallLanternTypical || '—', p.hallLanternTypical === 'remark' ? (p.hallLanternTypicalRemark || 'remark') + ' (remark)' : p.hallLanternTypical || '—');
+  row('Hall PIV (Main)', e.hallPIVMain || '—', p.hallPIVMain === 'remark' ? (p.hallPIVMainRemark || 'remark') + ' (remark)' : p.hallPIVMain || '—');
+  row('Hall PIV (Typical)', e.hallPIVTypical || '—', p.hallPIVTypical === 'remark' ? (p.hallPIVTypicalRemark || 'remark') + ' (remark)' : p.hallPIVTypical || '—');
+  
+  
   sec('Features (Proposed)');
   var featMap = [{
-    k: 'ECL',
-    c: 'ECL',
-    l: 'Emergency Car Lighting',
+    code: 'ECL',
+    label: 'Emergency Car Lighting',
     std: true
   }, {
-    k: 'MELD',
-    c: 'MELD',
-    l: 'Emergency Lowering Device',
+    code: 'MELD',
+    label: 'Emergency Lowering Device',
     std: true
   }, {
-    k: 'RSRL',
-    c: 'RSRL',
-    l: 'RSRL',
+    code: 'RSRL',
+    label: 'RSRL',
     std: true
   }, {
-    k: 'EMB',
-    c: 'EMB',
-    l: 'Emergency Bell',
+    code: 'EMB',
+    label: 'Emergency Bell',
     std: true
   }, {
-    k: 'EER',
-    c: 'EER',
-    l: "EER (".concat(f.EER_type || 'EER-P', ") Earthquake Emergency Return"),
+    code: 'EER',
+    label: 'Earthquake Emergency Return',
+    std: true,
+    sub: f.EER_type || 'EER-P'
+  }, {
+    code: 'FER',
+    label: 'Fire Emergency Return',
     std: true
   }, {
-    k: 'FER',
-    c: 'FER',
-    l: 'Fire Emergency Return',
+    code: 'FE',
+    label: "Firefighters' Emergency Operation",
+    std: true,
+    sub: 'FE + FELC'
+  }, {
+    code: 'SDE',
+    label: 'Safety Door Edge',
+    std: true,
+    sub: f.SDE_side || 'one side'
+  }, {
+    code: 'MBS',
+    label: 'Multi Beam Sensor',
     std: true
   }, {
-    k: 'FE',
-    c: 'FE',
-    l: 'FE + FELC',
+    code: 'DKO_TB',
+    label: 'Door Hold Open',
     std: true
   }, {
-    k: 'SDE',
-    c: 'SDE',
-    l: "SDE (".concat(f.SDE_side || 'one side', ") Safety Door Edge"),
+    code: 'ACB',
+    label: 'Sonic Car Button',
     std: true
   }, {
-    k: 'MBS',
-    c: 'MBS',
-    l: 'Multi Beam Sensor',
+    code: 'OLHL',
+    label: 'Overload',
     std: true
   }, {
-    k: 'DKO_TB',
-    c: 'DKO-TB',
-    l: 'Door Hold Open',
+    code: 'FCC_P',
+    label: 'Floor Call Cancel',
     std: true
   }, {
-    k: 'ACB',
-    c: 'ACB',
-    l: 'Sonic Car Button',
+    code: 'CCTV',
+    label: 'CCTV',
     std: true
   }, {
-    k: 'OLHL',
-    c: 'OLHL',
-    l: 'Overload',
+    code: 'AECC',
+    label: 'Car Arrival Chime',
+    std: true,
+    sub: f.AECC_type || 'AECC'
+  }, {
+    code: 'MFP',
+    label: 'Main Floor Parking',
     std: true
   }, {
-    k: 'FCC_P',
-    c: 'FCC-P',
-    l: 'Floor Call Cancel',
+    code: 'HOS',
+    label: 'Out of Service by Hall Key Switch',
     std: true
   }, {
-    k: 'CCTV',
-    c: 'CCTV',
-    l: 'CCTV',
-    std: true
-  }, {
-    k: 'AECC',
-    c: 'AECC',
-    l: "AECC (".concat(f.AECC_type || 'AECC', ") Car Arrival Chime"),
-    std: true
-  }, {
-    k: 'MFP',
-    c: 'MFP',
-    l: 'Main Floor Parking',
-    std: true
-  }, {
-    k: 'HOS',
-    c: 'HOS',
-    l: 'Out of Service by Hall Key Switch',
-    std: true
-  }, {
-    k: 'BMS_GW',
-    c: 'BMS-GW',
-    l: 'Building Management System Gateway',
+    code: 'BMS_GW',
+    label: 'BMS Gateway',
     std: false
   }, {
-    k: 'WP_W',
-    c: 'WP-W',
-    l: 'MelEye Monitoring and Control',
+    code: 'EER_S',
+    label: 'EER-S',
+    std: false,
+    show: f.EER && f.EER_type === 'EER-S'
+  }, {
+    code: 'ABP',
+    label: 'Auto By-pass',
     std: false
   }, {
-    k: 'OEPS_SA',
-    c: 'OEPS-SA',
-    l: 'Operation by Emergency Power Source',
+    code: 'AAN',
+    label: 'Voice Announcement',
+    std: false,
+    sub: f.AAN_type || 'AAN-B'
+  }, {
+    code: 'AS',
+    label: 'Attendant Service',
     std: false
   }, {
-    k: 'Niagara',
-    c: 'Niagara',
-    l: 'Niagara IoT Platform',
+    code: 'FCC_A',
+    label: 'False Call Cancel Auto',
     std: false
   }, {
-    k: 'ABP',
-    c: 'ABP',
-    l: 'Auto By-pass',
+    code: 'cardreader',
+    label: 'Interface Card Reader',
     std: false
   }, {
-    k: 'AAN',
-    c: 'AAN',
-    l: "AAN (".concat(f.AAN_type || 'AAN-B', ") Voice Announcement"),
+    code: 'OEPS_SA',
+    label: 'Operation by Emergency Power Source',
     std: false
   }, {
-    k: 'AS',
-    c: 'AS',
-    l: 'Attendant Service',
-    std: false
-  }, {
-    k: 'FCC_A',
-    c: 'FCC-A',
-    l: 'False Call Cancel Auto',
-    std: false
-  }, {
-    k: 'cardreader',
-    c: 'Cardreader',
-    l: 'Interface Card Reader',
-    std: false
-  }, {
-    k: 'ITP',
-    c: 'ITP',
-    l: "ITP (".concat(f.ITP_volt || '6V', ") Intercom"),
-    std: false
-  }, {
-    k: 'ACB',
-    c: 'ACB',
-    l: 'Sonic Car Button Click',
-    std: false
+    code: 'ITP',
+    label: 'Intercom',
+    std: false,
+    sub: f.ITP_volt || '6V'
   }];
   featMap.forEach(function (ft, i) {
-    var checked = ft.std ? f[ft.k] !== false : !!f[ft.k];
+    var checked = ft.std ? f[ft.code] !== false : !!f[ft.code];
     if (!checked && !ft.std) return;
+    var label = ft.sub ? "".concat(ft.code.replace('_', '-'), " (").concat(ft.sub, ") \u2014 ").concat(ft.label) : "".concat(ft.code.replace('_', '-'), " \u2014 ").concat(ft.label);
     rows.push({
       type: 'feat',
-      field: "".concat(ft.c, " \u2014 ").concat(ft.l),
+      field: label,
       std: ft.std,
       no: i + 1
     });
   });
   sec('Local Scope');
-  if (l.localInstallJamb === 'Yes') rows.push({
-    type: 'local',
-    field: 'Install new jamb',
-    val: 'Yes'
+  var localItems = [['New Jamb', l.newJamb], ['Motor Relocation', l.motorRelocation], ['Demolish Beam Motor', l.demolishBeamMotor], ['Demolish Buffer', l.demolishBuffer], ['Expand Entrance', l.expandEntrance], ['Close Entrance', l.closeEntrance], ['Utilities', l.utilities], ['Overhaul', l.overhaul], ['Rental', l.rental], ['Local Wiring ITP', l.localWiringITP], ['Floor to Floor', l.localFloorToFloor], ['EER Equipment', l.localEEREq], ['LCD Screen', l.localLCD]];
+  localItems.forEach(function (_ref25) {
+    var _ref26 = _slicedToArray(_ref25, 2),
+      label = _ref26[0],
+      val = _ref26[1];
+    if (val && val !== 'No') rows.push({
+      type: 'local',
+      field: label,
+      val: val
+    });
   });
-  if (l.motorRelocation === 'Yes') rows.push({
-    type: 'local',
-    field: 'Motor relocation',
-    val: 'Yes'
-  });
-  if (l.utilities === 'Yes') rows.push({
-    type: 'local',
-    field: 'Utilities',
-    val: 'Yes'
-  });
-  if (l.overhaul === 'Yes') rows.push({
-    type: 'local',
-    field: 'Overhaul',
-    val: 'Yes'
-  });
-  if (l.rental) rows.push({
-    type: 'local',
-    field: 'Rental',
-    val: l.rental
-  });
-  if (l.localWiringITP === 'Yes') rows.push({
-    type: 'local',
-    field: 'Local wiring ITP',
-    val: 'Yes'
-  });
-  if (l.localFloorToFloor) rows.push({
-    type: 'local',
-    field: 'Floor to floor',
-    val: l.localFloorToFloor
-  });
-  if (l.localEEREq === 'Yes') rows.push({
-    type: 'local',
-    field: 'EER equipment',
-    val: 'Yes'
-  });
-  if (l.localLCD === 'Yes') rows.push({
-    type: 'local',
-    field: 'LCD screen',
-    val: 'Yes'
-  });
-  (l.localItems || []).forEach(function (item) {
+  if ((l.localItems || []).length > 0) l.localItems.forEach(function (item) {
     if (item) rows.push({
       type: 'local',
       field: 'Additional',
@@ -5864,6 +5814,2742 @@ function buildFMRows(g) {
     val: l.tseRemarks
   });
   return rows;
+}
+var ProjHdr = function ProjHdr(_ref27) {
+  var proj = _ref27.proj;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: NAV,
+      borderRadius: "10px 10px 0 0",
+      padding: "12px 16px",
+      borderBottom: "0.5px solid rgba(255,255,255,0.15)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 9.5,
+      color: "rgba(255,255,255,0.5)",
+      letterSpacing: ".1em",
+      textTransform: "uppercase",
+      marginBottom: 2
+    }
+  }, "Pre-Sale Inquiry \u2014 MOD Tool"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: "#fff",
+      fontSize: 15,
+      fontWeight: 500,
+      marginBottom: 6
+    }
+  }, proj.name || "Unnamed Project", " ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 400,
+      color: "rgba(255,255,255,0.6)"
+    }
+  }, "| ", proj.rev || "Rev.0")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 16,
+      flexWrap: "wrap"
+    }
+  }, [["Customer", proj.customer], ["Building", proj.building], ["Location", proj.location], ["Date", proj.date], ["Sales", proj.sales], ["Engineer", proj.engineer]].filter(function (_ref28) {
+    var _ref29 = _slicedToArray(_ref28, 2),
+      v = _ref29[1];
+    return v;
+  }).map(function (_ref30) {
+    var _ref31 = _slicedToArray(_ref30, 2),
+      l = _ref31[0],
+      v = _ref31[1];
+    return /*#__PURE__*/React.createElement("div", {
+      key: l
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 9,
+        color: "rgba(255,255,255,0.4)"
+      }
+    }, l), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11.5,
+        color: "#fff",
+        fontWeight: 500
+      }
+    }, v));
+  })));
+};
+function App() {
+  var _previewGroup$cm, _previewGroup$cm2, _previewGroup$cm3, _previewGroup$cm4, _previewGroup$cm5, _previewGroup$existin, _previewGroup$existin2, _previewGroup$propose, _previewGroup$propose2, _previewGroup$propose3;
+  var _useState3 = useState(_objectSpread({}, INIT_PROJ)),
+    _useState4 = _slicedToArray(_useState3, 2),
+    proj = _useState4[0],
+    setProj = _useState4[1];
+  var _useState5 = useState([]),
+    _useState6 = _slicedToArray(_useState5, 2),
+    groups = _useState6[0],
+    setGroups = _useState6[1];
+  var _useState7 = useState('list'),
+    _useState8 = _slicedToArray(_useState7, 2),
+    view = _useState8[0],
+    setView = _useState8[1];
+  var _useState9 = useState({}),
+    _useState0 = _slicedToArray(_useState9, 2),
+    expanded = _useState0[0],
+    setExpanded = _useState0[1];
+  var _useState1 = useState(null),
+    _useState10 = _slicedToArray(_useState1, 2),
+    previewGroup = _useState10[0],
+    setPreviewGroup = _useState10[1];
+  var _useState11 = useState(false),
+    _useState12 = _slicedToArray(_useState11, 2),
+    showTypeModal = _useState12[0],
+    setShowTypeModal = _useState12[1];
+  var _useState13 = useState('FM'),
+    _useState14 = _slicedToArray(_useState13, 2),
+    cmType = _useState14[0],
+    setCmType = _useState14[1];
+  var _useState15 = useState(_objectSpread({}, INIT_CM)),
+    _useState16 = _slicedToArray(_useState15, 2),
+    editCM = _useState16[0],
+    setEditCM = _useState16[1];
+  var _useState17 = useState(false),
+    _useState18 = _slicedToArray(_useState17, 2),
+    autoFilled = _useState18[0],
+    setAutoFilled = _useState18[1];
+  var _useState19 = useState([]),
+    _useState20 = _slicedToArray(_useState19, 2),
+    autoFilledFields = _useState20[0],
+    setAutoFilledFields = _useState20[1];
+  var _useState21 = useState(false),
+    _useState22 = _slicedToArray(_useState21, 2),
+    uploading = _useState22[0],
+    setUploading = _useState22[1];
+  var fileUploadRef = useRef(null);
+
+  // ── AUTO-SAVE to localStorage ──────────────────────────────────────
+  useEffect(function () {
+    try {
+      localStorage.setItem('mod_proj', JSON.stringify(proj));
+    } catch (e) {}
+  }, [proj]);
+  useEffect(function () {
+    try {
+      localStorage.setItem('mod_groups', JSON.stringify(groups));
+    } catch (e) {}
+  }, [groups]);
+  useEffect(function () {
+    try {
+      var p = localStorage.getItem('mod_proj');
+      if (p) setProj(function (prev) {
+        return _objectSpread(_objectSpread({}, prev), JSON.parse(p));
+      });
+      var g = localStorage.getItem('mod_groups');
+      if (g) {
+        var parsed = JSON.parse(g);
+        var fixed = parsed.map(function (gr) {
+          return _objectSpread(_objectSpread({}, gr), {}, {
+            existing: _objectSpread(_objectSpread({}, INIT_EXISTING), gr.existing || {}),
+            proposed: _objectSpread(_objectSpread({}, INIT_PROPOSED), gr.proposed || {}),
+            feats: _objectSpread(_objectSpread({}, INIT_FEATS), gr.feats || {}),
+            local: _objectSpread(_objectSpread({}, INIT_LOCAL), gr.local || {})
+          });
+        });
+        setGroups(fixed);
+      }
+    } catch (e) {}
+  }, []); // list | edit
+  var _useState23 = useState(null),
+    _useState24 = _slicedToArray(_useState23, 2),
+    editIdx = _useState24[0],
+    setEditIdx = _useState24[1];
+  var _useState25 = useState(_objectSpread({}, INIT_EXISTING)),
+    _useState26 = _slicedToArray(_useState25, 2),
+    editExisting = _useState26[0],
+    setEditExisting = _useState26[1];
+  var _useState27 = useState(_objectSpread({}, INIT_PROPOSED)),
+    _useState28 = _slicedToArray(_useState27, 2),
+    editProposed = _useState28[0],
+    setEditProposed = _useState28[1];
+  var _useState29 = useState(_objectSpread({}, INIT_FEATS)),
+    _useState30 = _slicedToArray(_useState29, 2),
+    editFeats = _useState30[0],
+    setEditFeats = _useState30[1];
+  var _useState31 = useState(_objectSpread({}, INIT_LOCAL)),
+    _useState32 = _slicedToArray(_useState31, 2),
+    editLocal = _useState32[0],
+    setEditLocal = _useState32[1];
+  var _useState33 = useState(1),
+    _useState34 = _slicedToArray(_useState33, 2),
+    wizStep = _useState34[0],
+    setWizStep = _useState34[1];
+  var _useState35 = useState(''),
+    _useState36 = _slicedToArray(_useState35, 2),
+    saveMsg = _useState36[0],
+    setSaveMsg = _useState36[1];
+  var importRef = useRef(null);
+  var sp = function sp(v) {
+    return setProj(function (p) {
+      return _objectSpread(_objectSpread({}, p), v);
+    });
+  };
+  var exportJSON = function exportJSON() {
+    var data = {
+      version: 1,
+      type: "MOD",
+      proj: proj,
+      groups: groups
+    };
+    var blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: 'application/json'
+    });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = (proj.name || 'MOD') + '_' + proj.rev + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  var importJSON = function importJSON(file) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      try {
+        var d = JSON.parse(e.target.result);
+        if (d.proj) setProj(d.proj);
+        if (d.groups) setGroups(d.groups);
+      } catch (_unused) {
+        alert('Invalid JSON');
+      }
+    };
+    reader.readAsText(file);
+  };
+  var openNewGroup = function openNewGroup() {
+    return setShowTypeModal(true);
+  };
+  var openCM = function openCM() {
+    var _groups$idx;
+    var idx = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+    setEditIdx(idx);
+    setEditCM(idx !== null && ((_groups$idx = groups[idx]) === null || _groups$idx === void 0 ? void 0 : _groups$idx.type) === 'CM' ? _objectSpread(_objectSpread({}, INIT_CM), groups[idx].cm) : _objectSpread({}, INIT_CM));
+    setEditFeats(_objectSpread({}, INIT_FEATS));
+    setWizStep(1);
+    setShowTypeModal(false);
+    setView('cm');
+  };
+  var openNew = function openNew() {
+    setEditIdx(null);
+    setEditExisting(_objectSpread({}, INIT_EXISTING));
+    setEditProposed(_objectSpread({}, INIT_PROPOSED));
+    setEditFeats(_objectSpread({}, INIT_FEATS));
+    setEditLocal(_objectSpread({}, INIT_LOCAL));
+    setWizStep(1);
+    setView('edit');
+  };
+  var openEdit = function openEdit(idx) {
+    var g = groups[idx];
+    setEditIdx(idx);
+    setEditExisting(_objectSpread({}, g.existing));
+    setEditProposed(_objectSpread({}, g.proposed));
+    setEditFeats(_objectSpread({}, g.feats));
+    setEditLocal(_objectSpread({}, g.local));
+    setWizStep(1);
+    setView('edit');
+  };
+  var copyGroup = function copyGroup(idx) {
+    var g = groups[idx];
+    var ng = {
+      id: uid(),
+      existing: _objectSpread(_objectSpread({}, g.existing), {}, {
+        elevNo: (g.existing.elevNo || 'Lift') + ' (copy)'
+      }),
+      proposed: _objectSpread({}, g.proposed),
+      feats: _objectSpread({}, g.feats),
+      local: _objectSpread({}, g.local)
+    };
+    setGroups(function (prev) {
+      return [].concat(_toConsumableArray(prev), [ng]);
+    });
+  };
+  var deleteGroup = function deleteGroup(idx) {
+    if (!window.confirm('Delete this lift?')) return;
+    setGroups(function (prev) {
+      return prev.filter(function (_, i) {
+        return i !== idx;
+      });
+    });
+  };
+  var generateXls = /*#__PURE__*/function () {
+    var _generateXls = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+      var ExcelJS, wb, NAV_C, WHT, AMBR, BLU, SECL, ALT, GRN, AMBL, fs, bd, al, ws0, addMerged, sh, buf, blob, url, a;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.n) {
+          case 0:
+            ExcelJS = window.ExcelJS;
+            if (ExcelJS) {
+              _context.n = 1;
+              break;
+            }
+            alert('ExcelJS not loaded');
+            return _context.a(2);
+          case 1:
+            wb = new ExcelJS.Workbook();
+            wb.creator = 'Elevator MOD Pre-Sale Tool';
+            NAV_C = 'FF1E3A5F', WHT = 'FFFFFFFF', AMBR = 'FFD97706', BLU = 'FF075985', SECL = 'FFEEF2F7', ALT = 'FFFAFAFA', GRN = 'FF166534', AMBL = 'FFFFF3E0';
+            fs = function fs(cell, argb) {
+              cell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: {
+                  argb: argb
+                }
+              };
+            };
+            bd = function bd(cell) {
+              cell.border = {
+                bottom: {
+                  style: 'thin',
+                  color: {
+                    argb: 'FFE2E8F0'
+                  }
+                },
+                right: {
+                  style: 'thin',
+                  color: {
+                    argb: 'FFE2E8F0'
+                  }
+                }
+              };
+            };
+            al = function al(cell) {
+              var h = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'left';
+              cell.alignment = {
+                vertical: 'middle',
+                horizontal: h,
+                wrapText: false
+              };
+            }; // ── SUMMARY SHEET ────────────────────────────────────────────────
+            ws0 = wb.addWorksheet('Summary');
+            [10, 22, 22, 22, 10, 10, 8, 12, 12, 12].forEach(function (w, i) {
+              ws0.getColumn(i + 1).width = w;
+            });
+            addMerged = function addMerged(ws, txt, bg, font, cols, h) {
+              var r = ws.addRow([txt].concat(_toConsumableArray(Array(cols - 1).fill(''))));
+              ws.mergeCells("A".concat(r.number, ":").concat(String.fromCharCode(64 + cols)).concat(r.number));
+              r.height = h || 20;
+              var c = r.getCell('A');
+              fs(c, bg);
+              c.font = font;
+              al(c);
+              bd(c);
+              return r;
+            };
+            addMerged(ws0, "".concat(proj.name || 'Project', " \u2014 MOD Pre-Sale Inquiry | ").concat(proj.rev), AMBR, {
+              color: {
+                argb: WHT
+              },
+              bold: true,
+              size: 12
+            }, 10, 26);
+            addMerged(ws0, "Customer: ".concat(proj.customer || '—', " | Building: ").concat(proj.building || '—', " | Location: ").concat(proj.location || '—', " | Date: ").concat(proj.date || '—', " | Sales: ").concat(proj.sales || '—', " | Engineer: ").concat(proj.engineer || '—'), 'FFFFF7ED', {
+              color: {
+                argb: 'FF7C2D12'
+              },
+              size: 10
+            }, 10, 18);
+            ws0.addRow([]);
+            sh = ws0.addRow(['No.', 'Elev No.', 'Existing Brand', 'Proposed Product', 'Code', 'kg', 'Speed', 'Stops', 'OH diff', 'Pit diff']);
+            sh.height = 20;
+            ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'].forEach(function (c) {
+              var cell = sh.getCell(c);
+              fs(cell, AMBR);
+              cell.font = {
+                color: {
+                  argb: WHT
+                },
+                bold: true,
+                size: 10
+              };
+              al(cell, 'center');
+              bd(cell);
+            });
+            groups.forEach(function (g, gi) {
+              var e = g.existing || {},
+                p = g.proposed || {};
+              var ohDiff = e.overhead && p.overhead ? Number(p.overhead) - Number(e.overhead) : null;
+              var pitDiff = e.pitDepth && p.pitDepth ? Number(p.pitDepth) - Number(e.pitDepth) : null;
+              var r = ws0.addRow([gi + 1, e.elevNo || '—', e.brand || '—', [p.source, p.product].filter(Boolean).join(' '), p.code || '—', p.kg || '—', p.speed ? p.speed + ' m/s' : '—', e.noOfStop || '—', ohDiff != null ? ohDiff > 0 ? '+' + ohDiff + 'mm' : 'OK' : '—', pitDiff != null ? pitDiff > 0 ? '+' + pitDiff + 'mm' : 'OK' : '—']);
+              r.height = 18;
+              ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'].forEach(function (c, ci) {
+                var cell = r.getCell(c);
+                var bg = gi % 2 === 0 ? 'FFFFFFFF' : ALT;
+                fs(cell, bg);
+                al(cell, ci === 0 ? 'center' : 'left');
+                bd(cell);
+                if (ci >= 8 && r.getCell(c).value && r.getCell(c).value.includes('+')) {
+                  cell.font = {
+                    color: {
+                      argb: 'FFDC2626'
+                    },
+                    bold: true
+                  };
+                }
+                if (ci >= 8 && r.getCell(c).value === 'OK') {
+                  cell.font = {
+                    color: {
+                      argb: 'FF166534'
+                    },
+                    bold: true
+                  };
+                }
+              });
+            });
+
+            // ── PER-LIFT SHEETS ─────────────────────────────────────────────
+            groups.forEach(function (g, gi) {
+              // ── CM sheet ──────────────────────────────────────────────────
+              if (g.type === 'CM') {
+                var cm = g.cm || {};
+                var _shName = ('G' + (gi + 1) + (cm.techInquiryNo ? '_' + cm.techInquiryNo : '')).slice(0, 31).replace(/[\/\\?*\[\]:]/g, '_');
+                var _ws = wb.addWorksheet(_shName);
+                [8, 55, 30].forEach(function (w, i) {
+                  _ws.getColumn(i + 1).width = w;
+                });
+                addMerged(_ws, "".concat(proj.name || 'Project', " | ").concat(proj.rev), NAV_C, {
+                  color: {
+                    argb: WHT
+                  },
+                  bold: true,
+                  size: 12
+                }, 3, 24);
+                addMerged(_ws, "CM | ".concat(cm.techInquiryNo || '', " | ").concat(cm.product || '—', " | Tech Level: ").concat(cm.techLevel || '—'), 'FF2D5086', {
+                  color: {
+                    argb: WHT
+                  },
+                  bold: true,
+                  size: 11
+                }, 3, 20);
+                var ch = _ws.addRow(['No.', 'Description', 'Value']);
+                ch.height = 22;
+                ['A', 'B', 'C'].forEach(function (col) {
+                  var cell = ch.getCell(col);
+                  fs(cell, NAV_C);
+                  cell.font = {
+                    color: {
+                      argb: WHT
+                    },
+                    bold: true,
+                    size: 11
+                  };
+                  al(cell, col === 'B' ? 'left' : 'center');
+                  bd(cell);
+                });
+                var cidx = 0;
+                buildCMRows(g).forEach(function (row) {
+                  if (row.type === 'sec') {
+                    cidx = 0;
+                    var r = _ws.addRow([row.title, '', '']);
+                    _ws.mergeCells("A".concat(r.number, ":C").concat(r.number));
+                    r.height = 18;
+                    var cell = r.getCell('A');
+                    var isLocal = row.title.includes('Local');
+                    var isFeat = row.title === 'Features';
+                    fs(cell, isLocal || isFeat ? AMBL : SECL);
+                    cell.font = {
+                      color: {
+                        argb: isLocal || isFeat ? 'FF92400E' : NAV_C
+                      },
+                      bold: true,
+                      size: 10.5
+                    };
+                    al(cell);
+                    bd(cell);
+                  } else if (row.type === 'feat') {
+                    var _r = _ws.addRow([++cidx, row.field, row.std ? 'Standard' : 'Optional']);
+                    _r.height = 17;
+                    var bg = cidx % 2 === 0 ? 'FFFFFFFF' : ALT;
+                    var nc = _r.getCell('A');
+                    fs(nc, bg);
+                    nc.font = {
+                      color: {
+                        argb: BLU
+                      },
+                      bold: true
+                    };
+                    al(nc, 'center');
+                    bd(nc);
+                    var dc = _r.getCell('B');
+                    fs(dc, bg);
+                    al(dc, 'left');
+                    bd(dc);
+                    var vc = _r.getCell('C');
+                    fs(vc, row.std ? SECL : AMBL);
+                    al(vc, 'center');
+                    vc.font = {
+                      color: {
+                        argb: row.std ? NAV_C : 'FF92400E'
+                      },
+                      size: 10,
+                      bold: true
+                    };
+                    bd(vc);
+                  } else {
+                    var _r2 = _ws.addRow([++cidx, row.field, row.pr || '—']);
+                    _r2.height = 17;
+                    var _bg = cidx % 2 === 0 ? 'FFFFFFFF' : ALT;
+                    var _nc = _r2.getCell('A');
+                    fs(_nc, _bg);
+                    _nc.font = {
+                      color: {
+                        argb: BLU
+                      },
+                      bold: true
+                    };
+                    al(_nc, 'center');
+                    bd(_nc);
+                    var _dc = _r2.getCell('B');
+                    fs(_dc, _bg);
+                    al(_dc, 'left');
+                    bd(_dc);
+                    var _vc = _r2.getCell('C');
+                    fs(_vc, 'FFFFF7ED');
+                    al(_vc, 'left');
+                    _vc.font = {
+                      color: {
+                        argb: NAV_C
+                      },
+                      bold: true,
+                      size: 11
+                    };
+                    bd(_vc);
+                  }
+                });
+                return;
+              }
+              // ── FM sheet ──────────────────────────────────────────────────
+              var e = g.existing || {},
+                p = g.proposed || {};
+              var shName = ('G' + (gi + 1) + (e.elevNo ? ' - ' + e.elevNo : '')).slice(0, 31).replace(/[\/\\?*\[\]:]/g, '');
+              var ws = wb.addWorksheet(shName);
+              [6, 40, 28, 28].forEach(function (w, i) {
+                ws.getColumn(i + 1).width = w;
+              });
+              addMerged(ws, "".concat(proj.name || 'Project', " | ").concat(proj.rev), NAV_C, {
+                color: {
+                  argb: WHT
+                },
+                bold: true,
+                size: 12
+              }, 4, 24);
+              addMerged(ws, "".concat(e.elevNo || 'Lift ' + (gi + 1), " \u2014 Modernization Full Replacement"), 'FF2D5086', {
+                color: {
+                  argb: WHT
+                },
+                bold: true,
+                size: 11
+              }, 4, 20);
+              var hr = ws.addRow(['#', 'Field', 'Existing Lift', 'Modernization']);
+              hr.height = 22;
+              ['A', 'B', 'C', 'D'].forEach(function (c, ci) {
+                var cell = hr.getCell(c);
+                fs(cell, NAV_C);
+                cell.font = {
+                  color: {
+                    argb: WHT
+                  },
+                  bold: true,
+                  size: 11
+                };
+                al(cell, ci === 0 ? 'center' : ci === 1 ? 'left' : 'center');
+                bd(cell);
+              });
+              var rn = 0;
+              buildFMRows(g).forEach(function (row) {
+                if (row.type === 'sec') {
+                  rn = 0;
+                  var r = ws.addRow([row.title, '', '', '']);
+                  ws.mergeCells("A".concat(r.number, ":D").concat(r.number));
+                  r.height = 18;
+                  var cell = r.getCell('A');
+                  fs(cell, row.title.includes('Features') || row.title.includes('Local') ? AMBL : SECL);
+                  cell.font = {
+                    color: {
+                      argb: row.title.includes('Features') || row.title.includes('Local') ? 'FF92400E' : NAV_C
+                    },
+                    bold: true,
+                    size: 10.5
+                  };
+                  al(cell);
+                  bd(cell);
+                } else if (row.type === 'feat') {
+                  var _r3 = ws.addRow([++rn, row.field, '', row.std ? 'Standard' : 'Optional']);
+                  _r3.height = 17;
+                  var bg = rn % 2 === 0 ? 'FFFFFFFF' : ALT;
+                  var nc = _r3.getCell('A');
+                  fs(nc, bg);
+                  nc.font = {
+                    color: {
+                      argb: BLU
+                    },
+                    bold: true
+                  };
+                  al(nc, 'center');
+                  bd(nc);
+                  var fc = _r3.getCell('B');
+                  fs(fc, bg);
+                  al(fc, 'left');
+                  bd(fc);
+                  var ec = _r3.getCell('C');
+                  fs(ec, bg);
+                  al(ec, 'center');
+                  bd(ec);
+                  var vc = _r3.getCell('D');
+                  fs(vc, row.std ? SECL : AMBL);
+                  al(vc, 'center');
+                  vc.font = {
+                    color: {
+                      argb: row.std ? NAV_C : 'FF92400E'
+                    },
+                    bold: true,
+                    size: 10
+                  };
+                  bd(vc);
+                } else if (row.type === 'local') {
+                  var _r4 = ws.addRow([++rn, row.field, '', row.val || '—']);
+                  _r4.height = 17;
+                  var _bg2 = rn % 2 === 0 ? 'FFFFFFFF' : ALT;
+                  ['A', 'B', 'C', 'D'].forEach(function (c, ci) {
+                    var cell = _r4.getCell(c);
+                    fs(cell, ci === 3 ? 'FFFFF7ED' : _bg2);
+                    al(cell, ci === 0 ? 'center' : 'left');
+                    bd(cell);
+                  });
+                  _r4.getCell('A').font = {
+                    color: {
+                      argb: BLU
+                    },
+                    bold: true
+                  };
+                  _r4.getCell('D').font = {
+                    color: {
+                      argb: NAV_C
+                    },
+                    bold: true
+                  };
+                } else {
+                  var _r5 = ws.addRow([++rn, row.field, row.ex || '—', row.pr || '—']);
+                  _r5.height = 17;
+                  var _bg3 = rn % 2 === 0 ? 'FFFFFFFF' : ALT;
+                  var _nc2 = _r5.getCell('A');
+                  fs(_nc2, _bg3);
+                  _nc2.font = {
+                    color: {
+                      argb: BLU
+                    },
+                    bold: true
+                  };
+                  al(_nc2, 'center');
+                  bd(_nc2);
+                  var lc = _r5.getCell('B');
+                  fs(lc, SECL);
+                  lc.font = {
+                    bold: true,
+                    size: 10
+                  };
+                  al(lc);
+                  bd(lc);
+                  var _ec = _r5.getCell('C');
+                  fs(_ec, _bg3);
+                  al(_ec);
+                  bd(_ec);
+                  var pc = _r5.getCell('D');
+                  fs(pc, 'FFFFF7ED');
+                  pc.font = {
+                    color: {
+                      argb: NAV_C
+                    },
+                    bold: true
+                  };
+                  al(pc);
+                  bd(pc);
+                }
+              });
+            });
+            _context.n = 2;
+            return wb.xlsx.writeBuffer();
+          case 2:
+            buf = _context.v;
+            blob = new Blob([buf], {
+              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            });
+            url = URL.createObjectURL(blob);
+            a = document.createElement('a');
+            a.href = url;
+            a.download = (proj.name || 'MOD') + '_' + proj.rev + '.xlsx';
+            a.click();
+            URL.revokeObjectURL(url);
+          case 3:
+            return _context.a(2);
+        }
+      }, _callee);
+    }));
+    function generateXls() {
+      return _generateXls.apply(this, arguments);
+    }
+    return generateXls;
+  }();
+  var handleJobSiteUpload = /*#__PURE__*/function () {
+    var _handleJobSiteUpload = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(file) {
+      var _data$candidates, toB64, b64, ext, mimeMap, mime, PROMPT, resp, data, _data$error, msg, raw, clean, p, filled, se, _t;
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.p = _context2.n) {
+          case 0:
+            if (file) {
+              _context2.n = 1;
+              break;
+            }
+            return _context2.a(2);
+          case 1:
+            setUploading(true);
+            _context2.p = 2;
+            toB64 = function toB64(f) {
+              return new Promise(function (res, rej) {
+                var r = new FileReader();
+                r.onload = function () {
+                  return res(r.result.split(',')[1]);
+                };
+                r.onerror = rej;
+                r.readAsDataURL(f);
+              });
+            };
+            _context2.n = 3;
+            return toB64(file);
+          case 3:
+            b64 = _context2.v;
+            ext = file.name.split('.').pop().toLowerCase();
+            mimeMap = {
+              pdf: 'application/pdf',
+              jpg: 'image/jpeg',
+              jpeg: 'image/jpeg',
+              png: 'image/png',
+              webp: 'image/webp'
+            };
+            mime = mimeMap[ext] || 'application/pdf';
+            PROMPT = "Analyze this elevator/lift job site check or specification document. Extract existing lift information and return ONLY valid JSON:\n{\n  \"brand\":\"brand name or null\",\n  \"usage\":\"Passenger/Service/Fireman/Bed or null\",\n  \"capacity\":\"number in kg or null\",\n  \"speed\":\"number in m/s or null\",\n  \"doorType\":\"CO or 2S or null\",\n  \"noOfStop\":\"number or null\",\n  \"travel\":\"number in meters or null\",\n  \"machineRoom\":\"MR or MRL or null\",\n  \"carType\":\"Standard or Non-standard or null\",\n  \"carW\":\"car width in mm or null\",\n  \"carD\":\"car depth in mm or null\",\n  \"ceilingHL\":\"ceiling height in mm or null\",\n  \"entranceJJ\":\"door width in mm or null\",\n  \"entranceHH\":\"door height in mm or null\",\n  \"shaftAH\":\"shaft width in mm or null\",\n  \"shaftBH\":\"shaft depth in mm or null\",\n  \"overhead\":\"overhead in mm or null\",\n  \"pitDepth\":\"pit depth in mm or null\",\n  \"hoistway\":\"RCC or Brick or Steel or null\",\n  \"cwtLocation\":\"Rear or Left or Right or Side or null\",\n  \"carWall\":\"finish description or null\",\n  \"carDoor\":\"finish description or null\",\n  \"flooring\":\"flooring description or null\",\n  \"cop\":\"COP description or null\",\n  \"operation\":\"Passenger or Service or null\",\n  \"filledFields\":[\"list of field names that were successfully extracted\"]\n}";
+            _context2.n = 4;
+            return fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent", {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-goog-api-key': GEMINI_KEY
+              },
+              body: JSON.stringify({
+                contents: [{
+                  parts: [{
+                    inline_data: {
+                      mime_type: mime,
+                      data: b64
+                    }
+                  }, {
+                    text: PROMPT
+                  }]
+                }]
+              })
+            });
+          case 4:
+            resp = _context2.v;
+            _context2.n = 5;
+            return resp.json();
+          case 5:
+            data = _context2.v;
+            if (!(!resp.ok || data.error)) {
+              _context2.n = 6;
+              break;
+            }
+            msg = ((_data$error = data.error) === null || _data$error === void 0 ? void 0 : _data$error.message) || JSON.stringify(data).slice(0, 200);
+            alert('Gemini Error: ' + msg);
+            setUploading(false);
+            return _context2.a(2);
+          case 6:
+            raw = ((_data$candidates = data.candidates) === null || _data$candidates === void 0 || (_data$candidates = _data$candidates[0]) === null || _data$candidates === void 0 || (_data$candidates = _data$candidates.content) === null || _data$candidates === void 0 || (_data$candidates = _data$candidates.parts) === null || _data$candidates === void 0 || (_data$candidates = _data$candidates[0]) === null || _data$candidates === void 0 ? void 0 : _data$candidates.text) || '{}';
+            clean = raw.replace(/```json|```/g, '').trim();
+            p = JSON.parse(clean);
+            filled = [];
+            se = function se(k, v) {
+              if (v != null && v !== '') {
+                setEditExisting(function (prev) {
+                  return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, k, String(v)));
+                });
+                filled.push(k);
+              }
+            };
+            se('brand', p.brand);
+            se('usage', p.usage);
+            se('capacity', p.capacity);
+            se('speed', p.speed);
+            se('doorType', p.doorType);
+            se('noOfStop', p.noOfStop);
+            se('travel', p.travel);
+            se('machineRoom', p.machineRoom);
+            se('carType', p.carType);
+            se('carW', p.carW);
+            se('carD', p.carD);
+            se('ceilingHL', p.ceilingHL);
+            se('entranceJJ', p.entranceJJ);
+            se('entranceHH', p.entranceHH);
+            se('shaftAH', p.shaftAH);
+            se('shaftBH', p.shaftBH);
+            se('overhead', p.overhead);
+            se('pitDepth', p.pitDepth);
+            se('hoistway', p.hoistway);
+            se('cwtLocation', p.cwtLocation);
+            se('carWall', p.carWall);
+            se('carDoor', p.carDoor);
+            se('flooring', p.flooring);
+            se('cop', p.cop);
+            se('operation', p.operation);
+            setAutoFilled(true);
+            setAutoFilledFields(filled);
+            _context2.n = 8;
+            break;
+          case 7:
+            _context2.p = 7;
+            _t = _context2.v;
+            alert('Auto fill failed: ' + _t.message);
+          case 8:
+            _context2.p = 8;
+            setUploading(false);
+            return _context2.f(8);
+          case 9:
+            return _context2.a(2);
+        }
+      }, _callee2, null, [[2, 7, 8, 9]]);
+    }));
+    function handleJobSiteUpload(_x) {
+      return _handleJobSiteUpload.apply(this, arguments);
+    }
+    return handleJobSiteUpload;
+  }();
+  var saveCM = function saveCM() {
+    var g = {
+      id: editIdx !== null ? groups[editIdx].id : uid(),
+      type: 'CM',
+      cm: _objectSpread({}, editCM),
+      feats: _objectSpread({}, editFeats)
+    };
+    if (editIdx !== null) {
+      setGroups(function (prev) {
+        return prev.map(function (x, i) {
+          return i === editIdx ? g : x;
+        });
+      });
+    } else {
+      setGroups(function (prev) {
+        return [].concat(_toConsumableArray(prev), [g]);
+      });
+    }
+    setSaveMsg('Saved!');
+    setTimeout(function () {
+      return setSaveMsg('');
+    }, 2000);
+    setView('list');
+    window.scrollTo(0, 0);
+  };
+  var saveGroup = function saveGroup() {
+    var g = {
+      id: editIdx !== null ? groups[editIdx].id : uid(),
+      existing: editExisting,
+      proposed: editProposed,
+      feats: editFeats,
+      local: editLocal
+    };
+    if (editIdx !== null) {
+      setGroups(function (prev) {
+        return prev.map(function (x, i) {
+          return i === editIdx ? g : x;
+        });
+      });
+    } else {
+      setGroups(function (prev) {
+        return [].concat(_toConsumableArray(prev), [g]);
+      });
+    }
+    setSaveMsg('Saved!');
+    setTimeout(function () {
+      return setSaveMsg('');
+    }, 2000);
+    setView('list');
+    window.scrollTo(0, 0);
+  };
+  var totalUnits = groups.length;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "system-ui,sans-serif",
+      fontSize: 15,
+      background: "var(--color-background-secondary)",
+      minHeight: "100vh"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: NAV,
+      padding: "0 16px",
+      position: "sticky",
+      top: 0,
+      zIndex: 50
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 740,
+      margin: "0 auto",
+      display: "flex",
+      alignItems: "center",
+      gap: 6,
+      height: 48
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 30,
+      height: 30,
+      borderRadius: 7,
+      background: AMBER,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 13,
+      fontWeight: 700,
+      color: NAV,
+      flexShrink: 0
+    }
+  }, "M"), (view === 'list' || view === 'preview') && /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setView('list');
+    },
+    style: {
+      padding: "5px 13px",
+      borderRadius: 5,
+      border: "none",
+      background: view === 'list' ? "#fff" : "transparent",
+      color: view === 'list' ? NAV : "rgba(255,255,255,0.65)",
+      fontWeight: view === 'list' ? 500 : 400,
+      fontSize: 12,
+      cursor: "pointer",
+      fontFamily: "inherit"
+    }
+  }, "Group List"), (view === 'list' || view === 'preview') && /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setView('preview');
+    },
+    style: {
+      padding: "5px 13px",
+      borderRadius: 5,
+      border: "none",
+      background: view === 'preview' ? "#fff" : "transparent",
+      color: view === 'preview' ? NAV : "rgba(255,255,255,0.65)",
+      fontWeight: view === 'preview' ? 500 : 400,
+      fontSize: 12,
+      cursor: "pointer",
+      fontFamily: "inherit"
+    }
+  }, "Preview Form"), (view === 'edit' || view === 'cm') && /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      setView('list');
+      setWizStep(1);
+    },
+    style: {
+      padding: "5px 12px",
+      borderRadius: 5,
+      border: "0.5px solid rgba(255,255,255,0.3)",
+      background: "transparent",
+      color: "#fff",
+      fontSize: 12,
+      cursor: "pointer",
+      fontFamily: "inherit"
+    }
+  }, "\u2190 Back to List"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }), saveMsg && /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "#86efac"
+    }
+  }, saveMsg), /*#__PURE__*/React.createElement("button", {
+    onClick: exportJSON,
+    style: {
+      padding: "5px 10px",
+      borderRadius: 5,
+      border: "0.5px solid rgba(255,255,255,0.3)",
+      background: "transparent",
+      color: "#fff",
+      fontSize: 11.5,
+      cursor: "pointer",
+      fontFamily: "inherit"
+    }
+  }, "\uD83D\uDCBE Save"), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      var _importRef$current;
+      return (_importRef$current = importRef.current) === null || _importRef$current === void 0 ? void 0 : _importRef$current.click();
+    },
+    style: {
+      padding: "5px 10px",
+      borderRadius: 5,
+      border: "0.5px solid rgba(255,255,255,0.3)",
+      background: "transparent",
+      color: "#fff",
+      fontSize: 11.5,
+      cursor: "pointer",
+      fontFamily: "inherit"
+    }
+  }, "\uD83D\uDCC2 Upload"), /*#__PURE__*/React.createElement("input", {
+    ref: importRef,
+    type: "file",
+    accept: ".json",
+    style: {
+      display: "none"
+    },
+    onChange: function onChange(e) {
+      var _e$target$files2;
+      if ((_e$target$files2 = e.target.files) !== null && _e$target$files2 !== void 0 && _e$target$files2[0]) importJSON(e.target.files[0]);
+      e.target.value = '';
+    }
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 740,
+      margin: "0 auto",
+      padding: "14px 12px"
+    }
+  }, view === 'list' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "var(--color-background-primary)",
+      border: "0.5px solid var(--color-border-tertiary)",
+      borderRadius: 10,
+      padding: 14,
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 500,
+      color: NAV,
+      marginBottom: 12
+    }
+  }, "\uD83D\uDCCB Project Information"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement(F, {
+    label: "Job Site Check No.",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.jobSiteNo,
+    on: function on(v) {
+      return sp({
+        jobSiteNo: v
+      });
+    },
+    ph: "e.g. JS-2026-001"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Project BKK No.",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.projectBKKNo,
+    on: function on(v) {
+      return sp({
+        projectBKKNo: v
+      });
+    },
+    ph: "e.g. BKK-2026-001"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Project Name"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.name,
+    on: function on(v) {
+      return sp({
+        name: v
+      });
+    },
+    ph: "e.g. ABC Building MOD"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Customer"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.customer,
+    on: function on(v) {
+      return sp({
+        customer: v
+      });
+    },
+    ph: "Customer name"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Building Type"
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: proj.building || "Office",
+    on: function on(v) {
+      return sp({
+        building: v
+      });
+    },
+    opts: ["Office", "Residential", "Hotel", "Hospital", "Bank", "Department store", "ETC"]
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Location"
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.location,
+    on: function on(v) {
+      return sp({
+        location: v
+      });
+    },
+    ph: "City"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Date",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.date,
+    on: function on(v) {
+      return sp({
+        date: v
+      });
+    },
+    ph: "YYYY-MM-DD"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Revision",
+    half: true
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    value: proj.rev,
+    onChange: function onChange(e) {
+      return sp({
+        rev: e.target.value
+      });
+    },
+    style: _objectSpread(_objectSpread({}, bInp), {}, {
+      flex: 1
+    })
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      var m = proj.rev.match(/Rev\.(\d+)/);
+      var n = m ? parseInt(m[1]) + 1 : 1;
+      sp({
+        rev: "Rev.".concat(n)
+      });
+    },
+    style: {
+      padding: "7px 10px",
+      borderRadius: 7,
+      border: "0.5px solid ".concat(AMBER),
+      background: "transparent",
+      color: AMBER,
+      cursor: "pointer",
+      fontFamily: "inherit",
+      fontSize: 12,
+      whiteSpace: "nowrap"
+    }
+  }, "+Rev"))), /*#__PURE__*/React.createElement(F, {
+    label: "Sales Name",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.sales,
+    on: function on(v) {
+      return sp({
+        sales: v
+      });
+    },
+    ph: "Sales name"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Engineer Name",
+    half: true
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: proj.engineer,
+    on: function on(v) {
+      return sp({
+        engineer: v
+      });
+    },
+    ph: "Engineer name"
+  })))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 0,
+      border: "0.5px solid var(--color-border-secondary)",
+      borderRadius: 8,
+      overflow: "hidden",
+      marginBottom: 8
+    }
+  }, [["FM", "🔄 FM — Full Replacement"], ["CM", "⚙️ CM — Control Modernization"]].map(function (_ref32) {
+    var _ref33 = _slicedToArray(_ref32, 2),
+      t = _ref33[0],
+      l = _ref33[1];
+    return /*#__PURE__*/React.createElement("button", {
+      key: t,
+      onClick: function onClick() {
+        return setCmType(t);
+      },
+      style: {
+        flex: 1,
+        padding: "8px",
+        border: "none",
+        background: cmType === t ? AMBER : "var(--color-background-primary)",
+        color: cmType === t ? NAV : "var(--color-text-secondary)",
+        fontWeight: cmType === t ? 500 : 400,
+        fontSize: 12.5,
+        cursor: "pointer",
+        fontFamily: "inherit"
+      }
+    }, l);
+  })), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return cmType === 'CM' ? openCM() : openNew();
+    },
+    style: {
+      width: "100%",
+      padding: "9px",
+      borderRadius: 8,
+      border: "1.5px dashed ".concat(NAV),
+      background: "transparent",
+      color: NAV,
+      fontSize: 13,
+      fontWeight: 500,
+      cursor: "pointer",
+      fontFamily: "inherit",
+      marginBottom: 10
+    }
+  }, "+ Add ", cmType, " Lift"), groups.length === 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      padding: "40px 20px",
+      color: "var(--color-text-muted)",
+      fontSize: 13
+    }
+  }, "No lifts added yet \u2014 click \"+ Add Lift (MOD)\" to get started"), groups.map(function (g, i) {
+    var e = g.existing || {},
+      p = g.proposed || {},
+      cm = g.cm || {};
+    var isCM = g.type === 'CM';
+    return /*#__PURE__*/React.createElement("div", {
+      key: g.id,
+      style: {
+        border: "0.5px solid ".concat(isCM ? AMBER : NAV),
+        borderRadius: 12,
+        marginBottom: 10,
+        overflow: "hidden",
+        background: "var(--color-background-primary)"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        padding: "10px 14px",
+        background: isCM ? "#fefce8" : "var(--color-background-secondary)",
+        borderBottom: "0.5px solid var(--color-border-tertiary)"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 28,
+        height: 28,
+        borderRadius: 7,
+        background: isCM ? AMBER : NAV,
+        color: isCM ? NAV : "#fff",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: 11,
+        fontWeight: 500,
+        flexShrink: 0
+      }
+    }, "G", i + 1), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 14,
+        fontWeight: 500,
+        color: isCM ? AMBERD : NAV,
+        display: "flex",
+        alignItems: "center",
+        gap: 6
+      }
+    }, isCM ? "CM" : "FM", " \u2014 ", isCM ? cm.techInquiryNo || "Group ".concat(i + 1) : e.elevNo || "Group ".concat(i + 1), isCM && /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 9.5,
+        background: AMBER,
+        color: NAV,
+        padding: "1px 6px",
+        borderRadius: 3,
+        fontWeight: 600
+      }
+    }, "CM")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 12,
+        color: "var(--color-text-muted)"
+      }
+    }, isCM ? "".concat(cm.product || "—", " \xB7 ").concat(cm.capacity || "—", " kg \xB7 ").concat(cm.speed || "—", " m/s") : "".concat(e.brand || "—", " \u2192 ").concat(p.source || "—", " ").concat(p.product || "—", " ").concat(p.code || ""))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 6
+      }
+    }, ["Edit", "Copy", "Preview", "Delete"].map(function (a) {
+      return /*#__PURE__*/React.createElement("button", {
+        key: a,
+        onClick: function onClick() {
+          return a === 'Edit' ? isCM ? openCM(i) : openEdit(i) : a === 'Copy' ? copyGroup(i) : a === 'Preview' ? setPreviewGroup(g) : deleteGroup(i);
+        },
+        style: {
+          padding: "5px 10px",
+          borderRadius: 6,
+          border: "0.5px solid var(--color-border-secondary)",
+          background: "var(--color-background-primary)",
+          color: a === 'Delete' ? "var(--color-text-danger)" : a === 'Preview' ? AMBER : "var(--color-text-primary)",
+          fontWeight: a === 'Preview' ? 500 : 400,
+          fontSize: 11.5,
+          cursor: "pointer",
+          fontFamily: "inherit"
+        }
+      }, a);
+    }))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "10px 14px",
+        display: "grid",
+        gridTemplateColumns: "repeat(3,1fr)",
+        gap: 8
+      }
+    }, isCM ? [["Product", cm.product || "—"], ["Capacity", cm.capacity ? cm.capacity + " kg" : "—"], ["Speed", cm.speed ? cm.speed + " m/s" : "—"], ["Tech Level", cm.techLevel || "—"], ["Tech Inquiry No.", cm.techInquiryNo || "—"], ["Traction", cm.tractionMachine || "—"]].map(function (_ref34) {
+      var _ref35 = _slicedToArray(_ref34, 2),
+        l = _ref35[0],
+        v = _ref35[1];
+      return /*#__PURE__*/React.createElement("div", {
+        key: l,
+        style: {
+          background: "var(--color-background-secondary)",
+          borderRadius: 8,
+          padding: "8px 10px"
+        }
+      }, /*#__PURE__*/React.createElement("div", {
+        style: {
+          fontSize: 10,
+          color: "var(--color-text-muted)",
+          marginBottom: 2
+        }
+      }, l), /*#__PURE__*/React.createElement("div", {
+        style: {
+          fontSize: 13,
+          fontWeight: 500
+        }
+      }, v));
+    }) : [[" Existing speed", e.speed ? e.speed + " m/s" : "—"], ["Proposed speed", p.speed ? p.speed + " m/s" : "—"], ["Capacity", p.kg ? p.kg + " kg" : "—"], ["No. of Stop", e.noOfStop || "—"], ["Travel", e.travel ? e.travel + " m" : "—"], ["Machine Room", p.machineRoom || "—"]].map(function (_ref36) {
+      var _ref37 = _slicedToArray(_ref36, 2),
+        l = _ref37[0],
+        v = _ref37[1];
+      return /*#__PURE__*/React.createElement("div", {
+        key: l,
+        style: {
+          background: "var(--color-background-secondary)",
+          borderRadius: 8,
+          padding: "8px 10px"
+        }
+      }, /*#__PURE__*/React.createElement("div", {
+        style: {
+          fontSize: 10,
+          color: "var(--color-text-muted)",
+          marginBottom: 2
+        }
+      }, l), /*#__PURE__*/React.createElement("div", {
+        style: {
+          fontSize: 13,
+          fontWeight: 500
+        }
+      }, v));
+    })));
+  }), groups.length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      marginTop: 8,
+      paddingBottom: 40,
+      color: "var(--color-text-muted)",
+      fontSize: 12
+    }
+  }, totalUnits, " lift(s) total")), view === 'edit' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setView('list');
+    },
+    style: {
+      padding: "7px 12px",
+      borderRadius: 7,
+      border: "0.5px solid var(--color-border-secondary)",
+      background: "var(--color-background-primary)",
+      cursor: "pointer",
+      fontSize: 13,
+      fontFamily: "inherit"
+    }
+  }, "\u2190 Back"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      fontWeight: 500
+    }
+  }, editIdx !== null ? "Edit Lift" : "Modernization Full Replacement")), /*#__PURE__*/React.createElement(WizBar, {
+    step: wizStep,
+    onStep: setWizStep
+  }), wizStep === 1 && /*#__PURE__*/React.createElement(Sec, {
+    icon: "\uD83C\uDFD7\uFE0F",
+    title: "Basic Info"
+  }, /*#__PURE__*/React.createElement(F, {
+    label: "Elevator No."
+  }, /*#__PURE__*/React.createElement(Inp, {
+    v: editExisting.elevNo,
+    on: function on(v) {
+      return setEditExisting(function (s) {
+        return _objectSpread(_objectSpread({}, s), {}, {
+          elevNo: v
+        });
+      });
+    },
+    ph: "e.g. D-PL-01"
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Quantity",
+    half: true
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    min: "1",
+    value: editProposed.quantity || 1,
+    onChange: function onChange(e) {
+      return setEditProposed(function (s) {
+        return _objectSpread(_objectSpread({}, s), {}, {
+          quantity: e.target.value
+        });
+      });
+    },
+    style: _objectSpread({}, bInp)
+  })), /*#__PURE__*/React.createElement(F, {
+    label: "Usage",
+    half: true
+  }, /*#__PURE__*/React.createElement(Sel, {
+    v: editExisting.usage || "Passenger",
+    on: function on(v) {
+      return setEditExisting(function (s) {
+        return _objectSpread(_objectSpread({}, s), {}, {
+          usage: v
+        });
+      });
+    },
+    opts: ["Passenger", "Service", "Bed", "Fireman", "Car park"]
+  }))), wizStep >= 2 && wizStep <= 4 && /*#__PURE__*/React.createElement(LiftEditor, {
+    existing: editExisting,
+    proposed: editProposed,
+    feats: editFeats,
+    local: editLocal,
+    setExisting: setEditExisting,
+    setProposed: setEditProposed,
+    setFeats: setEditFeats,
+    setLocal: setEditLocal,
+    step: wizStep,
+    setStep: setWizStep,
+    autoFilled: autoFilled,
+    autoFilledFields: autoFilledFields,
+    uploading: uploading,
+    handleJobSiteUpload: handleJobSiteUpload,
+    fileUploadRef: fileUploadRef,
+    onClearAutoFill: function onClearAutoFill() {
+      setAutoFilled(false);
+      setAutoFilledFields([]);
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 10,
+      paddingBottom: 20
+    }
+  }, wizStep > 1 && /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setWizStep(function (s) {
+        return s - 1;
+      });
+    },
+    style: {
+      flex: 1,
+      padding: "10px",
+      borderRadius: 8,
+      border: "0.5px solid var(--color-border-strong)",
+      background: "var(--color-background-primary)",
+      cursor: "pointer",
+      fontSize: 14,
+      fontFamily: "inherit"
+    }
+  }, "\u2190 Back"), wizStep < 4 ? /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setWizStep(function (s) {
+        return s + 1;
+      });
+    },
+    style: {
+      flex: 2,
+      padding: "10px",
+      borderRadius: 8,
+      border: "none",
+      background: AMBER,
+      color: NAV,
+      cursor: "pointer",
+      fontSize: 14,
+      fontWeight: 500,
+      fontFamily: "inherit"
+    }
+  }, "Next \u2192") : /*#__PURE__*/React.createElement("button", {
+    onClick: saveGroup,
+    style: {
+      flex: 2,
+      padding: "10px",
+      borderRadius: 8,
+      border: "none",
+      background: AMBER,
+      color: NAV,
+      cursor: "pointer",
+      fontSize: 14,
+      fontWeight: 500,
+      fontFamily: "inherit"
+    }
+  }, "\uD83D\uDCBE Save Lift"))), view === 'cm' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      setView('list');
+      setWizStep(1);
+    },
+    style: {
+      padding: "7px 12px",
+      borderRadius: 7,
+      border: "0.5px solid var(--color-border-secondary)",
+      background: "var(--color-background-primary)",
+      cursor: "pointer",
+      fontSize: 13,
+      fontFamily: "inherit"
+    }
+  }, "\u2190 Back"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      fontWeight: 500
+    }
+  }, "CM \u2014 Control Modernization")), /*#__PURE__*/React.createElement(WizBar, {
+    step: wizStep,
+    onStep: setWizStep,
+    steps: CM_STEPS
+  }), /*#__PURE__*/React.createElement(CMEditor, {
+    cm: editCM,
+    setCM: setEditCM,
+    feats: editFeats,
+    setFeats: setEditFeats,
+    step: wizStep,
+    setStep: setWizStep,
+    fileUploadRef: fileUploadRef,
+    uploading: uploading,
+    handleJobSiteUpload: handleJobSiteUpload,
+    autoFilled: autoFilled,
+    autoFilledFields: autoFilledFields,
+    onClearAutoFill: function onClearAutoFill() {
+      setAutoFilled(false);
+      setAutoFilledFields([]);
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 10,
+      paddingBottom: 20
+    }
+  }, wizStep > 1 && /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setWizStep(function (s) {
+        return s - 1;
+      });
+    },
+    style: {
+      flex: 1,
+      padding: "10px",
+      borderRadius: 8,
+      border: "0.5px solid var(--color-border-secondary)",
+      background: "var(--color-background-primary)",
+      cursor: "pointer",
+      fontSize: 14,
+      fontFamily: "inherit"
+    }
+  }, "\u2190 Back"), wizStep < 7 ? /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setWizStep(function (s) {
+        return s + 1;
+      });
+    },
+    style: {
+      flex: 2,
+      padding: "10px",
+      borderRadius: 8,
+      border: "none",
+      background: AMBER,
+      color: NAV,
+      cursor: "pointer",
+      fontSize: 14,
+      fontWeight: 500,
+      fontFamily: "inherit"
+    }
+  }, "Next \u2192") : /*#__PURE__*/React.createElement("button", {
+    onClick: saveCM,
+    style: {
+      flex: 2,
+      padding: "10px",
+      borderRadius: 8,
+      border: "none",
+      background: AMBER,
+      color: NAV,
+      cursor: "pointer",
+      fontSize: 14,
+      fontWeight: 500,
+      fontFamily: "inherit"
+    }
+  }, "\uD83D\uDCBE Save Lift"))), view === 'preview' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "right",
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: generateXls,
+    style: {
+      padding: "8px 18px",
+      borderRadius: 7,
+      border: "none",
+      background: AMBER,
+      color: NAV,
+      fontSize: 12.5,
+      fontWeight: 500,
+      cursor: "pointer",
+      fontFamily: "inherit"
+    }
+  }, "\uD83D\uDCCA Export Excel")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: NAV,
+      borderRadius: 10,
+      overflow: "hidden",
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 9.5,
+      color: "rgba(255,255,255,0.5)",
+      letterSpacing: ".1em",
+      textTransform: "uppercase",
+      padding: "10px 16px 0",
+      marginBottom: 2
+    }
+  }, "Pre-Sale Inquiry \u2014 MOD Tool"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: "#fff",
+      fontSize: 16,
+      fontWeight: 500,
+      padding: "0 16px 6px"
+    }
+  }, proj.name || "Unnamed Project", " ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 400,
+      color: "rgba(255,255,255,0.6)"
+    }
+  }, "| ", proj.rev || "Rev.0")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 16,
+      flexWrap: "wrap",
+      padding: "0 16px 10px"
+    }
+  }, [["Customer", proj.customer], ["Building", proj.building], ["Location", proj.location], ["Date", proj.date], ["Sales", proj.sales], ["Engineer", proj.engineer]].filter(function (_ref38) {
+    var _ref39 = _slicedToArray(_ref38, 2),
+      v = _ref39[1];
+    return v;
+  }).map(function (_ref40) {
+    var _ref41 = _slicedToArray(_ref40, 2),
+      l = _ref41[0],
+      v = _ref41[1];
+    return /*#__PURE__*/React.createElement("div", {
+      key: l
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 9,
+        color: "rgba(255,255,255,0.4)"
+      }
+    }, l), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11.5,
+        color: "#fff",
+        fontWeight: 500
+      }
+    }, v));
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 20
+    }
+  }, [["Lifts", groups.length], ["Date", proj.date || "—"], ["Revision", proj.rev]].map(function (_ref42) {
+    var _ref43 = _slicedToArray(_ref42, 2),
+      l = _ref43[0],
+      v = _ref43[1];
+    return /*#__PURE__*/React.createElement("div", {
+      key: l
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 9.5,
+        color: "rgba(255,255,255,0.4)"
+      }
+    }, l), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 12,
+        color: "#fff",
+        fontWeight: 500
+      }
+    }, v));
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fff",
+      borderRadius: 10,
+      overflow: "hidden",
+      border: "0.5px solid #e2e8f0",
+      marginBottom: 80
+    }
+  }, groups.map(function (g, gi) {
+    var _g$cm, _g$cm2, _g$cm3, _g$cm4, _g$cm5;
+    var e = g.existing || {},
+      p = g.proposed || {},
+      f = g.feats || {},
+      l = g.local || {};
+    var isOpen = expanded[g.id] !== false;
+    var diffBadge = function diffBadge(ex, pr) {
+      var ev = Number(ex),
+        pv = Number(pr);
+      if (!ex || !pr) return null;
+      if (pv <= ev) return /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 10,
+          background: "#dcf5e8",
+          color: "#166534",
+          padding: "1px 5px",
+          borderRadius: 3,
+          marginLeft: 4,
+          fontWeight: 500
+        }
+      }, "OK");
+      return /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 10,
+          background: "#fef2f2",
+          color: "#dc2626",
+          padding: "1px 5px",
+          borderRadius: 3,
+          marginLeft: 4,
+          fontWeight: 600
+        }
+      }, "+", pv - ev, "mm");
+    };
+    var stdFeatList = [{
+      code: 'ITP',
+      label: 'Intercom',
+      val: f.ITP ? "ITP (".concat(f.ITP_volt, ")") : null,
+      std: false
+    }, {
+      code: 'DKO-TB',
+      label: 'Door Hold',
+      val: 'DKO-TB',
+      std: true
+    }, {
+      code: 'OLHL',
+      label: 'Overload',
+      val: 'OLHL',
+      std: true
+    }, {
+      code: 'ECL',
+      label: 'Emergency Car Lighting',
+      val: 'ECL',
+      std: true
+    }, {
+      code: 'MELD',
+      label: 'Emergency Lowering Device',
+      val: 'MELD',
+      std: true
+    }, {
+      code: 'SDE',
+      label: 'Safety Door Edge',
+      val: 'SDE',
+      std: true
+    }, {
+      code: 'ACB',
+      label: 'Sonic Car Button Click',
+      val: 'ACB',
+      std: true
+    }, {
+      code: 'FCC-P',
+      label: 'Floor Call Cancel',
+      val: 'FCC-P',
+      std: true
+    }, {
+      code: 'CCTV',
+      label: 'CCTV',
+      val: 'CCTV',
+      std: true
+    }, {
+      code: 'RSRL',
+      label: 'RSRL',
+      val: 'RSRL',
+      std: true
+    }, {
+      code: 'EMB',
+      label: 'Emergency Bell',
+      val: 'EMB',
+      std: true
+    }];
+    var optFeatList = [{
+      code: 'AECC',
+      label: 'Car Arrival Chime',
+      val: f.AECC ? "AECC (".concat(f.AECC_type, ")") : null
+    }, {
+      code: 'MFP',
+      label: 'Main Floor Parking',
+      val: f.MFP ? 'MFP' : null
+    }, {
+      code: 'EER',
+      label: 'Earthquake Emergency Return',
+      val: f.EER ? "EER (".concat(f.EER_type, ")") : null
+    }, {
+      code: 'HOS',
+      label: 'Out of Service by Hall Key Switch',
+      val: f.HOS ? 'HOS' : null
+    }, {
+      code: 'ABP',
+      label: 'Auto By-pass',
+      val: f.ABP ? 'ABP' : null
+    }, {
+      code: 'FE',
+      label: 'Firefighters Emergency Operation',
+      val: f.FE ? f.FE_FELC === 'Yes' ? 'FE + FELC' : 'FE' : null
+    }, {
+      code: 'AAN',
+      label: 'Voice Announcement',
+      val: f.AAN ? "AAN (".concat(f.AAN_type, ")") : null
+    }, {
+      code: 'AS',
+      label: 'Attendant Service',
+      val: f.AS ? 'AS' : null
+    }, {
+      code: 'FCC-A',
+      label: 'False Call Cancel Auto',
+      val: f.FCC_A ? 'FCC-A' : null
+    }, {
+      code: 'Cardreader',
+      label: 'Interface Card Reader',
+      val: f.cardreader ? 'Cardreader' : null
+    }, {
+      code: 'OEPS-SA',
+      label: 'Operation by Emergency Power Source',
+      val: f.OEPS_SA ? 'OEPS-SA' : null
+    }].filter(function (x) {
+      return x.val;
+    });
+    var allFeats = [].concat(_toConsumableArray(stdFeatList.map(function (x) {
+      return _objectSpread(_objectSpread({}, x), {}, {
+        isStd: true
+      });
+    })), _toConsumableArray(optFeatList.map(function (x) {
+      return _objectSpread(_objectSpread({}, x), {}, {
+        isStd: false
+      });
+    })));
+    var stdFeats = ['ECL', 'MELD', 'DKO-TB', 'FCC-P', 'OLHL', 'CCTV'];
+    var optList = Object.entries({
+      BMS_GW: 'BMS-GW',
+      EER: 'EER',
+      FER: 'FER',
+      FE: 'FE',
+      WP_W: 'WP-W',
+      OEPS_SA: 'OEPS-SA',
+      WP_S: 'WP-S',
+      Niagara: 'Niagara',
+      AS: 'AS',
+      ABP: 'ABP',
+      FCC_A: 'FCC-A',
+      LO: 'LO',
+      NS: 'NS',
+      cardreader: 'Cardreader',
+      PCNV: 'PCNV',
+      BSO: 'BSO',
+      AAN: 'AAN',
+      AECC: 'AECC',
+      AIL: 'AIL',
+      ITP: 'ITP',
+      ACB: 'ACB',
+      AHC: 'AHC',
+      ELCS_RB: 'ELCS-RB',
+      ELCS_SP: 'ELCS-SP',
+      MFP: 'MFP',
+      VIP_S: 'VIP-S'
+    });
+    var optFeats = optList.filter(function (_ref44) {
+      var _ref45 = _slicedToArray(_ref44, 1),
+        k = _ref45[0];
+      return f[k];
+    }).map(function (_ref46) {
+      var _ref47 = _slicedToArray(_ref46, 2),
+        k = _ref47[0],
+        v = _ref47[1];
+      return v;
+    });
+    var scopeColor = function scopeColor(v) {
+      return v === 'By MET' ? {
+        color: "#166534",
+        fontWeight: 500
+      } : v === 'By owner' ? {
+        color: "#92400e",
+        fontWeight: 500
+      } : {
+        color: "#64748b"
+      };
+    };
+    var rows = [['General Info', null, null, true], ['Elevator No.', e.elevNo, e.elevNo, false], ['Usage', e.usage, p.usage || e.usage, false], ['Brand / Product', e.brand, [p.source, p.product, p.code].filter(Boolean).join(' / '), false], ['Capacity', e.capacity ? e.capacity + ' kg' : '—', p.kg ? p.kg + ' kg (' + p.persons + 'P)' : '—', false], ['Door Type', e.doorType, p.doorType, false], ['Speed', e.speed ? e.speed + ' m/s' : '—', p.speed ? p.speed + ' m/s' : '—', false], ['Operation', e.operation, p.operation, false], ['Travel', e.travel ? e.travel + ' m' : '—', p.travel ? p.travel + ' m' : '—', false], ['No. of Stop', e.noOfStop, p.noOfStop || e.noOfStop, false], ['Machine Room', e.machineRoom, p.machineRoom, false], ['Shaft & Civil', null, null, true], ['Car AA×BB', e.carW && e.carD ? e.carW + '×' + e.carD + ' mm' : '—', p.carWidth && p.carDepth ? p.carWidth + '×' + p.carDepth + ' mm' : '—', false], ['Ceiling HL', e.ceilingHL ? e.ceilingHL + ' mm' : '—', p.ceilingHeight ? p.ceilingHeight + ' mm' : '—', false], ['Entrance JJ×HH', e.entranceJJ && e.entranceHH ? e.entranceJJ + '×' + e.entranceHH + ' mm' : '—', p.carDoorWidth && p.carDoorHeight ? p.carDoorWidth + '×' + p.carDoorHeight + ' mm' : '—', false], ['CWT Location', e.cwtLocation, p.cwtLocation, false], ['Shaft AH×BH', e.shaftAH && e.shaftBH ? e.shaftAH + '×' + e.shaftBH + ' mm' : '—', p.shaftAH && p.shaftBH ? p.shaftAH + '×' + p.shaftBH + ' mm' : '—', false], ['LE Wall', e.leWall ? e.leWall + ' mm' : '—', p.leWall ? p.leWall + ' mm' : '—', false], ['RE Wall', e.reWall ? e.reWall + ' mm' : '—', p.reWall ? p.reWall + ' mm' : '—', false], ['Overhead OH', e.overhead ? e.overhead + ' mm' : '—', p.overhead ? p.overhead + ' mm' : '—', false, 'OH'], ['Pit Depth PD', e.pitDepth ? e.pitDepth + ' mm' : '—', p.pitDepth ? p.pitDepth + ' mm' : '—', false, 'PIT'], ['Hoistway', e.hoistway === 'remark' ? (e.hoistwayremark || 'remark') + ' (remark)' : e.hoistway, p.hoistway === 'remark' ? (p.hoistwayremark || 'remark') + ' (remark)' : p.hoistway, false], ['Car Design', null, null, true], ['COP Main', e.cop, p.mainCOP + (p.mainCOPRemark ? ' (' + p.mainCOPRemark + ')' : ''), false], ['Ceiling', e.ceiling, p.ceilingType + (p.ceilingTypeRemark ? ' (' + p.ceilingTypeRemark + ')' : ''), false], ['Car Wall', e.carWall, p.carWallFinish === 'remark' ? (p.carWallFinishRemark || 'remark') + ' (remark)' : p.carWallFinish, false], ['Car Door', e.carDoor, p.carDoorFinish === 'remark' ? (p.carDoorFinishRemark || 'remark') + ' (remark)' : p.carDoorFinish, false], ['Flooring', e.flooring, p.flooring === 'remark' ? (p.flooringRemark || 'remark') + ' (remark)' : p.flooring, false], ['Entrance Design', null, null, true], ['Landing door (main)', e.landingDoorMain, p.landingDoorMain === 'remark' ? (p.landingDoorMainRemark || 'remark') + ' (remark)' : p.landingDoorMain, false], ['Landing door (typical)', e.landingDoorTypical, p.landingDoorTypical === 'remark' ? (p.landingDoorTypicalRemark || 'remark') + ' (remark)' : p.landingDoorTypical, false], ['Jamb (main)', e.jambMain, p.jambMain === 'remark' ? (p.jambMainRemark || 'remark') + ' (remark)' : p.jambMain, false], ['Jamb (typical)', e.jambTypical, p.jambTypical === 'remark' ? (p.jambTypicalRemark || 'remark') + ' (remark)' : p.jambTypical, false], ['Kick Plate', e.kickPlate, p.kickPlate === 'remark' ? (p.kickPlateRemark || 'remark') + ' (remark)' : p.kickPlate, false], ['Jamb (main)', e.jambMain, p.jambMain === 'remark' ? (p.jambMainRemark || 'remark') + ' (remark)' : p.jambMain, false], ['Jamb (typical)', e.jambTypical, p.jambTypical, false], ['Jamb type (main)', e.jambTypeMain, p.jambTypeMain + (p.jambTypeMainRemark ? ' (' + p.jambTypeMainRemark + ')' : ''), false], ['Jamb type (typical)', e.jambTypeTypical, p.jambTypeTypical + (p.jambTypeTypicalRemark ? ' (' + p.jambTypeTypicalRemark + ')' : ''), false], e.hallBtnMain || p.hallBtnMain ? ['Hall button (main)', e.hallBtnMain, p.hallBtnMain + (p.hallBtnMainRemark ? ' (' + p.hallBtnMainRemark + ')' : ''), false] : null, e.hallBtnTypical || p.hallBtnTypical ? ['Hall button (typical)', e.hallBtnTypical, p.hallBtnTypical + (p.hallBtnTypicalRemark ? ' (' + p.hallBtnTypicalRemark + ')' : ''), false] : null, e.hallLanternMain || p.hallLanternMain ? ['Hall lantern (main)', e.hallLanternMain, p.hallLanternMain + (p.hallLanternMainRemark ? ' (' + p.hallLanternMainRemark + ')' : ''), false] : null, e.hallPIVMain || p.hallPIVMain ? ['Hall pos. ind. (main)', e.hallPIVMain, p.hallPIVMain + (p.hallPIVMainRemark ? ' (' + p.hallPIVMainRemark + ')' : ''), false] : null].filter(Boolean);
+    var localScope = [['ติดตั้งวงกบใหม่', l.newJamb], ['ขนย้าย Motor', l.motorRelocation], ['ทุบปูน Beam Motor เก่า', l.demolishBeamMotor], ['ทุบปูน Buffer เก่า', l.demolishBuffer], ['ขยายช่องหน้าชั้น', l.expandEntrance], ['ปิดช่องหน้าชั้น', l.closeEntrance]].filter(function (_ref48) {
+      var _ref49 = _slicedToArray(_ref48, 2),
+        v = _ref49[1];
+      return v && v !== 'No';
+    });
+    return /*#__PURE__*/React.createElement("div", {
+      key: g.id,
+      style: {
+        borderBottom: gi < groups.length - 1 ? "0.5px solid #e2e8f0" : "none"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      onClick: function onClick() {
+        return setExpanded(function (ex) {
+          return _objectSpread(_objectSpread({}, ex), {}, _defineProperty({}, g.id, !isOpen));
+        });
+      },
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        padding: "10px 14px",
+        background: "#fafafa",
+        cursor: "pointer",
+        userSelect: "none"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 26,
+        height: 26,
+        borderRadius: 6,
+        background: g.type === 'CM' ? AMBER : NAV,
+        color: g.type === 'CM' ? NAV : "#fff",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: 11,
+        fontWeight: 500,
+        flexShrink: 0
+      }
+    }, "G", gi + 1), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 13,
+        fontWeight: 500,
+        color: g.type === 'CM' ? AMBERD : NAV
+      }
+    }, g.type === 'CM' ? "CM \u2014 ".concat(((_g$cm = g.cm) === null || _g$cm === void 0 ? void 0 : _g$cm.techInquiryNo) || ((_g$cm2 = g.cm) === null || _g$cm2 === void 0 ? void 0 : _g$cm2.product) || "Group " + (gi + 1)) : e.elevNo || "Lift " + (gi + 1)), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11,
+        color: "#64748b"
+      }
+    }, g.type === 'CM' ? "".concat(((_g$cm3 = g.cm) === null || _g$cm3 === void 0 ? void 0 : _g$cm3.product) || "—", " \xB7 ").concat(((_g$cm4 = g.cm) === null || _g$cm4 === void 0 ? void 0 : _g$cm4.capacity) || "—", " kg \xB7 ").concat(((_g$cm5 = g.cm) === null || _g$cm5 === void 0 ? void 0 : _g$cm5.speed) || "—", " m/s") : "".concat(e.brand || "—", " \u2192 ").concat([p.source, p.product, p.code].filter(Boolean).join(' ') || "—", " \xB7 ").concat(p.speed || e.speed || "—", " m/s"))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11,
+        color: g.type === 'CM' ? AMBERD : NAV,
+        fontWeight: 500
+      }
+    }, isOpen ? "▼" : "▶")), isOpen && g.type === 'CM' && /*#__PURE__*/React.createElement("table", {
+      style: {
+        width: "100%",
+        borderCollapse: "collapse"
+      }
+    }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
+      style: {
+        background: "#f8fafc"
+      }
+    }, /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        width: 28,
+        fontSize: 10,
+        fontWeight: 500,
+        color: "#94a3b8",
+        textAlign: "center",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "#"), /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 10.5,
+        fontWeight: 500,
+        color: "#64748b",
+        textAlign: "left",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "Field"), /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 10.5,
+        fontWeight: 500,
+        color: NAV,
+        textAlign: "left",
+        background: "#fef3c7",
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "Value"))), /*#__PURE__*/React.createElement("tbody", null, buildCMRows(g).map(function (r, ri) {
+      if (r.type === 'sec') return /*#__PURE__*/React.createElement("tr", {
+        key: ri
+      }, /*#__PURE__*/React.createElement("td", {
+        colSpan: 3,
+        style: {
+          padding: "5px 8px",
+          background: r.title.includes('Local') ? "#FEF3C7" : r.title === 'Features' ? "#fff7ed" : "#eef2f7",
+          color: r.title.includes('Local') ? AMBERD : r.title === 'Features' ? AMBERD : NAV,
+          fontSize: 11,
+          fontWeight: 600
+        }
+      }, r.title));
+      if (r.type === 'feat') return /*#__PURE__*/React.createElement("tr", {
+        key: ri,
+        style: {
+          background: ri % 2 === 0 ? "#fff" : "#fafafa"
+        }
+      }, /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 11,
+          color: "#94a3b8",
+          textAlign: "center",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, ri), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 12,
+          color: "#475569",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, r.field), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          background: "#fff7ed",
+          borderBottom: "0.5px solid #f1f5f9",
+          textAlign: "center"
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          padding: "1px 7px",
+          borderRadius: 3,
+          fontSize: 10,
+          fontWeight: 500,
+          background: r.std ? "#eef2f7" : "#fde68a",
+          color: r.std ? NAV : AMBERD
+        }
+      }, r.std ? "Standard" : "Optional")));
+      return /*#__PURE__*/React.createElement("tr", {
+        key: ri,
+        style: {
+          background: ri % 2 === 0 ? "#fff" : "#fafafa"
+        }
+      }, /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 11,
+          color: "#94a3b8",
+          textAlign: "center",
+          background: "#f8fafc",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, ri), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 11.5,
+          color: "#64748b",
+          fontWeight: 500,
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, r.field), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 12.5,
+          color: NAV,
+          fontWeight: 500,
+          background: "#fff7ed",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, r.pr));
+    }))), isOpen && g.type !== 'CM' && /*#__PURE__*/React.createElement("table", {
+      style: {
+        width: "100%",
+        borderCollapse: "collapse"
+      }
+    }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
+      style: {
+        background: "#f8fafc"
+      }
+    }, /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        width: 28,
+        fontSize: 10,
+        fontWeight: 500,
+        color: "#94a3b8",
+        textAlign: "center",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "#"), /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        width: 150,
+        fontSize: 10.5,
+        fontWeight: 500,
+        color: "#64748b",
+        textAlign: "left",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "Field"), /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 10.5,
+        fontWeight: 500,
+        color: "#475569",
+        textAlign: "center",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "Existing lift"), /*#__PURE__*/React.createElement("th", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 10.5,
+        fontWeight: 500,
+        color: NAV,
+        textAlign: "center",
+        background: "#fef3c7",
+        borderBottom: "0.5px solid #e2e8f0"
+      }
+    }, "\uD83C\uDFE2 Modernization"))), /*#__PURE__*/React.createElement("tbody", null, buildFMRows(g).map(function (r, ri) {
+      if (r.type === 'sec') return /*#__PURE__*/React.createElement("tr", {
+        key: ri
+      }, /*#__PURE__*/React.createElement("td", {
+        colSpan: 4,
+        style: {
+          padding: "5px 8px",
+          background: AMBER,
+          color: "#fff",
+          fontSize: 11,
+          fontWeight: 600
+        }
+      }, r.title));
+      if (r.type === 'feat') return /*#__PURE__*/React.createElement("tr", {
+        key: ri,
+        style: {
+          background: ri % 2 === 0 ? "#fff" : "#fafafa"
+        }
+      }, /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 11,
+          color: "#94a3b8",
+          textAlign: "center",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, r.no), /*#__PURE__*/React.createElement("td", {
+        colSpan: 2,
+        style: {
+          padding: "5px 8px",
+          fontSize: 12,
+          color: "#475569",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, r.field), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          textAlign: "center",
+          background: "#fff7ed",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          padding: "1px 7px",
+          borderRadius: 3,
+          fontSize: 10,
+          fontWeight: 500,
+          background: r.std ? "#eef2f7" : "#fde68a",
+          color: r.std ? NAV : AMBERD
+        }
+      }, r.std ? "Standard" : "Optional")));
+      if (r.type === 'local') return /*#__PURE__*/React.createElement("tr", {
+        key: ri,
+        style: {
+          background: ri % 2 === 0 ? "#fff" : "#fafafa"
+        }
+      }, /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 12,
+          color: "#64748b",
+          fontWeight: 500,
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, r.field), /*#__PURE__*/React.createElement("td", {
+        colSpan: 2,
+        style: {
+          padding: "5px 8px",
+          fontSize: 12,
+          color: NAV,
+          fontWeight: 500,
+          background: "#fff7ed",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, r.val));
+      return /*#__PURE__*/React.createElement("tr", {
+        key: ri,
+        style: {
+          background: ri % 2 === 0 ? "#fff" : "#fafafa"
+        }
+      }, /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 11,
+          color: "#94a3b8",
+          textAlign: "center",
+          background: "#f8fafc",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, ri + 1), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 11.5,
+          color: "#64748b",
+          background: "#f8fafc",
+          fontWeight: 500,
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, r.field), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 12.5,
+          color: "#475569",
+          borderRight: "0.5px solid #e2e8f0",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, r.ex), /*#__PURE__*/React.createElement("td", {
+        style: {
+          padding: "5px 8px",
+          fontSize: 12.5,
+          color: NAV,
+          fontWeight: 500,
+          background: "#fff7ed",
+          borderBottom: "0.5px solid #f1f5f9"
+        }
+      }, r.pr));
+    }))));
+  }))), previewGroup && previewGroup.type === 'CM' && /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.5)",
+      zIndex: 200,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fff",
+      borderRadius: 12,
+      width: "100%",
+      maxWidth: 640,
+      maxHeight: "90vh",
+      overflow: "auto"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderRadius: "12px 12px 0 0",
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement(ProjHdr, {
+    proj: proj
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 16px",
+      background: AMBER,
+      color: NAV,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between"
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 500
+    }
+  }, "CM \u2014 ", ((_previewGroup$cm = previewGroup.cm) === null || _previewGroup$cm === void 0 ? void 0 : _previewGroup$cm.techInquiryNo) || ((_previewGroup$cm2 = previewGroup.cm) === null || _previewGroup$cm2 === void 0 ? void 0 : _previewGroup$cm2.product) || "Group"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11
+    }
+  }, ((_previewGroup$cm3 = previewGroup.cm) === null || _previewGroup$cm3 === void 0 ? void 0 : _previewGroup$cm3.product) || "", " \xB7 ", ((_previewGroup$cm4 = previewGroup.cm) === null || _previewGroup$cm4 === void 0 ? void 0 : _previewGroup$cm4.capacity) || "", " kg \xB7 ", ((_previewGroup$cm5 = previewGroup.cm) === null || _previewGroup$cm5 === void 0 ? void 0 : _previewGroup$cm5.speed) || "", " m/s")), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setPreviewGroup(null);
+    },
+    style: {
+      background: "transparent",
+      border: "none",
+      color: NAV,
+      fontSize: 18,
+      cursor: "pointer",
+      fontWeight: 500
+    }
+  }, "\u2715"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fff",
+      borderRadius: "0 0 12px 12px",
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("table", {
+    style: {
+      width: "100%",
+      borderCollapse: "collapse"
+    }
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
+    style: {
+      background: "#f8fafc"
+    }
+  }, /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: "5px 8px",
+      width: 28,
+      fontSize: 10,
+      fontWeight: 500,
+      color: "#94a3b8",
+      textAlign: "center",
+      borderRight: "0.5px solid #e2e8f0",
+      borderBottom: "0.5px solid #e2e8f0"
+    }
+  }, "#"), /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: "5px 8px",
+      width: "40%",
+      fontSize: 10.5,
+      fontWeight: 500,
+      color: "#64748b",
+      textAlign: "left",
+      borderRight: "0.5px solid #e2e8f0",
+      borderBottom: "0.5px solid #e2e8f0"
+    }
+  }, "Field"), /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: "5px 8px",
+      width: "60%",
+      fontSize: 10.5,
+      fontWeight: 500,
+      color: NAV,
+      textAlign: "left",
+      background: "#fef3c7",
+      borderBottom: "0.5px solid #e2e8f0"
+    }
+  }, "Value"))), /*#__PURE__*/React.createElement("tbody", null, buildCMRows(previewGroup).map(function (r, ri) {
+    if (r.type === 'sec') return /*#__PURE__*/React.createElement("tr", {
+      key: ri
+    }, /*#__PURE__*/React.createElement("td", {
+      colSpan: 3,
+      style: {
+        padding: "5px 8px",
+        background: r.title.includes('Local') ? "#FEF3C7" : r.title === 'Features' ? "#fff7ed" : "#eef2f7",
+        color: r.title.includes('Local') ? AMBERD : r.title === 'Features' ? AMBERD : NAV,
+        fontSize: 11,
+        fontWeight: 600
+      }
+    }, r.title));
+    if (r.type === 'feat') return /*#__PURE__*/React.createElement("tr", {
+      key: ri,
+      style: {
+        background: ri % 2 === 0 ? "#fff" : "#fafafa"
+      }
+    }, /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11,
+        color: "#94a3b8",
+        textAlign: "center",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, ri), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 12,
+        color: "#475569",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.field), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        background: "#fff7ed",
+        borderBottom: "0.5px solid #f1f5f9",
+        textAlign: "center"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        padding: "1px 7px",
+        borderRadius: 3,
+        fontSize: 10,
+        fontWeight: 500,
+        background: r.std ? "#eef2f7" : "#fde68a",
+        color: r.std ? NAV : AMBERD
+      }
+    }, r.std ? "Standard" : "Optional")));
+    return /*#__PURE__*/React.createElement("tr", {
+      key: ri,
+      style: {
+        background: ri % 2 === 0 ? "#fff" : "#fafafa"
+      }
+    }, /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11,
+        color: "#94a3b8",
+        textAlign: "center",
+        background: "#f8fafc",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, ri), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11.5,
+        color: "#64748b",
+        fontWeight: 500,
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.field), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 12.5,
+        color: NAV,
+        fontWeight: 500,
+        background: "#fff7ed",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.pr));
+  })))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "10px 16px",
+      textAlign: "center",
+      borderTop: "0.5px solid #e2e8f0"
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setPreviewGroup(null);
+    },
+    style: {
+      padding: "7px 24px",
+      borderRadius: 7,
+      border: "0.5px solid #cbd5e1",
+      background: "#fff",
+      cursor: "pointer",
+      fontSize: 13,
+      fontFamily: "inherit"
+    }
+  }, "\u2190 Close")))), previewGroup && previewGroup.type !== 'CM' && /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.5)",
+      zIndex: 200,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fff",
+      borderRadius: 12,
+      width: "100%",
+      maxWidth: 680,
+      maxHeight: "90vh",
+      overflow: "auto"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderRadius: "12px 12px 0 0",
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement(ProjHdr, {
+    proj: proj
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "8px 16px",
+      background: NAV,
+      color: "#fff",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between"
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 500
+    }
+  }, "Lift ", ((_previewGroup$existin = previewGroup.existing) === null || _previewGroup$existin === void 0 ? void 0 : _previewGroup$existin.elevNo) || "—", " \u2014 Modernization Full Replacement"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "rgba(255,255,255,0.7)"
+    }
+  }, ((_previewGroup$existin2 = previewGroup.existing) === null || _previewGroup$existin2 === void 0 ? void 0 : _previewGroup$existin2.brand) || "—", " \u2192 ", [(_previewGroup$propose = previewGroup.proposed) === null || _previewGroup$propose === void 0 ? void 0 : _previewGroup$propose.source, (_previewGroup$propose2 = previewGroup.proposed) === null || _previewGroup$propose2 === void 0 ? void 0 : _previewGroup$propose2.product, (_previewGroup$propose3 = previewGroup.proposed) === null || _previewGroup$propose3 === void 0 ? void 0 : _previewGroup$propose3.code].filter(Boolean).join(' / ') || "—")), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setPreviewGroup(null);
+    },
+    style: {
+      background: "transparent",
+      border: "none",
+      color: "#fff",
+      fontSize: 18,
+      cursor: "pointer",
+      fontWeight: 500
+    }
+  }, "\u2715"))), /*#__PURE__*/React.createElement("table", {
+    style: {
+      width: "100%",
+      borderCollapse: "collapse"
+    }
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
+    style: {
+      background: "#f8fafc"
+    }
+  }, /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: "5px 8px",
+      width: 28,
+      fontSize: 10,
+      fontWeight: 500,
+      color: "#94a3b8",
+      textAlign: "center",
+      borderRight: "0.5px solid #e2e8f0",
+      borderBottom: "0.5px solid #e2e8f0"
+    }
+  }, "#"), /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: "5px 8px",
+      width: 150,
+      fontSize: 10.5,
+      fontWeight: 500,
+      color: "#64748b",
+      textAlign: "left",
+      borderRight: "0.5px solid #e2e8f0",
+      borderBottom: "0.5px solid #e2e8f0"
+    }
+  }, "Field"), /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: "5px 8px",
+      fontSize: 10.5,
+      fontWeight: 500,
+      color: "#475569",
+      textAlign: "center",
+      borderRight: "0.5px solid #e2e8f0",
+      borderBottom: "0.5px solid #e2e8f0"
+    }
+  }, "Existing lift"), /*#__PURE__*/React.createElement("th", {
+    style: {
+      padding: "5px 8px",
+      fontSize: 10.5,
+      fontWeight: 500,
+      color: NAV,
+      textAlign: "center",
+      background: "#fef3c7",
+      borderBottom: "0.5px solid #e2e8f0"
+    }
+  }, "\uD83C\uDFE2 Modernization"))), /*#__PURE__*/React.createElement("tbody", null, buildFMRows(previewGroup).map(function (r, ri) {
+    if (r.type === 'sec') return /*#__PURE__*/React.createElement("tr", {
+      key: ri
+    }, /*#__PURE__*/React.createElement("td", {
+      colSpan: 4,
+      style: {
+        padding: "5px 8px",
+        background: AMBER,
+        color: "#fff",
+        fontSize: 11,
+        fontWeight: 600
+      }
+    }, r.title));
+    if (r.type === 'feat') return /*#__PURE__*/React.createElement("tr", {
+      key: ri,
+      style: {
+        background: ri % 2 === 0 ? "#fff" : "#fafafa"
+      }
+    }, /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11,
+        color: "#94a3b8",
+        textAlign: "center",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.no), /*#__PURE__*/React.createElement("td", {
+      colSpan: 2,
+      style: {
+        padding: "5px 8px",
+        fontSize: 12,
+        color: "#475569",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.field), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        textAlign: "center",
+        background: "#fff7ed",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        padding: "1px 7px",
+        borderRadius: 3,
+        fontSize: 10,
+        fontWeight: 500,
+        background: r.std ? "#eef2f7" : "#fde68a",
+        color: r.std ? NAV : AMBERD
+      }
+    }, r.std ? "Standard" : "Optional")));
+    if (r.type === 'local') return /*#__PURE__*/React.createElement("tr", {
+      key: ri,
+      style: {
+        background: ri % 2 === 0 ? "#fff" : "#fafafa"
+      }
+    }, /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 12,
+        color: "#64748b",
+        fontWeight: 500,
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.field), /*#__PURE__*/React.createElement("td", {
+      colSpan: 2,
+      style: {
+        padding: "5px 8px",
+        fontSize: 12,
+        color: NAV,
+        fontWeight: 500,
+        background: "#fff7ed",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.val));
+    return /*#__PURE__*/React.createElement("tr", {
+      key: ri,
+      style: {
+        background: ri % 2 === 0 ? "#fff" : "#fafafa"
+      }
+    }, /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11,
+        color: "#94a3b8",
+        textAlign: "center",
+        background: "#f8fafc",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, ri + 1), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 11.5,
+        color: "#64748b",
+        background: "#f8fafc",
+        fontWeight: 500,
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.field), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 12.5,
+        color: "#475569",
+        borderRight: "0.5px solid #e2e8f0",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.ex), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: "5px 8px",
+        fontSize: 12.5,
+        color: NAV,
+        fontWeight: 500,
+        background: "#fff7ed",
+        borderBottom: "0.5px solid #f1f5f9"
+      }
+    }, r.pr));
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "10px 16px",
+      textAlign: "center",
+      borderTop: "0.5px solid #e2e8f0"
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setPreviewGroup(null);
+    },
+    style: {
+      padding: "7px 24px",
+      borderRadius: 7,
+      border: "0.5px solid #cbd5e1",
+      background: "#fff",
+      cursor: "pointer",
+      fontSize: 13,
+      fontFamily: "inherit"
+    }
+  }, "\u2190 Close"))))));
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App,null));
